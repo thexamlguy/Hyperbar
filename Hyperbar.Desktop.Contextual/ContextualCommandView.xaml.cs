@@ -10,6 +10,6 @@ public sealed partial class ContextualCommandView : Page
 
     private void Button_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-        KeyIntrop.Type((VirtualKey)186, VirtualKey.LeftWindows);
+        KeyInterop.Type((VirtualKey)186, VirtualKey.LeftWindows);
     }
 }

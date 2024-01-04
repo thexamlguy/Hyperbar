@@ -7,9 +7,9 @@ using Windows.Win32.UI.KeyboardAndMouseInput;
 
 namespace Hyperbar.Desktop.Win32;
 
-public class KeyIntrop
+public class KeyInterop
 {
-    private static readonly VirtualKey[] ExtendedKeys = [
+    private static readonly VirtualKey[] extendedKeys = [
         VirtualKey.Menu,
         VirtualKey.Menu,
         VirtualKey.NumberKeyLock,
@@ -69,7 +69,7 @@ public class KeyIntrop
             flags |= KEYBD_EVENT_FLAGS.KEYEVENTF_KEYUP;
         }
 
-        if (ExtendedKeys.Contains(key))
+        if (extendedKeys.Contains(key))
         {
             flags |= KEYBD_EVENT_FLAGS.KEYEVENTF_EXTENDEDKEY;
         }
