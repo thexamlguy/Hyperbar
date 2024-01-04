@@ -1,8 +1,10 @@
-﻿using Hyperbar.Desktop.Controls;
+﻿using Hyperbar.Desktop.Contextual;
+using Hyperbar.Desktop.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
 using System;
+using System.Collections.Generic;
 
 namespace Hyperbar.Desktop;
 
@@ -17,18 +19,37 @@ public partial class App :
 
         IHost? host = Host.CreateDefaultBuilder()
             .UseContentRoot(AppContext.BaseDirectory)
-            .ConfigureServices(args => 
+            .ConfigureServices(services =>
             {
-                args.AddTransient<IInitializer, AppInitializer>();
-                args.AddTransient<DesktopFlyout>();
+                services.AddHostedService<AppService>();
 
-                args.AddTransient<ITemplateFactory, TemplateFactory>();
-                args.AddTransient<ITemplateGeneratorFactory, TemplateGeneratorFactory>();
+                services.AddTransient<IInitializer, AppInitializer>();
+                services.AddTransient<DesktopFlyout>();
 
-                args.AddDataTemplate<CommandViewModel, CommandView>("Commands");
-                args.AddDataTemplate<ContextualCommandViewModel, ContextualCommandView>();
+                services.AddTransient<ITemplateFactory, TemplateFactory>();
+                services.AddTransient<ITemplateGeneratorFactory, TemplateGeneratorFactory>();
 
-                args.AddHostedService<AppService>();
+                services.AddDataTemplate<CommandViewModel, CommandView>("Commands");
+
+                // Commands
+                services.AddSomething<ContextualCommandBuilder>();
+ 
+                services.AddTransient(provider =>
+                {
+                    IEnumerable<ICommandViewModel> Resolve(IServiceProvider services)
+                    {
+                        foreach (ICommandContext commandContext in services.GetServices<ICommandContext>())
+                        {
+                            if (commandContext.ServiceProvider.GetService<ICommandViewModel>() is 
+                                ICommandViewModel commandViewModel)
+                            {
+                                yield return commandViewModel;
+                            }
+                        }
+                    }
+
+                    return Resolve(provider);                
+                });
             })
             .Build();
         

@@ -9,10 +9,10 @@ public class TemplateGeneratorFactory :
     public DataTemplate Create()
     {
         string xamlString = @"
-                    <DataTemplate xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' 
-                                  xmlns:desktop='using:Hyperbar.Desktop'>
-                        <desktop:TemplateGeneratorControl />
-                    </DataTemplate>";
+                <DataTemplate xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' 
+                                xmlns:desktop='using:Hyperbar.Desktop'>
+                    <desktop:TemplateGeneratorControl />
+                </DataTemplate>";
 
         return (DataTemplate)XamlReader.Load(xamlString);
     }

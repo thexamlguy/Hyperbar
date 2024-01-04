@@ -41,6 +41,7 @@
 		</Page>
 	</ItemGroup>
 	<ItemGroup>
+	  <ProjectReference Include="..\Hyperbar.Desktop.Contextual\Hyperbar.Desktop.Contextual.csproj" />
 	  <ProjectReference Include="..\Hyperbar.Desktop.Controls\Hyperbar.Desktop.Controls.csproj" />
 	  <ProjectReference Include="..\Hyperbar\Hyperbar.csproj" />
 	</ItemGroup>

@@ -1,6 +1,7 @@
-﻿namespace Hyperbar.Desktop;
+﻿namespace Hyperbar.Desktop.Contextual;
 
 public class ContextualCommandViewModel :
+    ICommandViewModel,
     ITemplatedViewModel
 {
     public ContextualCommandViewModel(ITemplateFactory templateFactory)

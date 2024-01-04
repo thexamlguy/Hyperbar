@@ -2,6 +2,7 @@
 
 namespace Hyperbar.Desktop
 {
+
     public interface ITemplateGeneratorFactory
     {
         DataTemplate Create();

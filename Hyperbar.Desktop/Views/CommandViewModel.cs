@@ -1,20 +1,21 @@
-﻿namespace Hyperbar.Desktop;
+﻿using System.Collections;
+using System.Collections.Generic;
+
+namespace Hyperbar.Desktop;
 
 public partial class CommandViewModel : 
     ObservableCollectionViewModel,
     ITemplatedViewModel
 {
-    public CommandViewModel(ITemplateFactory templateFactory)
+    public CommandViewModel(ITemplateFactory templateFactory, 
+        IEnumerable<ICommandViewModel> commands)
     {
         TemplateFactory = templateFactory;
 
-        this.Add(new ContextualCommandViewModel(templateFactory));
-        this.Add(new ContextualCommandViewModel(templateFactory));
-        this.Add(new ContextualCommandViewModel(templateFactory));
-        this.Add(new ContextualCommandViewModel(templateFactory));
-        this.Add(new ContextualCommandViewModel(templateFactory));
-
-        var d = Items;
+        foreach (var command in commands)
+        {
+            this.Add(command);
+        }
     }
 
     public ITemplateFactory TemplateFactory { get; }
