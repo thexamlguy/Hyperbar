@@ -1,8 +1,9 @@
-﻿namespace Hyperbar.Desktop.Contextual;
+﻿namespace Hyperbar.Desktop.Primary;
 
-public class ContextualCommandViewModel(ITemplateFactory templateFactory) :
+public class PrimaryCommandViewModel(ITemplateFactory templateFactory) :
     ICommandViewModel,
     ITemplatedViewModel
 {
     public ITemplateFactory TemplateFactory { get; } = templateFactory;
 }
+

@@ -2,13 +2,13 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
 		<TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
-		<RootNamespace>Hyperbar.Desktop.Contextual</RootNamespace>
+		<RootNamespace>Hyperbar.Desktop.Primary</RootNamespace>
 		<RuntimeIdentifiers>win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
 		<UseWinUI>true</UseWinUI>
 		<UseRidGraph>true</UseRidGraph>
 	</PropertyGroup>
 	<ItemGroup>
-		<None Remove="ContextualCommandView.xaml" />
+	  <None Remove="PrimaryCommandView.xaml" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
@@ -16,12 +16,11 @@
 		<PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.25936-preview" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\Hyperbar.Desktop.Win32\Hyperbar.Desktop.Win32.csproj" />
-		<ProjectReference Include="..\Hyperbar\Hyperbar.csproj" />
+	  <ProjectReference Include="..\Hyperbar\Hyperbar.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<Page Update="ContextualCommandView.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</Page>
+	  <Page Update="PrimaryCommandView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
 	</ItemGroup>
 </Project>

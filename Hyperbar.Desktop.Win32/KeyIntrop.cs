@@ -11,7 +11,7 @@ public class KeyInterop
 {
     private static readonly VirtualKey[] extendedKeys = [
         VirtualKey.Menu,
-        VirtualKey.Menu,
+        VirtualKey.LeftMenu,
         VirtualKey.NumberKeyLock,
         VirtualKey.Insert,
         VirtualKey.Delete,

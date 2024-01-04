@@ -1,5 +1,6 @@
 ﻿using Hyperbar.Desktop.Contextual;
 using Hyperbar.Desktop.Controls;
+using Hyperbar.Desktop.Primary;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
@@ -33,10 +34,11 @@ public partial class App :
 
                 // Commands
                 services.AddSomething<ContextualCommandBuilder>();
- 
+                services.AddSomething<PrimaryCommandBuilder>();
+
                 services.AddTransient(provider =>
                 {
-                    IEnumerable<ICommandViewModel> Resolve(IServiceProvider services)
+                    static IEnumerable<ICommandViewModel> Resolve(IServiceProvider services)
                     {
                         foreach (ICommandContext commandContext in services.GetServices<ICommandContext>())
                         {
