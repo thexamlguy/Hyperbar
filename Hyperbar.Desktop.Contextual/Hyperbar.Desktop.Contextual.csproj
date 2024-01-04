@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Hyperbar.Desktop.Win32\Hyperbar.Desktop.Win32.csproj" />
     <ProjectReference Include="..\Hyperbar\Hyperbar.csproj" />
   </ItemGroup>
 

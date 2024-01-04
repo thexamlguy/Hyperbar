@@ -10,6 +10,6 @@
     mc:Ignorable="d">
 
     <Grid>
-        <Button Content="This is a test" />
+        <Button Content="This is a test" Click="Button_Click"/>
     </Grid>
 </Page>
