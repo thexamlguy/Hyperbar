@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Hyperbar.Desktop (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Hyperbar.Desktop (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
