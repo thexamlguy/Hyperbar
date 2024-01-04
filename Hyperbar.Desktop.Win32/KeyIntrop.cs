@@ -29,7 +29,6 @@ public class KeyIntrop
 
     public static void Release(VirtualKey key) => SendKey(key, false);
 
-
     public static unsafe void Type(VirtualKey key, 
         params VirtualKey[] modifierKeys)
     {
