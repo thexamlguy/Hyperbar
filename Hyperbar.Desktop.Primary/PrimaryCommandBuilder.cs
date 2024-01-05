@@ -1,3 +1,5 @@
+using Hyperbar.Extensions;
+using Hyperbar.Lifecycles;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Hyperbar.Desktop.Primary;

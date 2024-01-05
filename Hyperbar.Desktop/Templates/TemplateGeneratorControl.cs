@@ -1,4 +1,5 @@
-﻿using Microsoft.UI.Xaml;
+﻿using Hyperbar.Templates;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
 namespace Hyperbar.Desktop;

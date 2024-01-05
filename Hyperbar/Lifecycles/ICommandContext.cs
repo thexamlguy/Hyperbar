@@ -1,4 +1,4 @@
-﻿namespace Hyperbar;
+﻿namespace Hyperbar.Lifecycles;
 
 public interface ICommandContext
 {

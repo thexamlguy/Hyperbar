@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Hyperbar;
+namespace Hyperbar.Lifecycles;
 
 public interface ICommandBuilder
 {

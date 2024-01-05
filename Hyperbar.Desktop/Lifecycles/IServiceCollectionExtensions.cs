@@ -1,11 +1,14 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Hyperbar.Lifecycles;
+using Hyperbar.Templates;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace Hyperbar.Desktop
 {
     public static class IServiceCollectionExtensions
     {
-        public static IServiceCollection AddSomething<TCommandBuilder>(this IServiceCollection services)
+        public static IServiceCollection AddCommandBuilder<TCommandBuilder>(this IServiceCollection services, 
+            string key)
             where TCommandBuilder :
             ICommandBuilder, new()
         {

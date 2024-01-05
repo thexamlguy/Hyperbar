@@ -1,5 +1,4 @@
-﻿
-namespace Hyperbar;
+﻿namespace Hyperbar.Lifecycles;
 
 public class CommandContext(IServiceProvider serviceProvider) :
     ICommandContext

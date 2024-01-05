@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+﻿using Hyperbar.Lifecycles;
+using Hyperbar.Templates;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Hyperbar;
-
 public static class IServiceCollectionExtensions
 {
     public static IServiceCollection AddCommandTemplate<TCommand, TCommandTemplate>(this IServiceCollection services)
@@ -12,15 +12,15 @@ public static class IServiceCollectionExtensions
         Type dataType = typeof(TCommand);
         Type templateType = typeof(TCommandTemplate);
 
-        var key = dataType.Name;
+        string key = dataType.Name;
 
-        services.AddTransient(typeof(ICommandViewModel), dataType);
-        services.AddTransient(templateType);
+        _ = services.AddTransient(typeof(ICommandViewModel), dataType);
+        _ = services.AddTransient(templateType);
 
-        services.AddKeyedTransient(typeof(ICommandViewModel), key, dataType);
-        services.AddKeyedTransient(templateType, key);
+        _ = services.AddKeyedTransient(typeof(ICommandViewModel), key, dataType);
+        _ = services.AddKeyedTransient(templateType, key);
 
-        services.AddTransient<IDataTemplateDescriptor>(provider => new DataTemplateDescriptor
+        _ = services.AddTransient<IDataTemplateDescriptor>(provider => new DataTemplateDescriptor
         {
             DataType = dataType,
             TemplateType = templateType,
@@ -38,10 +38,10 @@ public static class IServiceCollectionExtensions
 
         key ??= dataType.Name;
 
-        services.AddKeyedTransient(dataType, key);
-        services.AddKeyedTransient(templateType, key);
+        _ = services.AddKeyedTransient(dataType, key);
+        _ = services.AddKeyedTransient(templateType, key);
 
-        services.AddTransient<IDataTemplateDescriptor>(provider => new DataTemplateDescriptor
+        _ = services.AddTransient<IDataTemplateDescriptor>(provider => new DataTemplateDescriptor
         {
             DataType = dataType,
             TemplateType = templateType,

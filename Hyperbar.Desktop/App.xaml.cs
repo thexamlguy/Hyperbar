@@ -1,6 +1,8 @@
 ﻿using Hyperbar.Desktop.Contextual;
 using Hyperbar.Desktop.Controls;
 using Hyperbar.Desktop.Primary;
+using Hyperbar.Lifecycles;
+using Hyperbar.Templates;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
@@ -30,11 +32,10 @@ public partial class App :
                 services.AddTransient<ITemplateFactory, TemplateFactory>();
                 services.AddTransient<ITemplateGeneratorFactory, TemplateGeneratorFactory>();
 
-                services.AddDataTemplate<CommandViewModel, CommandView>("Commands");
+                services.AddDataTemplate<CommandViewModel, CommandView>();
 
-                // Commands
-                services.AddSomething<ContextualCommandBuilder>();
-                services.AddSomething<PrimaryCommandBuilder>();
+                services.AddCommandBuilder<ContextualCommandBuilder>("Contexual.Commands");
+                services.AddCommandBuilder<PrimaryCommandBuilder>("Primary.Command");
 
                 services.AddTransient(provider =>
                 {

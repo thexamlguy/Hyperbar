@@ -1,4 +1,4 @@
-﻿namespace Hyperbar;
+﻿namespace Hyperbar.Templates;
 
 public interface ITemplatedViewModel
 {
