@@ -7,19 +7,19 @@ namespace Hyperbar.Desktop
 {
     public static class IServiceCollectionExtensions
     {
-        public static IServiceCollection AddCommandBuilder<TCommandBuilder>(this IServiceCollection services, 
+        public static IServiceCollection AddCommand<TCommandBuilder>(this IServiceCollection services, 
             string key)
             where TCommandBuilder :
             ICommandBuilder, new()
         {
             TCommandBuilder builder = new();
             IHost? host = new HostBuilder()
-                .ConfigureServices(services =>
+                .ConfigureServices(isolatedServices =>
                 {
-                    services.AddTransient<ITemplateFactory, TemplateFactory>();
-                    services.AddTransient<ITemplateGeneratorFactory, TemplateGeneratorFactory>();
+                    isolatedServices.AddTransient<ITemplateFactory, TemplateFactory>();
+                    isolatedServices.AddTransient<ITemplateGeneratorFactory, TemplateGeneratorFactory>();
 
-                    builder.Create(services);
+                    builder.Create(isolatedServices);
                 }).Build();
 
             services.AddTransient<ICommandContext>(provider => new CommandContext(host.Services));

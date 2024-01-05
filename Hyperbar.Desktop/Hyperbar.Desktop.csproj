@@ -14,8 +14,8 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 	<ItemGroup>
-	  <None Remove="ContextualCommandView.xaml" />
-	  <None Remove="Views\CommandView.xaml" />
+		<None Remove="ContextualCommandView.xaml" />
+		<None Remove="Views\CommandView.xaml" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Include="Assets\SplashScreen.scale-200.png" />
@@ -36,25 +36,10 @@
 		<ProjectCapability Include="Msix" />
 	</ItemGroup>
 	<ItemGroup>
-		<Page Update="CommandHostView.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</Page>
-	</ItemGroup>
-	<ItemGroup>
-	  <ProjectReference Include="..\Hyperbar.Desktop.Contextual\Hyperbar.Desktop.Contextual.csproj" />
-	  <ProjectReference Include="..\Hyperbar.Desktop.Controls\Hyperbar.Desktop.Controls.csproj" />
-	  <ProjectReference Include="..\Hyperbar.Desktop.Primary\Hyperbar.Desktop.Primary.csproj" />
-	  <ProjectReference Include="..\Hyperbar\Hyperbar.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Page Update="ContextualCommandView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </Page>
-	</ItemGroup>
-	<ItemGroup>
-	  <Page Update="Views\CommandView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </Page>
+		<ProjectReference Include="..\Hyperbar.Desktop.Contextual\Hyperbar.Desktop.Contextual.csproj" />
+		<ProjectReference Include="..\Hyperbar.Desktop.Controls\Hyperbar.Desktop.Controls.csproj" />
+		<ProjectReference Include="..\Hyperbar.Desktop.Primary\Hyperbar.Desktop.Primary.csproj" />
+		<ProjectReference Include="..\Hyperbar\Hyperbar.csproj" />
 	</ItemGroup>
 	<PropertyGroup Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
 		<HasPackageAndPublishMenu>true</HasPackageAndPublishMenu>

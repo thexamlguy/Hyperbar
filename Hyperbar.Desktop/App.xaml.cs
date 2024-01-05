@@ -3,6 +3,7 @@ using Hyperbar.Desktop.Controls;
 using Hyperbar.Desktop.Primary;
 using Hyperbar.Lifecycles;
 using Hyperbar.Templates;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
@@ -11,6 +12,10 @@ using System.Collections.Generic;
 
 namespace Hyperbar.Desktop;
 
+public class AppConfiguration
+{
+
+}
 public partial class App : 
     Application
 {
@@ -22,7 +27,14 @@ public partial class App :
 
         IHost? host = Host.CreateDefaultBuilder()
             .UseContentRoot(AppContext.BaseDirectory)
-            .ConfigureServices(services =>
+            .ConfigureAppConfiguration(config =>
+            {
+                config.SetBasePath(AppContext.BaseDirectory);
+                config.AddJsonFile("Settings.json", true);
+
+                config.Build();
+            })
+            .ConfigureServices((context, services) =>
             {
                 services.AddHostedService<AppService>();
 
@@ -34,8 +46,8 @@ public partial class App :
 
                 services.AddDataTemplate<CommandViewModel, CommandView>();
 
-                services.AddCommandBuilder<ContextualCommandBuilder>("Contexual.Commands");
-                services.AddCommandBuilder<PrimaryCommandBuilder>("Primary.Command");
+                services.AddCommand<ContextualCommandBuilder>("");
+                services.AddCommand<PrimaryCommandBuilder>("");
 
                 services.AddTransient(provider =>
                 {
@@ -53,9 +65,11 @@ public partial class App :
 
                     return Resolve(provider);                
                 });
+
+                services.ConfigureWritableOptions<AppConfiguration>();
+
             })
             .Build();
-        
         await host.RunAsync();
     }
 }

@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace Hyperbar.Desktop;
 
-public class AppInitializer([FromKeyedServices(nameof(CommandView))] CommandView view,
-    [FromKeyedServices(nameof(CommandView))] CommandViewModel viewModel,
+public class AppInitializer([FromKeyedServices(nameof(CommandViewModel))] CommandView view,
+    [FromKeyedServices(nameof(CommandViewModel))] CommandViewModel viewModel,
     DesktopFlyout desktopFlyout) : 
     IInitializer
 {

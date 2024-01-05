@@ -9,6 +9,5 @@
                 <StackPanel Orientation="Horizontal" />
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
-
     </ItemsControl>
 </Page>

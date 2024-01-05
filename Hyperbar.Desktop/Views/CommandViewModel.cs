@@ -1,6 +1,5 @@
 ﻿using Hyperbar.Lifecycles;
 using Hyperbar.Templates;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace Hyperbar.Desktop;
@@ -10,14 +9,13 @@ public partial class CommandViewModel :
     ITemplatedViewModel
 {
     public CommandViewModel(ITemplateFactory templateFactory, 
-        IEnumerable<ICommandViewModel> commands)
+        IEnumerable<ICommandViewModel> commands,
+        IWritableConfiguration<AppConfiguration> options)
     {
         TemplateFactory = templateFactory;
+        AddRange(commands);
 
-        foreach (var command in commands)
-        {
-            this.Add(command);
-        }
+        options.Update(args => { });
     }
 
     public ITemplateFactory TemplateFactory { get; }

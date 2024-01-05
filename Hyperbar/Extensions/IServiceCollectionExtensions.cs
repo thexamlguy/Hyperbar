@@ -1,10 +1,62 @@
 ﻿using Hyperbar.Lifecycles;
+using Hyperbar.Options;
 using Hyperbar.Templates;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using System.Text.Json;
 
 namespace Hyperbar;
 public static class IServiceCollectionExtensions
 {
+    public static IServiceCollection ConfigureWritableOptions<TConfiguration>(this IServiceCollection services,
+        string path = "Settings.json",
+        Func<JsonSerializerOptions>? defaultSerializerOptions = null)
+        where TConfiguration :
+        class, new()
+    {
+        return services.ConfigureWritableOptions<TConfiguration>(typeof(TConfiguration).Name, path);
+    }
+
+    public static IServiceCollection ConfigureWritableOptions<TConfiguration>(this IServiceCollection services,
+        string section,
+        string path = "Settings.json",
+        Action<JsonSerializerOptions>? serializerDelegate = null) 
+        where TConfiguration : 
+        class, new()
+    {
+        services.AddOptions();
+        services.AddSingleton<IConfigureOptions<TConfiguration>>(new ConfigureNamedOptions<TConfiguration>("", args => { }));
+
+        services.AddTransient<IConfigurationWriter<TConfiguration>>(provider =>
+        {
+            string? jsonFilePath = null;
+            if (provider.GetService<IHostEnvironment>() is IHostEnvironment hostEnvironment)
+            {
+                IFileProvider fileProvider = hostEnvironment.ContentRootFileProvider;
+                IFileInfo fileInfo = fileProvider.GetFileInfo(path);
+
+                jsonFilePath = fileInfo.PhysicalPath;
+            }
+
+            jsonFilePath ??= Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
+
+            JsonSerializerOptions? defaultSerializerOptions = null;
+            if (serializerDelegate is not null)
+            {
+                defaultSerializerOptions = new JsonSerializerOptions();
+                serializerDelegate.Invoke(defaultSerializerOptions);
+            }
+
+            return new ConfigurationWriter<TConfiguration>(jsonFilePath, section, defaultSerializerOptions);
+        });
+
+        services.AddTransient<IWritableConfiguration<TConfiguration>, WritableConfiguration<TConfiguration>>();
+        return services;
+    }
+
     public static IServiceCollection AddCommandTemplate<TCommand, TCommandTemplate>(this IServiceCollection services)
         where TCommand :
         ICommandViewModel
@@ -13,14 +65,13 @@ public static class IServiceCollectionExtensions
         Type templateType = typeof(TCommandTemplate);
 
         string key = dataType.Name;
-
-        _ = services.AddTransient(typeof(ICommandViewModel), dataType);
-        _ = services.AddTransient(templateType);
-
-        _ = services.AddKeyedTransient(typeof(ICommandViewModel), key, dataType);
-        _ = services.AddKeyedTransient(templateType, key);
-
-        _ = services.AddTransient<IDataTemplateDescriptor>(provider => new DataTemplateDescriptor
+        
+        services.AddTransient(typeof(ICommandViewModel), dataType);
+        services.AddTransient(templateType);
+        services.AddKeyedTransient(typeof(ICommandViewModel), key, dataType);
+        services.AddKeyedTransient(templateType, key);
+        
+        services.AddTransient<IDataTemplateDescriptor>(provider => new DataTemplateDescriptor
         {
             DataType = dataType,
             TemplateType = templateType,
@@ -38,10 +89,10 @@ public static class IServiceCollectionExtensions
 
         key ??= dataType.Name;
 
-        _ = services.AddKeyedTransient(dataType, key);
-        _ = services.AddKeyedTransient(templateType, key);
-
-        _ = services.AddTransient<IDataTemplateDescriptor>(provider => new DataTemplateDescriptor
+        services.AddKeyedTransient(dataType, key);
+        services.AddKeyedTransient(templateType, key);
+        
+        services.AddTransient<IDataTemplateDescriptor>(provider => new DataTemplateDescriptor
         {
             DataType = dataType,
             TemplateType = templateType,
