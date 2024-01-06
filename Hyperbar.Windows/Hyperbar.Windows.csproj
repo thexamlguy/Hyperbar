@@ -15,10 +15,6 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 	<ItemGroup>
-		<None Remove="ContextualCommandView.xaml" />
-		<None Remove="Views\CommandView.xaml" />
-	</ItemGroup>
-	<ItemGroup>
 		<Content Include="Assets\SplashScreen.scale-200.png" />
 		<Content Include="Assets\LockScreenLogo.scale-200.png" />
 		<Content Include="Assets\Square150x150Logo.scale-200.png" />
@@ -37,9 +33,9 @@
 		<ProjectCapability Include="Msix" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\Hyperbar.Windows.Contextual\Hyperbar.Windows.Contextual.csproj" />
+		<ProjectReference Include="..\Hyperbar.Windows.Contextual\Hyperbar.Widget.Contextual.csproj" />
 		<ProjectReference Include="..\Hyperbar.Windows.Controls\Hyperbar.Windows.Controls.csproj" />
-		<ProjectReference Include="..\Hyperbar.Windows.Primary\Hyperbar.Windows.Primary.csproj" />
+		<ProjectReference Include="..\Hyperbar.Windows.Primary\Hyperbar.Widget.Primary.csproj" />
 		<ProjectReference Include="..\Hyperbar\Hyperbar.csproj" />
 	</ItemGroup>
 	<PropertyGroup Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">

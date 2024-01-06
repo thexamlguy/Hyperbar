@@ -1,9 +1,9 @@
 ﻿namespace Hyperbar.Templates;
 
-public record DataTemplateDescriptor :
-    IDataTemplateDescriptor
+public record ContentTemplateDescriptor :
+    IContentTemplateDescriptor
 {
-    public required Type DataType { get; set; }
+    public required Type ContentType { get; set; }
 
     public required Type TemplateType { get; set; }
 

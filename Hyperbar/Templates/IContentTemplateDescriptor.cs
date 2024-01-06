@@ -1,9 +1,11 @@
 ﻿namespace Hyperbar.Templates;
 
-public interface IDataTemplateDescriptor
+public interface IContentTemplateDescriptor
 {
-    Type DataType { get; set; }
+    Type ContentType { get; set; }
+
     object Key { get; set; }
+
     Type TemplateType { get; set; }
 }
 

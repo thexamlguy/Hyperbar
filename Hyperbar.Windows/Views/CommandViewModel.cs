@@ -9,7 +9,7 @@ public partial class CommandViewModel :
     ITemplatedViewModel
 {
     public CommandViewModel(ITemplateFactory templateFactory, 
-        IEnumerable<ICommandWidgetViewModel> commands)
+        IEnumerable<IWidgetViewModel> commands)
     {
         TemplateFactory = templateFactory;
         AddRange(commands);

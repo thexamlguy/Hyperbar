@@ -1,10 +1,10 @@
 ﻿using Hyperbar.Lifecycles;
 using Hyperbar.Templates;
 
-namespace Hyperbar.Windows.Contextual;
+namespace Hyperbar.Extensions.Contextual;
 
-public class ContextualCommandWidgetViewModel(ITemplateFactory templateFactory) :
-    ICommandWidgetViewModel,
+public class ContextualWidgetViewModel(ITemplateFactory templateFactory) :
+    IWidgetViewModel,
     ITemplatedViewModel
 {
     public ITemplateFactory TemplateFactory { get; } = templateFactory;

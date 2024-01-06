@@ -1,6 +1,4 @@
-﻿using Hyperbar.Windows.Contextual;
-using Hyperbar.Windows.Controls;
-using Hyperbar.Windows.Primary;
+﻿using Hyperbar.Windows.Controls;
 using Hyperbar.Lifecycles;
 using Hyperbar.Templates;
 using Microsoft.Extensions.Configuration;
@@ -38,19 +36,19 @@ public partial class App :
                 services.AddTransient<ITemplateFactory, TemplateFactory>();
                 services.AddTransient<ITemplateGeneratorFactory, TemplateGeneratorFactory>();
 
-                services.AddDataTemplate<CommandViewModel, CommandView>();
+                services.AddContentTemplate<CommandViewModel, CommandView>();
 
-                services.AddCommand<ContextualCommandWidgetBuilder>("");
-                services.AddCommand<PrimaryCommandWidgetBuilder>("");
+                //services.AddCommand<ContextualCommandWidgetBuilder>("");
+                //services.AddWidget<PrimaryCommandWidgetBuilder>("");
 
                 services.AddTransient(provider =>
                 {
-                    static IEnumerable<ICommandWidgetViewModel> Resolve(IServiceProvider services)
+                    static IEnumerable<IWidgetViewModel> Resolve(IServiceProvider services)
                     {
-                        foreach (ICommandWidgetContext commandContext in services.GetServices<ICommandWidgetContext>())
+                        foreach (IWidgetContext commandContext in services.GetServices<IWidgetContext>())
                         {
-                            if (commandContext.ServiceProvider.GetService<ICommandWidgetViewModel>() is 
-                                ICommandWidgetViewModel commandViewModel)
+                            if (commandContext.ServiceProvider.GetService<IWidgetViewModel>() is 
+                                IWidgetViewModel commandViewModel)
                             {
                                 yield return commandViewModel;
                             }

@@ -9,7 +9,7 @@ using System.Linq;
 namespace Hyperbar.Windows;
 
 public class TemplateFactory(ITemplateGeneratorFactory factory,
-    IEnumerable<IDataTemplateDescriptor> descriptors,
+    IEnumerable<IContentTemplateDescriptor> descriptors,
     IServiceProvider provider) :
     DataTemplateSelector,
     ITemplateFactory
@@ -20,7 +20,7 @@ public class TemplateFactory(ITemplateGeneratorFactory factory,
 
     public object? Create(object key)
     {
-        if (descriptors.FirstOrDefault(x => x.Key == key) is IDataTemplateDescriptor descriptor)
+        if (descriptors.FirstOrDefault(x => x.Key == key) is IContentTemplateDescriptor descriptor)
         {
             if (provider.GetRequiredKeyedService(descriptor.TemplateType, descriptor.Key) is { } template)
             {

@@ -11,9 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hyperbar.Windows.Win32", "H
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hyperbar", "Hyperbar\Hyperbar.csproj", "{E5795878-C7E3-4386-86FA-33681BCF8D5B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hyperbar.Windows.Contextual", "Hyperbar.Windows.Contextual\Hyperbar.Windows.Contextual.csproj", "{C32D4073-2A9B-4257-8895-09951FAD8E7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hyperbar.Widget.Contextual", "Hyperbar.Windows.Contextual\Hyperbar.Widget.Contextual.csproj", "{C32D4073-2A9B-4257-8895-09951FAD8E7A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hyperbar.Windows.Primary", "Hyperbar.Windows.Primary\Hyperbar.Windows.Primary.csproj", "{AFB8A3EB-8831-4041-AE05-3E0EF672887C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hyperbar.Widget.Primary", "Hyperbar.Windows.Primary\Hyperbar.Widget.Primary.csproj", "{AFB8A3EB-8831-4041-AE05-3E0EF672887C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

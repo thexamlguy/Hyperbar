@@ -2,7 +2,7 @@
 
 namespace Hyperbar.Lifecycles;
 
-public interface ICommandWidgetBuilder
+public interface IWidgetBuilder
 {
     void Create(IServiceCollection services);
 }

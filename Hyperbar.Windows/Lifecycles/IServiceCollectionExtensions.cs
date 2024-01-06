@@ -7,10 +7,10 @@ namespace Hyperbar.Windows
 {
     public static class IServiceCollectionExtensions
     {
-        public static IServiceCollection AddCommand<TCommandBuilder>(this IServiceCollection services, 
+        public static IServiceCollection AddWidget<TCommandBuilder>(this IServiceCollection services, 
             string key)
             where TCommandBuilder :
-            ICommandWidgetBuilder, new()
+            IWidgetBuilder, new()
         {
             TCommandBuilder builder = new();
             IHost? host = new HostBuilder()
@@ -22,7 +22,7 @@ namespace Hyperbar.Windows
                     builder.Create(isolatedServices);
                 }).Build();
 
-            services.AddTransient<ICommandWidgetContext>(provider => new CommandWidgetContext(host.Services));
+            services.AddTransient<IWidgetContext>(provider => new WidgetContext(host.Services));
             return services;
         }
     }

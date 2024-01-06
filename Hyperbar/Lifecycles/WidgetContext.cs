@@ -1,7 +1,7 @@
 ﻿namespace Hyperbar.Lifecycles;
 
-public class CommandWidgetContext(IServiceProvider serviceProvider) :
-    ICommandWidgetContext
+public class WidgetContext(IServiceProvider serviceProvider) :
+    IWidgetContext
 {
     public IServiceProvider ServiceProvider => serviceProvider;
 }

@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<Page
-    x:Class="Hyperbar.Windows.Primary.PrimaryCommandWidgetView"
+<UserControl
+    x:Class="Hyperbar.Windows.WidgetView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Grid>
-        <Button Content="Primary commands" />
-    </Grid>
-</Page>
+    <Grid />
+</UserControl>

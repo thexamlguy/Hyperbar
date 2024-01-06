@@ -3,7 +3,8 @@ using Microsoft.UI.Xaml.Input;
 
 namespace Hyperbar.Windows;
 
-public sealed partial class CommandView : Page
+public sealed partial class CommandView : 
+    UserControl
 {
     public CommandView() => InitializeComponent();
 

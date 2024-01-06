@@ -1,6 +1,6 @@
 ﻿namespace Hyperbar.Lifecycles;
 
-public interface ICommandWidgetContext
+public interface IWidgetContext
 {
     IServiceProvider ServiceProvider { get; }
 }

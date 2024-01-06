@@ -2,23 +2,25 @@
 using Hyperbar.Options;
 using Hyperbar.Templates;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
 
 namespace Hyperbar;
+
 public static class IServiceCollectionExtensions
 {
-    public static IServiceCollection AddWritableConfiguration<TConfiguration>(this IServiceCollection services,
+    public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services,
         string path = "Settings.json")
         where TConfiguration :
         class, new()
     {
-        return services.AddWritableConfiguration<TConfiguration>(typeof(TConfiguration).Name, path);
+        return services.AddConfiguration<TConfiguration>(typeof(TConfiguration).Name, path);
     }
 
-    public static IServiceCollection AddWritableConfiguration<TConfiguration>(this IServiceCollection services,
+    public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services,
         string section,
         string path = "Settings.json",
         Action<JsonSerializerOptions>? serializerDelegate = null) 
@@ -55,23 +57,24 @@ public static class IServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddCommandTemplate<TCommand, TCommandTemplate>(this IServiceCollection services)
-        where TCommand :
-        ICommandWidgetViewModel
+    public static IServiceCollection AddWidgetTemplate<TWidgetContent>(this IServiceCollection services)
+        where TWidgetContent :
+        IWidgetViewModel
     {
-        Type dataType = typeof(TCommand);
-        Type templateType = typeof(TCommandTemplate);
+        Type contentType = typeof(TWidgetContent);
+        Type templateType = typeof(IWidgetView);
 
-        string key = dataType.Name;
+        string key = contentType.Name;
         
-        services.AddTransient(typeof(ICommandWidgetViewModel), dataType);
-        services.AddTransient(templateType);
-        services.AddKeyedTransient(typeof(ICommandWidgetViewModel), key, dataType);
-        services.AddKeyedTransient(templateType, key);
+        services.AddTransient(typeof(IWidgetViewModel), contentType);
+        services.TryAddTransient(provider => provider.GetService<IWidgetView>()!);
+
+        services.AddKeyedTransient(typeof(IWidgetViewModel), key, contentType);
+        services.TryAddKeyedTransient(templateType, key);
         
-        services.AddTransient<IDataTemplateDescriptor>(provider => new DataTemplateDescriptor
+        services.AddTransient<IContentTemplateDescriptor>(provider => new ContentTemplateDescriptor
         {
-            DataType = dataType,
+            ContentType = contentType,
             TemplateType = templateType,
             Key = key
         });
@@ -79,20 +82,48 @@ public static class IServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddDataTemplate<TData, TTemplate>(this IServiceCollection services,
+    public static IServiceCollection AddWidgetTemplate<TWidgetContent, TWidgetTemplate>(this IServiceCollection services)
+        where TWidgetContent :
+        IWidgetViewModel
+    {
+        Type contentType = typeof(TWidgetContent);
+        Type templateType = typeof(TWidgetTemplate);
+
+        string key = contentType.Name;
+
+        services.AddTransient(typeof(IWidgetViewModel), contentType);
+        services.TryAddTransient(templateType);
+
+        services.AddKeyedTransient(typeof(IWidgetViewModel), key, contentType);
+        services.TryAddKeyedTransient(templateType, key);
+
+        services.AddTransient<IContentTemplateDescriptor>(provider => new ContentTemplateDescriptor
+        {
+            ContentType = contentType,
+            TemplateType = templateType,
+            Key = key
+        });
+
+        return services;
+    }
+
+    public static IServiceCollection AddContentTemplate<TContent, TTemplate>(this IServiceCollection services,
         object? key = null)
     {
-        Type dataType = typeof(TData);
+        Type contentType = typeof(TContent);
         Type templateType = typeof(TTemplate);
 
-        key ??= dataType.Name;
+        key ??= contentType.Name;
 
-        services.AddKeyedTransient(dataType, key);
+        services.AddTransient(contentType);
+        services.TryAddTransient(templateType);
+
+        services.AddKeyedTransient(contentType, key);
         services.AddKeyedTransient(templateType, key);
         
-        services.AddTransient<IDataTemplateDescriptor>(provider => new DataTemplateDescriptor
+        services.AddTransient<IContentTemplateDescriptor>(provider => new ContentTemplateDescriptor
         {
-            DataType = dataType,
+            ContentType = contentType,
             TemplateType = templateType,
             Key = key
         });
