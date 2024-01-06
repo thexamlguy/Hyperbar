@@ -1,7 +1,7 @@
 ﻿namespace Hyperbar;
 
-public class QueryClassHandlerWrapper<TRequest, TResponse> 
-    where TRequest : 
+public class QueryClassHandlerWrapper<TRequest, TResponse>
+    where TRequest :
     class,
     IQuery<TResponse>
 {

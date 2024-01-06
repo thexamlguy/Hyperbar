@@ -13,7 +13,7 @@ public class ObservableCollectionViewModel<TItem>(IServiceFactory serviceFactory
         return item;
     }
 
-    public TItem Add<T>(params object?[] parameters) 
+    public TItem Add<T>(params object?[] parameters)
         where T : TItem
     {
         T? item = serviceFactory.Create<T>(parameters);
@@ -44,5 +44,4 @@ public class ObservableCollectionViewModel<TItem>(IServiceFactory serviceFactory
 public class ObservableCollectionViewModel(IServiceFactory serviceFactory) :
     ObservableCollectionViewModel<object>(serviceFactory)
 {
-
 }

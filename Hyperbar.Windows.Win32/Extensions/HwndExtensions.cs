@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.Graphics.Gdi;
-using System.Runtime.InteropServices;
 using Windows.Win32.UI.WindowsAndMessaging;
 
 namespace Hyperbar.Windows.Win32;
@@ -15,7 +15,7 @@ public static class HwndExtensions
         WS_EX_LAYERED = 0x80000
     }
 
-    public static void SetWindowOpacity(this IntPtr hWnd, 
+    public static void SetWindowOpacity(this IntPtr hWnd,
         byte value)
     {
         HWND hWND = new(hWnd);
@@ -72,14 +72,17 @@ public static class HwndExtensions
                 left = 0;
                 top = (info.rcWork.bottom + info.rcWork.top) / 2 - actualHeight / 2;
                 break;
+
             case WindowPlacement.Top:
                 left = (info.rcWork.left + info.rcWork.right) / 2 - actualWidth / 2;
                 top = 0;
                 break;
+
             case WindowPlacement.Right:
                 left = info.rcWork.left + info.rcWork.right - actualWidth;
                 top = (info.rcWork.bottom + info.rcWork.top) / 2 - actualHeight / 2;
                 break;
+
             case WindowPlacement.Bottom:
                 left = (info.rcWork.left + info.rcWork.right) / 2 - actualWidth / 2;
                 top = info.rcWork.bottom + info.rcWork.top - actualHeight;

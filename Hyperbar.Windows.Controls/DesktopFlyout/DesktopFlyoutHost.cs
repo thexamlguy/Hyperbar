@@ -1,7 +1,7 @@
-﻿using Microsoft.UI.Xaml;
-using Hyperbar.Windows.Win32;
-using Microsoft.UI.Xaml.Controls.Primitives;
+﻿using Hyperbar.Windows.Win32;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
 
 namespace Hyperbar.Windows.Controls;
 
@@ -20,7 +20,7 @@ internal class DesktopFlyoutHost : Window
         presenter.SizeChanged += OnChildSizeChanged;
 
         Content = root;
-        
+
         this.SetOpacity(0);
         this.SetStyle(WindowStyle.SysMenu | WindowStyle.Visible);
         this.SetTopMost(true);
@@ -37,7 +37,7 @@ internal class DesktopFlyoutHost : Window
             return;
         }
 
-      //  presenter.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+        //  presenter.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
 
         double height = presenter.DesiredSize.Height;
         double width = presenter.DesiredSize.Width;
@@ -47,15 +47,19 @@ internal class DesktopFlyoutHost : Window
             case DesktopFlyoutPlacement.Left:
                 this.Snap(WindowPlacement.Left, 0, 0);
                 break;
+
             case DesktopFlyoutPlacement.Top:
                 this.Snap(WindowPlacement.Top, width, height);
                 break;
+
             case DesktopFlyoutPlacement.Right:
                 this.Snap(WindowPlacement.Right, 0, 0);
                 break;
+
             case DesktopFlyoutPlacement.Bottom:
                 this.Snap(WindowPlacement.Bottom, width, height);
                 break;
+
             default:
                 break;
         }

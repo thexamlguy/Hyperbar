@@ -5,16 +5,16 @@ namespace Hyperbar;
 
 public class WritableConfiguration<TConfiguration>(IConfigurationWriter<TConfiguration> writer,
     IOptionsMonitor<TConfiguration> options,
-    IConfiguration configuration) : 
-    IWritableConfiguration<TConfiguration> 
-    where TConfiguration : 
+    IConfiguration configuration) :
+    IWritableConfiguration<TConfiguration>
+    where TConfiguration :
     class, new()
 {
     public TConfiguration Value => options.CurrentValue;
 
     public TConfiguration Get(string? name) => options.Get(name);
 
-    public void Write(Action<TConfiguration> updateDelegate, 
+    public void Write(Action<TConfiguration> updateDelegate,
         bool reload = true)
     {
         writer.Write(updateDelegate);

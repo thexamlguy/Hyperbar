@@ -7,5 +7,4 @@ public interface IInitializer
 
 public interface IDataTemplateSelector
 {
-
 }

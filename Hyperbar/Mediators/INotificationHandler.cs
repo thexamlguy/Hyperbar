@@ -1,10 +1,9 @@
 ﻿namespace Hyperbar;
 
-public interface INotificationHandler<in TNotification> 
-    where TNotification : 
+public interface INotificationHandler<in TNotification>
+    where TNotification :
     INotification
 {
-    ValueTask Handle(TNotification notification, 
+    ValueTask Handle(TNotification notification,
         CancellationToken cancellationToken);
 }
-

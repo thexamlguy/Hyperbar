@@ -8,4 +8,3 @@ public interface IContentTemplateDescriptor
 
     Type TemplateType { get; set; }
 }
-

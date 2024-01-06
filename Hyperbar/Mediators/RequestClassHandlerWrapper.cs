@@ -1,8 +1,8 @@
 ﻿namespace Hyperbar;
 
 public class RequestClassHandlerWrapper<TRequest, TResponse>
-    where TRequest : 
-    class, 
+    where TRequest :
+    class,
     IRequest<TResponse>
 {
     private readonly MessageHandlerDelegate<TRequest, TResponse> handler;
@@ -16,7 +16,7 @@ public class RequestClassHandlerWrapper<TRequest, TResponse>
             MessageHandlerDelegate<TRequest, TResponse> handlerCopy = handler;
             IPipelineBehavior<TRequest, TResponse> pipelineCopy = pipeline;
 
-            handler = (TRequest message, CancellationToken cancellationToken) => 
+            handler = (TRequest message, CancellationToken cancellationToken) =>
                 pipelineCopy.Handle(message, handlerCopy, cancellationToken);
         }
 

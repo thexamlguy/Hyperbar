@@ -3,17 +3,17 @@ using System.Runtime.CompilerServices;
 
 namespace Hyperbar;
 
-public class Mediator(IServiceProvider provider) : 
+public class Mediator(IServiceProvider provider) :
     IMediator
 {
     private readonly ConditionalWeakTable<Type, dynamic> handlers = [];
 
-    public ValueTask Publish<TNotification>(TNotification notification, 
-        CancellationToken cancellationToken = default) 
-        where TNotification : 
+    public ValueTask Publish<TNotification>(TNotification notification,
+        CancellationToken cancellationToken = default)
+        where TNotification :
         INotification
     {
-        List<INotificationHandler<TNotification>> handlers = 
+        List<INotificationHandler<TNotification>> handlers =
             provider.GetServices<INotificationHandler<TNotification>>().ToList();
 
         foreach (KeyValuePair<Type, dynamic> handler in this.handlers)
@@ -36,7 +36,7 @@ public class Mediator(IServiceProvider provider) :
         return default;
     }
 
-    public ValueTask<TResponse> Send<TResponse>(IRequest<TResponse> request, 
+    public ValueTask<TResponse> Send<TResponse>(IRequest<TResponse> request,
         CancellationToken cancellationToken = default)
     {
         dynamic? handler = provider.GetService(typeof(RequestClassHandlerWrapper<,>)
@@ -50,7 +50,7 @@ public class Mediator(IServiceProvider provider) :
         return default;
     }
 
-    public ValueTask<TResponse> Send<TResponse>(ICommand<TResponse> command, 
+    public ValueTask<TResponse> Send<TResponse>(ICommand<TResponse> command,
         CancellationToken cancellationToken = default)
     {
         dynamic? handler = provider.GetService(typeof(CommandClassHandlerWrapper<,>)
@@ -64,7 +64,7 @@ public class Mediator(IServiceProvider provider) :
         return default;
     }
 
-    public ValueTask<TResponse> Send<TResponse>(IQuery<TResponse> query, 
+    public ValueTask<TResponse> Send<TResponse>(IQuery<TResponse> query,
         CancellationToken cancellationToken = default)
     {
         dynamic? handler = provider.GetService(typeof(QueryClassHandlerWrapper<,>)

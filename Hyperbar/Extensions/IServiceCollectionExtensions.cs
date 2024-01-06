@@ -5,7 +5,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
 
-namespace Hyperbar;
+namespace Hyperbar.Extensions;
 
 public static class IServiceCollectionExtensions
 {
@@ -20,14 +20,14 @@ public static class IServiceCollectionExtensions
     public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services,
         string section,
         string path = "Settings.json",
-        Action<JsonSerializerOptions>? serializerDelegate = null) 
-        where TConfiguration : 
+        Action<JsonSerializerOptions>? serializerDelegate = null)
+        where TConfiguration :
         class, new()
     {
-        services.AddOptions();
-        services.AddSingleton<IConfigureOptions<TConfiguration>>(new ConfigureNamedOptions<TConfiguration>("", args => { }));
+        _ = services.AddOptions();
+        _ = services.AddSingleton<IConfigureOptions<TConfiguration>>(new ConfigureNamedOptions<TConfiguration>("", args => { }));
 
-        services.AddTransient<IConfigurationWriter<TConfiguration>>(provider =>
+        _ = services.AddTransient<IConfigurationWriter<TConfiguration>>(provider =>
         {
             string? jsonFilePath = null;
             if (provider.GetService<IHostEnvironment>() is IHostEnvironment hostEnvironment)
@@ -50,7 +50,7 @@ public static class IServiceCollectionExtensions
             return new ConfigurationWriter<TConfiguration>(jsonFilePath, section, defaultSerializerOptions);
         });
 
-        services.AddTransient<IWritableConfiguration<TConfiguration>, WritableConfiguration<TConfiguration>>();
+        _ = services.AddTransient<IWritableConfiguration<TConfiguration>, WritableConfiguration<TConfiguration>>();
         return services;
     }
 
@@ -62,14 +62,14 @@ public static class IServiceCollectionExtensions
         Type templateType = typeof(IWidgetView);
 
         string key = contentType.Name;
-        
-        services.AddTransient(typeof(IWidgetViewModel), contentType);
+
+        _ = services.AddTransient(typeof(IWidgetViewModel), contentType);
         services.TryAddTransient(templateType, provider => provider.GetService<IWidgetView>()!);
 
-        services.AddKeyedTransient(typeof(IWidgetViewModel), key, contentType);
-        services.TryAddKeyedTransient<IWidgetView>(key, (provider, key) => provider.GetService<IWidgetView>()!);
+        _ = services.AddKeyedTransient(typeof(IWidgetViewModel), key, contentType);
+        services.TryAddKeyedTransient(key, (provider, key) => provider.GetService<IWidgetView>()!);
 
-        services.AddTransient<IContentTemplateDescriptor>(provider => new ContentTemplateDescriptor
+        _ = services.AddTransient<IContentTemplateDescriptor>(provider => new ContentTemplateDescriptor
         {
             ContentType = contentType,
             TemplateType = templateType,
@@ -88,13 +88,13 @@ public static class IServiceCollectionExtensions
 
         string key = contentType.Name;
 
-        services.AddTransient(typeof(IWidgetViewModel), contentType);
+        _ = services.AddTransient(typeof(IWidgetViewModel), contentType);
         services.TryAddTransient(templateType);
 
-        services.AddKeyedTransient(typeof(IWidgetViewModel), key, contentType);
+        _ = services.AddKeyedTransient(typeof(IWidgetViewModel), key, contentType);
         services.TryAddKeyedTransient(templateType, key);
 
-        services.AddTransient<IContentTemplateDescriptor>(provider => new ContentTemplateDescriptor
+        _ = services.AddTransient<IContentTemplateDescriptor>(provider => new ContentTemplateDescriptor
         {
             ContentType = contentType,
             TemplateType = templateType,
@@ -112,13 +112,13 @@ public static class IServiceCollectionExtensions
 
         key ??= contentType.Name;
 
-        services.AddTransient(contentType);
+        _ = services.AddTransient(contentType);
         services.TryAddTransient(templateType);
 
-        services.AddKeyedTransient(contentType, key);
-        services.AddKeyedTransient(templateType, key);
-        
-        services.AddTransient<IContentTemplateDescriptor>(provider => new ContentTemplateDescriptor
+        _ = services.AddKeyedTransient(contentType, key);
+        _ = services.AddKeyedTransient(templateType, key);
+
+        _ = services.AddTransient<IContentTemplateDescriptor>(provider => new ContentTemplateDescriptor
         {
             ContentType = contentType,
             TemplateType = templateType,

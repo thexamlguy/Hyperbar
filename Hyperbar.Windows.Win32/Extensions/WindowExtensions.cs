@@ -1,7 +1,6 @@
 ﻿using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using System;
-using Windows.UI.Popups;
 using WinRT.Interop;
 
 namespace Hyperbar.Windows.Win32;

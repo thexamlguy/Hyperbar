@@ -6,8 +6,8 @@ namespace Hyperbar;
 
 public class ConfigurationWriter<TConfiguration>(string path,
     string section,
-    JsonSerializerOptions? serializerOptions = null) : 
-    IConfigurationWriter<TConfiguration> 
+    JsonSerializerOptions? serializerOptions = null) :
+    IConfigurationWriter<TConfiguration>
     where TConfiguration :
     class, new()
 {

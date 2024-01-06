@@ -1,7 +1,7 @@
 ﻿namespace Hyperbar;
 
 public interface IConfigurationWriter<TConfiguration>
-    where TConfiguration : 
+    where TConfiguration :
     class, new()
 {
     void Write(Action<TConfiguration> updateDelegate);

@@ -3,7 +3,7 @@
 public class ContextualWidgetViewModel :
     WidgetViewModelBase
 {
-    public ContextualWidgetViewModel(ITemplateFactory templateFactory, 
+    public ContextualWidgetViewModel(ITemplateFactory templateFactory,
         IServiceFactory serviceFactory) : base(templateFactory, serviceFactory)
     {
         Add<WidgetButtonViewModel>();

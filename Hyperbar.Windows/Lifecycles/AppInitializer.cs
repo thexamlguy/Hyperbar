@@ -5,7 +5,7 @@ namespace Hyperbar.Windows;
 
 public class AppInitializer([FromKeyedServices(nameof(CommandViewModel))] CommandView view,
     [FromKeyedServices(nameof(CommandViewModel))] CommandViewModel viewModel,
-    DesktopFlyout desktopFlyout) : 
+    DesktopFlyout desktopFlyout) :
     IInitializer
 {
     public Task InitializeAsync()

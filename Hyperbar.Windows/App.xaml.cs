@@ -1,14 +1,15 @@
-﻿using Hyperbar.Windows.Controls;
+﻿using Hyperbar.Extensions;
+using Hyperbar.Widget.Contextual;
+using Hyperbar.Windows.Controls;
+using Hyperbar.Windows.Primary;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
-using Hyperbar.Widget.Contextual;
-using Hyperbar.Windows.Primary;
 
 namespace Hyperbar.Windows;
 
-public partial class App : 
+public partial class App :
     Application
 {
     public App() => InitializeComponent();
@@ -28,7 +29,7 @@ public partial class App :
             })
             .ConfigureServices((context, services) =>
             {
-                services.AddSingleton<IServiceFactory>(provider => 
+                services.AddSingleton<IServiceFactory>(provider =>
                     new ServiceFactory((type, parameters) => ActivatorUtilities.CreateInstance(provider, type, parameters!)));
 
                 services.AddHostedService<AppService>();
@@ -48,7 +49,7 @@ public partial class App :
                     {
                         foreach (IWidgetContext widgetContext in services.GetServices<IWidgetContext>())
                         {
-                            if (widgetContext.ServiceProvider.GetService<IWidgetViewModel>() is 
+                            if (widgetContext.ServiceProvider.GetService<IWidgetViewModel>() is
                                 IWidgetViewModel viewModel)
                             {
                                 yield return viewModel;
@@ -56,7 +57,7 @@ public partial class App :
                         }
                     }
 
-                    return Resolve(provider);                
+                    return Resolve(provider);
                 });
             })
             .Build();

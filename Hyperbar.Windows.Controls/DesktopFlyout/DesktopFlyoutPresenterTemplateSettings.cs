@@ -29,6 +29,7 @@ public class DesktopFlyoutPresenterTemplateSettings : DependencyObject
         get => (double)GetValue(HeightProperty);
         set => SetValue(HeightProperty, value);
     }
+
     public double NegativeHeight
     {
         get => (double)GetValue(NegativeHeightProperty);

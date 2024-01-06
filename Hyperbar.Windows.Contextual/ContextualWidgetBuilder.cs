@@ -1,8 +1,9 @@
+using Hyperbar.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Hyperbar.Widget.Contextual;
 
-public class ContextualWidgetBuilder : 
+public class ContextualWidgetBuilder :
     IWidgetBuilder
 {
     public void Create(IServiceCollection services) => services

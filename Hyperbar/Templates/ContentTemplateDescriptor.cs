@@ -9,4 +9,3 @@ public record ContentTemplateDescriptor :
 
     public required object Key { get; set; }
 }
-

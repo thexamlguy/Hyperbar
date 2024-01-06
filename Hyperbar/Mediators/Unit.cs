@@ -1,8 +1,8 @@
 ﻿namespace Hyperbar;
 
-public readonly struct Unit : 
-    IEquatable<Unit>, 
-    IComparable<Unit>, 
+public readonly struct Unit :
+    IEquatable<Unit>,
+    IComparable<Unit>,
     IComparable
 {
     private static readonly Unit value = new();
@@ -27,4 +27,3 @@ public readonly struct Unit :
 
     public override string ToString() => "()";
 }
-

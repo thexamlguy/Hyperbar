@@ -1,6 +1,6 @@
 ﻿namespace Hyperbar.Windows;
 
-public partial class CommandViewModel : 
+public partial class CommandViewModel :
     ObservableCollectionViewModel<IWidgetViewModel>,
     ITemplatedViewModel
 {

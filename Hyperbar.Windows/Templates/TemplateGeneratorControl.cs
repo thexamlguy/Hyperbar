@@ -3,7 +3,7 @@ using Microsoft.UI.Xaml.Controls;
 
 namespace Hyperbar.Windows;
 
-public class TemplateGeneratorControl : 
+public class TemplateGeneratorControl :
     ContentControl
 {
     public TemplateGeneratorControl()
