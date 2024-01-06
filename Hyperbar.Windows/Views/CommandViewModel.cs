@@ -1,15 +1,15 @@
-﻿namespace Hyperbar.Windows;
+﻿
+namespace Hyperbar.Windows;
 
 public partial class CommandViewModel :
     ObservableCollectionViewModel<IWidgetViewModel>,
     ITemplatedViewModel
 {
-    public CommandViewModel(ITemplateFactory templateFactory,
-        IServiceFactory serviceFactory,
-        IEnumerable<IWidgetViewModel> widgets) : base(serviceFactory)
+    public CommandViewModel(ITemplateFactory templateFactory, 
+        IServiceFactory serviceFactory, 
+        IEnumerable<IWidgetViewModel> items) : base(serviceFactory, items)
     {
         TemplateFactory = templateFactory;
-        AddRange(widgets);
     }
 
     public ITemplateFactory TemplateFactory { get; }

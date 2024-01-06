@@ -7,7 +7,8 @@ public class KeyAcceleratorCommandHandler(IVirtualKeyboard virtualKeyboard) :
 {
     public ValueTask<Unit> Handle(KeyAcceleratorCommand command,
         CancellationToken cancellationToken)
-    {        virtualKeyboard.Send((int)command.Key);
+    {       
+        virtualKeyboard.Send((int)command.Key);
         return default;
     }
 }

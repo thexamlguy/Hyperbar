@@ -2,9 +2,23 @@
 
 namespace Hyperbar;
 
-public class ObservableCollectionViewModel<TItem>(IServiceFactory serviceFactory) :
+public class ObservableCollectionViewModel<TItem> :
     ObservableCollection<TItem>
 {
+    private readonly IServiceFactory serviceFactory;
+
+    public ObservableCollectionViewModel(IServiceFactory serviceFactory)
+    {
+        this.serviceFactory = serviceFactory;
+    }
+
+    public ObservableCollectionViewModel(IServiceFactory serviceFactory, 
+        IEnumerable<TItem> items)
+    {
+        this.serviceFactory = serviceFactory;
+        AddRange(items);
+    }
+
     public TItem Add()
     {
         TItem? item = serviceFactory.Create<TItem>();
