@@ -25,11 +25,7 @@ public class KeyInterop
         VirtualKey.RightWindows,
         VirtualKey.LeftWindows];
 
-    public static void Press(VirtualKey key) => SendKey(key, true);
-
-    public static void Release(VirtualKey key) => SendKey(key, false);
-
-    public static unsafe void Type(VirtualKey key,
+    public static void Send(VirtualKey key,
         params VirtualKey[] modifierKeys)
     {
         foreach (VirtualKey modiferKey in modifierKeys)
@@ -46,7 +42,11 @@ public class KeyInterop
         }
     }
 
-    private static unsafe void SendKey(VirtualKey key,
+    private static void Press(VirtualKey key) => Send(key, true);
+
+    private static void Release(VirtualKey key) => Send(key, false);
+
+    private static unsafe void Send(VirtualKey key,
         bool pressed)
     {
         INPUT input = new()

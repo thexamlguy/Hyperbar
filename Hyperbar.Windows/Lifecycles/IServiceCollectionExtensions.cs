@@ -14,6 +14,7 @@ namespace Hyperbar.Windows
             IHost? host = new HostBuilder()
                 .ConfigureServices(isolatedServices =>
                 {
+
                     isolatedServices.AddSingleton<IServiceFactory>(provider =>
                         new ServiceFactory((type, parameters) => ActivatorUtilities.CreateInstance(provider, type, parameters!)));
 

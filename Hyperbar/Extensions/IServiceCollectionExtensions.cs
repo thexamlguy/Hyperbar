@@ -9,6 +9,83 @@ namespace Hyperbar.Extensions;
 
 public static class IServiceCollectionExtensions
 {
+    public static IServiceCollection AddHandler<THandler>(this IServiceCollection serviceCollection, 
+        ServiceLifetime lifetime = ServiceLifetime.Transient) 
+        where THandler : 
+        notnull
+    {
+        if (typeof(THandler).GetInterface(typeof(INotificationHandler<>).Name) is { } notificationContract)
+        {
+            if (notificationContract.GetGenericArguments() is { Length: 1 } arguments)
+            {
+                Type notificationType = arguments[0];
+
+                serviceCollection.TryAdd(new ServiceDescriptor(typeof(THandler), typeof(THandler), ServiceLifetime.Singleton));
+                serviceCollection.Add(new ServiceDescriptor(typeof(INotificationHandler<>).MakeGenericType(notificationType),
+                    provider => provider.GetRequiredService<THandler>(), lifetime));
+            }
+        }
+
+        if (typeof(THandler).GetInterface(typeof(IRequestHandler<,>).Name) is { } requestContract)
+        {
+            if (requestContract.GetGenericArguments() is { Length: 2 } arguments)
+            {
+                Type requestType = arguments[0];
+                Type responseType = arguments[1];
+
+                Type wrapperType = typeof(RequestClassHandlerWrapper<,>).MakeGenericType(requestType, responseType);
+
+                serviceCollection.TryAdd(new ServiceDescriptor(typeof(THandler), typeof(THandler), lifetime));
+                serviceCollection.Add(new ServiceDescriptor(wrapperType,
+                    provider => provider.GetService<IServiceFactory>()?.Create(wrapperType,
+                        provider.GetRequiredService<THandler>(),
+                        provider.GetServices(typeof(IPipelineBehavior<,>).MakeGenericType(requestType, responseType)))!,
+                    lifetime
+                ));
+            }
+        }
+
+        if (typeof(THandler).GetInterface(typeof(ICommandHandler<,>).Name) is { } commandContract)
+        {
+            if (commandContract.GetGenericArguments() is { Length: 2 } arguments)
+            {
+                Type requestType = arguments[0];
+                Type responseType = arguments[1];
+
+                Type wrapperType = typeof(CommandClassHandlerWrapper<,>).MakeGenericType(requestType, responseType);
+
+                serviceCollection.TryAdd(new ServiceDescriptor(typeof(THandler), typeof(THandler), lifetime));
+                serviceCollection.Add(new ServiceDescriptor(wrapperType,
+                    provider => provider.GetService<IServiceFactory>()?.Create(wrapperType, 
+                        provider.GetRequiredService<THandler>(),
+                        provider.GetServices(typeof(IPipelineBehavior<,>).MakeGenericType(requestType, responseType)))!,
+                    lifetime
+                ));
+            }
+        }
+
+        if (typeof(THandler).GetInterface(typeof(IQueryHandler<,>).Name) is { } queryContract)
+        {
+            if (queryContract.GetGenericArguments() is { Length: 2 } arguments)
+            {
+                Type requestType = arguments[0];
+                Type responseType = arguments[1];
+
+                Type wrapperType = typeof(QueryClassHandlerWrapper<,>).MakeGenericType(requestType, responseType);
+
+                serviceCollection.TryAdd(new ServiceDescriptor(typeof(THandler), typeof(THandler), lifetime));
+                serviceCollection.Add(new ServiceDescriptor(wrapperType,
+                    provider => provider.GetService<IServiceFactory>()?.Create(wrapperType, 
+                        provider.GetRequiredService<THandler>(), 
+                        provider.GetServices(typeof(IPipelineBehavior<,>).MakeGenericType(requestType, responseType)))!,
+                    lifetime
+                ));
+            }
+        }
+        return serviceCollection;
+    }
+
+
     public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services,
         string path = "Settings.json")
         where TConfiguration :
