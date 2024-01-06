@@ -1,4 +1,4 @@
-﻿namespace Hyperbar.Windows.Win32
+﻿namespace Hyperbar.Windows.Interop
 {
     public interface IVirtualKeyboard
     {

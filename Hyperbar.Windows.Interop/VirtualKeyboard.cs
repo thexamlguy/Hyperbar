@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using Windows.Win32;
 using Windows.Win32.UI.KeyboardAndMouseInput;
 
-namespace Hyperbar.Windows.Win32;
+namespace Hyperbar.Windows.Interop;
 
 public class VirtualKeyboard : 
     IVirtualKeyboard

@@ -1,9 +1,9 @@
-﻿using Microsoft.UI.Windowing;
+﻿using Hyperbar.Windows.Interop;
+using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
-using System;
 using WinRT.Interop;
 
-namespace Hyperbar.Windows.Win32;
+namespace Hyperbar.Windows.UI;
 
 public static class WindowExtensions
 {
@@ -32,5 +32,5 @@ public static class WindowExtensions
     public static void Snap(this Window window,
         WindowPlacement placement,
         double? width = null,
-        double? height = null) => window.GetHandle().SnapWindow(placement, width, height);
+        double? height = null) => window.GetHandle().SnapWindow((int)placement, width, height);
 }

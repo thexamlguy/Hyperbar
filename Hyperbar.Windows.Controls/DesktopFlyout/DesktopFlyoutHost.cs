@@ -1,7 +1,8 @@
-﻿using Hyperbar.Windows.Win32;
-using Microsoft.UI.Xaml;
+﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
+using Hyperbar.Windows.UI;
+using Hyperbar.Windows.Interop;
 
 namespace Hyperbar.Windows.Controls;
 

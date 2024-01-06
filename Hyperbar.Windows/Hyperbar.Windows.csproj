@@ -7,11 +7,11 @@
 		<Platforms>x86;x64;ARM64</Platforms>
 		<RuntimeIdentifiers>win-x86;win-x64;win-arm64</RuntimeIdentifiers>
 		<PublishProfile>win-$(Platform).pubxml</PublishProfile>
-		<UseRidGraph>true</UseRidGraph>
 		<UseWinUI>true</UseWinUI>
 		<EnableMsixTooling>true</EnableMsixTooling>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<UseRidGraph>true</UseRidGraph>
 	</PropertyGroup>
 	<ItemGroup>
 	  <None Remove="Views\WidgetButtonView.xaml" />
@@ -37,6 +37,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Hyperbar.Windows.Contextual\Hyperbar.Widget.Contextual.csproj" />
 		<ProjectReference Include="..\Hyperbar.Windows.Controls\Hyperbar.Windows.Controls.csproj" />
+		<ProjectReference Include="..\Hyperbar.Windows.Interop\Hyperbar.Windows.Interop.csproj" />
 		<ProjectReference Include="..\Hyperbar.Windows.Primary\Hyperbar.Widget.Primary.csproj" />
 		<ProjectReference Include="..\Hyperbar\Hyperbar.csproj" />
 	</ItemGroup>

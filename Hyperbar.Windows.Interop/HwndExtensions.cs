@@ -5,7 +5,7 @@ using Windows.Win32.Foundation;
 using Windows.Win32.Graphics.Gdi;
 using Windows.Win32.UI.WindowsAndMessaging;
 
-namespace Hyperbar.Windows.Win32;
+namespace Hyperbar.Windows.Interop;
 
 public static class HwndExtensions
 {
@@ -44,7 +44,7 @@ public static class HwndExtensions
     }
 
     public static void SnapWindow(this IntPtr hwnd,
-        WindowPlacement placement,
+        int placement,
         double? width = null,
         double? height = null)
     {
@@ -68,22 +68,22 @@ public static class HwndExtensions
 
         switch (placement)
         {
-            case WindowPlacement.Left:
+            case 0:
                 left = 0;
                 top = (info.rcWork.bottom + info.rcWork.top) / 2 - actualHeight / 2;
                 break;
 
-            case WindowPlacement.Top:
+            case 1:
                 left = (info.rcWork.left + info.rcWork.right) / 2 - actualWidth / 2;
                 top = 0;
                 break;
 
-            case WindowPlacement.Right:
+            case 2:
                 left = info.rcWork.left + info.rcWork.right - actualWidth;
                 top = (info.rcWork.bottom + info.rcWork.top) / 2 - actualHeight / 2;
                 break;
 
-            case WindowPlacement.Bottom:
+            case 3:
                 left = (info.rcWork.left + info.rcWork.right) / 2 - actualWidth / 2;
                 top = info.rcWork.bottom + info.rcWork.top - actualHeight;
                 break;
