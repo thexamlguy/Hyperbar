@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Hyperbar.Windows.Interop;
+﻿namespace Hyperbar.Windows.Interop;
 
 [Flags]
 public enum WindowStyle
