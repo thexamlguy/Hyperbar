@@ -5,6 +5,7 @@ using Hyperbar.Windows.Primary;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.UI.Xaml;
 
 namespace Hyperbar.Windows;
@@ -23,7 +24,7 @@ public partial class App :
             .ConfigureAppConfiguration(config =>
             {
                 config.SetBasePath(AppContext.BaseDirectory);
-                config.AddJsonFile("Settings.json", true);
+                config.AddJsonFile("Settings.json", true, true);
 
                 config.Build();
             })

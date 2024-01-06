@@ -11,7 +11,7 @@ public class ConfigurationWriter<TConfiguration>(string path,
     where TConfiguration :
     class, new()
 {
-    internal static Func<JsonSerializerOptions> DefaultSerializerOptions = new(() =>
+    private static readonly Func<JsonSerializerOptions> defaultSerializerOptions = new(() =>
     {
         return new JsonSerializerOptions
         {
@@ -20,8 +20,6 @@ public class ConfigurationWriter<TConfiguration>(string path,
             Converters = { new JsonStringEnumConverter() }
         };
     });
-
-    private readonly JsonSerializerOptions? serializerOptions = serializerOptions ??= DefaultSerializerOptions();
 
     public void Write(Action<TConfiguration> updateDelegate)
     {
@@ -57,7 +55,7 @@ public class ConfigurationWriter<TConfiguration>(string path,
 
         writer.WriteStartObject();
         bool isWritten = false;
-        JsonDocument optionsElement = JsonDocument.Parse(JsonSerializer.SerializeToUtf8Bytes(value, serializerOptions));
+        JsonDocument optionsElement = JsonDocument.Parse(JsonSerializer.SerializeToUtf8Bytes(value, serializerOptions ?? defaultSerializerOptions()));
 
         foreach (JsonProperty element in jsonDocument.RootElement.EnumerateObject())
         {
@@ -91,7 +89,7 @@ public class ConfigurationWriter<TConfiguration>(string path,
             using JsonDocument jsonDocument = JsonDocument.Parse(jsonContent);
             if (jsonDocument.RootElement.TryGetProperty(section, out JsonElement sectionValue))
             {
-                value = JsonSerializer.Deserialize<TConfiguration>(sectionValue.ToString(), serializerOptions);
+                value = JsonSerializer.Deserialize<TConfiguration>(sectionValue.ToString(), serializerOptions ?? defaultSerializerOptions());
                 return true;
             }
         }

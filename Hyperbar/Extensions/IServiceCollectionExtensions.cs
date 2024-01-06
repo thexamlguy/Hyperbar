@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
@@ -85,27 +86,30 @@ public static class IServiceCollectionExtensions
         return serviceCollection;
     }
 
-
     public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services,
-        string path = "Settings.json")
+        IConfiguration configuration,
+        TConfiguration? defaults = null)
         where TConfiguration :
         class, new()
     {
-        return services.AddConfiguration<TConfiguration>(typeof(TConfiguration).Name, path);
+        return services.AddConfiguration(configuration, typeof(TConfiguration).Name, "Settings.json", defaults);
     }
 
     public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services,
+        IConfiguration configuration,
         string section,
         string path = "Settings.json",
+        TConfiguration? defaults = null,
         Action<JsonSerializerOptions>? serializerDelegate = null)
         where TConfiguration :
         class, new()
     {
-        services.AddOptions();
+        services.Configure<TConfiguration>(configuration);
         services.AddSingleton<IConfigureOptions<TConfiguration>>(new ConfigureNamedOptions<TConfiguration>("", args => { }));
         services.AddTransient(provider => provider.GetService<IOptionsMonitor<TConfiguration>>()!.CurrentValue);
 
-        services.AddTransient<IConfigurationWriter<TConfiguration>>(provider =>
+
+        services.AddSingleton<IConfigurationWriter<TConfiguration>>(provider =>
         {
             string? jsonFilePath = null;
             if (provider.GetService<IHostEnvironment>() is IHostEnvironment hostEnvironment)
@@ -118,15 +122,21 @@ public static class IServiceCollectionExtensions
 
             jsonFilePath ??= Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
 
-            JsonSerializerOptions? defaultSerializerOptions = null;
+            JsonSerializerOptions? defaultSerializer = null;
             if (serializerDelegate is not null)
             {
-                defaultSerializerOptions = new JsonSerializerOptions();
-                serializerDelegate.Invoke(defaultSerializerOptions);
+                defaultSerializer = new JsonSerializerOptions();
+                serializerDelegate.Invoke(defaultSerializer);
             }
 
-            return new ConfigurationWriter<TConfiguration>(jsonFilePath, section, defaultSerializerOptions);
+            return new ConfigurationWriter<TConfiguration>(jsonFilePath, section, defaultSerializer);
         });
+
+        if (defaults is not null)
+        {
+            services.AddTransient(provider => new DefaultConfiguration<TConfiguration>(defaults));
+            services.AddTransient<IInitializer, ConfigurationInitializer<TConfiguration>>();
+        }
 
         services.AddTransient<IWritableConfiguration<TConfiguration>, WritableConfiguration<TConfiguration>>();
         return services;
