@@ -1,4 +1,4 @@
-﻿namespace Hyperbar.Lifecycles;
+﻿namespace Hyperbar;
 
 public class WidgetContext(IServiceProvider serviceProvider) :
     IWidgetContext

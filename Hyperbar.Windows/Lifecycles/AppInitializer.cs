@@ -1,7 +1,5 @@
 ﻿using Hyperbar.Windows.Controls;
-using Hyperbar.Lifecycles;
 using Microsoft.Extensions.DependencyInjection;
-using System.Threading.Tasks;
 
 namespace Hyperbar.Windows;
 

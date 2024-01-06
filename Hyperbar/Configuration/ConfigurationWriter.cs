@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Hyperbar.Options;
+namespace Hyperbar;
 
 public class ConfigurationWriter<TConfiguration>(string path,
     string section,

@@ -1,4 +1,4 @@
-﻿namespace Hyperbar.Extensions.Contextual;
+﻿namespace Hyperbar.Widget.Contextual;
 
 public class ContextualWidgetConfiguration
 { 

@@ -1,4 +1,4 @@
-﻿namespace Hyperbar.Lifecycles;
+﻿namespace Hyperbar;
 
 public interface IWidgetViewModel
 {

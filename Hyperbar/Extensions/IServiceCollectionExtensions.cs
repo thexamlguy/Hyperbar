@@ -1,7 +1,4 @@
-﻿using Hyperbar.Lifecycles;
-using Hyperbar.Options;
-using Hyperbar.Templates;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
@@ -67,11 +64,11 @@ public static class IServiceCollectionExtensions
         string key = contentType.Name;
         
         services.AddTransient(typeof(IWidgetViewModel), contentType);
-        services.TryAddTransient(provider => provider.GetService<IWidgetView>()!);
+        services.TryAddTransient(templateType, provider => provider.GetService<IWidgetView>()!);
 
         services.AddKeyedTransient(typeof(IWidgetViewModel), key, contentType);
-        services.TryAddKeyedTransient(templateType, key);
-        
+        services.TryAddKeyedTransient<IWidgetView>(key, (provider, key) => provider.GetService<IWidgetView>()!);
+
         services.AddTransient<IContentTemplateDescriptor>(provider => new ContentTemplateDescriptor
         {
             ContentType = contentType,

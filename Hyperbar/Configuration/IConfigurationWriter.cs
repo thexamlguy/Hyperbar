@@ -1,12 +1,10 @@
-﻿
-namespace Hyperbar.Options
-{
-    public interface IConfigurationWriter<TConfiguration>
-        where TConfiguration : 
-        class, new()
-    {
-        void Write(Action<TConfiguration> updateDelegate);
+﻿namespace Hyperbar;
 
-        void Write(TConfiguration value);
-    }
+public interface IConfigurationWriter<TConfiguration>
+    where TConfiguration : 
+    class, new()
+{
+    void Write(Action<TConfiguration> updateDelegate);
+
+    void Write(TConfiguration value);
 }

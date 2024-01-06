@@ -1,18 +1,15 @@
-﻿using Hyperbar.Lifecycles;
-using Hyperbar.Templates;
-using System.Collections.Generic;
-
-namespace Hyperbar.Windows;
+﻿namespace Hyperbar.Windows;
 
 public partial class CommandViewModel : 
-    ObservableCollectionViewModel,
+    ObservableCollectionViewModel<IWidgetViewModel>,
     ITemplatedViewModel
 {
-    public CommandViewModel(ITemplateFactory templateFactory, 
-        IEnumerable<IWidgetViewModel> commands)
+    public CommandViewModel(ITemplateFactory templateFactory,
+        IServiceFactory serviceFactory,
+        IEnumerable<IWidgetViewModel> widgets) : base(serviceFactory)
     {
         TemplateFactory = templateFactory;
-        AddRange(commands);
+        AddRange(widgets);
     }
 
     public ITemplateFactory TemplateFactory { get; }

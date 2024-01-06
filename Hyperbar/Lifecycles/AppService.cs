@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Hosting;
 
-namespace Hyperbar.Lifecycles;
+namespace Hyperbar;
 
 public class AppService(IEnumerable<IInitializer> initializers) :
     IHostedService

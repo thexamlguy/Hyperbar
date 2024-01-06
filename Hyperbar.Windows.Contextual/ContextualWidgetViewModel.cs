@@ -1,11 +1,12 @@
-﻿using Hyperbar.Lifecycles;
-using Hyperbar.Templates;
+﻿namespace Hyperbar.Widget.Contextual;
 
-namespace Hyperbar.Extensions.Contextual;
-
-public class ContextualWidgetViewModel(ITemplateFactory templateFactory) :
-    IWidgetViewModel,
-    ITemplatedViewModel
+public class ContextualWidgetViewModel :
+    WidgetViewModelBase
 {
-    public ITemplateFactory TemplateFactory { get; } = templateFactory;
+    public ContextualWidgetViewModel(ITemplateFactory templateFactory, 
+        IServiceFactory serviceFactory) : base(templateFactory, serviceFactory)
+    {
+        Add<WidgetButtonViewModel>();
+        Add<WidgetButtonViewModel>();
+    }
 }

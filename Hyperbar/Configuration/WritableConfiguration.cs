@@ -1,5 +1,4 @@
-﻿using Hyperbar.Options;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
 namespace Hyperbar;
