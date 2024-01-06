@@ -1,34 +1,35 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.InteropServices;
-using Windows.System;
 using Windows.Win32;
 using Windows.Win32.UI.KeyboardAndMouseInput;
 
 namespace Hyperbar.Windows.Win32;
 
-public class KeyInterop
+public class VirtualKeyboard : 
+    IVirtualKeyboard
 {
-    private static readonly VirtualKey[] extendedKeys = [
-        VirtualKey.Menu,
-        VirtualKey.LeftMenu,
-        VirtualKey.NumberKeyLock,
-        VirtualKey.Insert,
-        VirtualKey.Delete,
-        VirtualKey.Home,
-        VirtualKey.End,
-        VirtualKey.Up,
-        VirtualKey.Down,
-        VirtualKey.Left,
-        VirtualKey.Right,
-        VirtualKey.Application,
-        VirtualKey.RightWindows,
-        VirtualKey.LeftWindows];
+    private readonly int[] extendedKeys = [
+        165,    // RightMenu
+        164,    // LeftMenu
+        144,    // NumberKeyLock
+        45,     // Insert
+        46,     // Delete
+        36,     // Home
+        35,     // End
+        36,     // Up,
+        40,     // Down,
+        37,     // Left
+        39,     // Right,
+        93,     // Application,
+        92,     // RightWindows
+        91      // LeftWindows
+       ];
 
-    public static void Send(VirtualKey key,
-        params VirtualKey[] modifierKeys)
+    public void Send(int key,
+        params int[] modifierKeys)
     {
-        foreach (VirtualKey modiferKey in modifierKeys)
+        foreach (int modiferKey in modifierKeys)
         {
             Press(modiferKey);
         }
@@ -36,17 +37,17 @@ public class KeyInterop
         Press(key);
         Release(key);
 
-        foreach (VirtualKey modifierKey in modifierKeys.Reverse())
+        foreach (int modifierKey in modifierKeys.Reverse())
         {
             Release(modifierKey);
         }
     }
 
-    private static void Press(VirtualKey key) => Send(key, true);
+    private void Press(int key) => Send(key, true);
 
-    private static void Release(VirtualKey key) => Send(key, false);
+    private void Release(int key) => Send(key, false);
 
-    private static unsafe void Send(VirtualKey key,
+    private unsafe void Send(int key,
         bool pressed)
     {
         INPUT input = new()
@@ -69,7 +70,7 @@ public class KeyInterop
             flags |= KEYBD_EVENT_FLAGS.KEYEVENTF_KEYUP;
         }
 
-        if (extendedKeys.Contains(key))
+        if (extendedKeys.Contains((int)key))
         {
             flags |= KEYBD_EVENT_FLAGS.KEYEVENTF_EXTENDEDKEY;
         }

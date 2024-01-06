@@ -8,7 +8,7 @@ public class Mediator(IServiceProvider provider) :
 {
     private readonly ConditionalWeakTable<Type, dynamic> handlers = [];
 
-    public ValueTask Publish<TNotification>(TNotification notification,
+    public ValueTask PublishAsync<TNotification>(TNotification notification,
         CancellationToken cancellationToken = default)
         where TNotification :
         INotification
@@ -36,7 +36,7 @@ public class Mediator(IServiceProvider provider) :
         return default;
     }
 
-    public ValueTask<TResponse> Send<TResponse>(IRequest<TResponse> request,
+    public ValueTask<TResponse> SendAsync<TResponse>(IRequest<TResponse> request,
         CancellationToken cancellationToken = default)
     {
         dynamic? handler = provider.GetService(typeof(RequestClassHandlerWrapper<,>)
@@ -50,7 +50,7 @@ public class Mediator(IServiceProvider provider) :
         return default;
     }
 
-    public ValueTask<TResponse> Send<TResponse>(ICommand<TResponse> command,
+    public ValueTask<TResponse> SendAsync<TResponse>(ICommand<TResponse> command,
         CancellationToken cancellationToken = default)
     {
         dynamic? handler = provider.GetService(typeof(CommandClassHandlerWrapper<,>)
@@ -64,7 +64,18 @@ public class Mediator(IServiceProvider provider) :
         return default;
     }
 
-    public ValueTask<TResponse> Send<TResponse>(IQuery<TResponse> query,
+    public void Send<TResponse>(ICommand<TResponse> command)
+    {
+        dynamic? handler = provider.GetService(typeof(CommandClassHandlerWrapper<,>)
+            .MakeGenericType(command.GetType(), typeof(TResponse)));
+
+        if (handler is not null)
+        {
+            _ = handler.Handle((dynamic)command, default(CancellationToken));
+        }
+    }
+
+    public ValueTask<TResponse> SendAsync<TResponse>(IQuery<TResponse> query,
         CancellationToken cancellationToken = default)
     {
         dynamic? handler = provider.GetService(typeof(QueryClassHandlerWrapper<,>)
@@ -78,7 +89,7 @@ public class Mediator(IServiceProvider provider) :
         return default;
     }
 
-    public ValueTask<object?> Send(object message,
+    public ValueTask<object?> SendAsync(object message,
         CancellationToken cancellationToken = default)
     {
         if (message.GetType().GetInterface(typeof(IRequest<>).Name) is { } requestType)

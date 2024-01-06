@@ -1,6 +1,6 @@
 ﻿namespace Hyperbar.Windows.Primary;
 
 public class PrimaryWidgetConfiguration :
-    List<IPrimaryCommand>
+    List<IPrimaryCommandConfiguration>
 {
 }

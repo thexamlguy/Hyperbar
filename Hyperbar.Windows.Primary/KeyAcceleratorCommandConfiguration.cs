@@ -1,7 +1,7 @@
 ﻿namespace Hyperbar.Windows.Primary;
 
-public class KeyAcceleratorCommand :
-    IPrimaryCommand
+public class KeyAcceleratorCommandConfiguration :
+    IPrimaryCommandConfiguration
 {
     public string? Icon { get; set; }
 

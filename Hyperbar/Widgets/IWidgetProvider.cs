@@ -2,7 +2,7 @@
 
 namespace Hyperbar;
 
-public interface IWidgetBuilder
+public interface IWidgetProvider
 {
     void Create(IServiceCollection services);
 }
