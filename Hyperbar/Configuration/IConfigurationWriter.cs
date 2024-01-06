@@ -5,8 +5,8 @@ namespace Hyperbar.Options
         where TConfiguration : 
         class, new()
     {
-        void Write(Action<TConfiguration?>? updateDelegate = null);
+        void Write(Action<TConfiguration> updateDelegate);
 
-        void Write(TConfiguration? value);
+        void Write(TConfiguration value);
     }
 }

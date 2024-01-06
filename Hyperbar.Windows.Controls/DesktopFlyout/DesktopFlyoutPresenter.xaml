@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Hyperbar.Windows.Controls">
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Default">
+            <StaticResource x:Key="CommandBarFlyoutBackground" ResourceKey="AcrylicInAppFillColorDefaultBrush" />
+            <StaticResource x:Key="CommandBarFlyoutForeground" ResourceKey="TextFillColorPrimaryBrush" />
+            <StaticResource x:Key="CommandBarFlyoutBorderBrush" ResourceKey="ControlStrokeColorDefaultBrush" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Light">
+            <StaticResource x:Key="CommandBarFlyoutBackground" ResourceKey="AcrylicInAppFillColorDefaultBrush" />
+            <StaticResource x:Key="CommandBarFlyoutForeground" ResourceKey="TextFillColorPrimaryBrush" />
+            <StaticResource x:Key="CommandBarFlyoutBorderBrush" ResourceKey="ControlStrokeColorDefaultBrush" />
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
+    <Style TargetType="controls:DesktopFlyoutPresenter">
+        <Setter Property="Background" Value="{ThemeResource CommandBarFlyoutBackground}" />
+        <Setter Property="Foreground" Value="{ThemeResource CommandBarFlyoutForeground}" />
+        <Setter Property="BorderBrush" Value="{ThemeResource CommandBarFlyoutBorderBrush}" />
+        <Setter Property="BorderThickness" Value="{ThemeResource CommandBarFlyoutBorderThemeThickness}" />
+        <Setter Property="CornerRadius" Value="{ThemeResource OverlayCornerRadius}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="controls:DesktopFlyoutPresenter">
+                    <Border x:Name="Container">
+                        <Border
+                            x:Name="BackgroundElement"
+                            Height="48"
+                            MinWidth="40"
+                            Margin="24"
+                            Background="{TemplateBinding Background}"
+                            BackgroundSizing="InnerBorderEdge"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            FlowDirection="{TemplateBinding FlowDirection}">
+                            <Border.Transitions>
+                                <TransitionCollection>
+                                    <EntranceThemeTransition x:Name="EntranceThemeTransition" FromVerticalOffset="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.NegativeHeight}" />
+                                </TransitionCollection>
+                            </Border.Transitions>
+                            <ContentControl
+                                Margin="{TemplateBinding Padding}"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                ContentTransitions="{TemplateBinding ContentTransitions}" />
+                        </Border>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="PlacementStates">
+                                <VisualState x:Name="DefaultPlacement" />
+                                <VisualState x:Name="BottomPlacement">
+                                    <VisualState.Setters>
+                                        <Setter Target="EntranceThemeTransition.FromHorizontalOffset" Value="0" />
+                                        <Setter Target="EntranceThemeTransition.FromVerticalOffset" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.Height}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="TopPlacement">
+                                    <VisualState.Setters>
+                                        <Setter Target="EntranceThemeTransition.FromHorizontalOffset" Value="0" />
+                                        <Setter Target="EntranceThemeTransition.FromVerticalOffset" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.NegativeHeight}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="LeftPlacement">
+                                    <VisualState.Setters>
+                                        <Setter Target="EntranceThemeTransition.FromHorizontalOffset" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.NegativeWidth}" />
+                                        <Setter Target="EntranceThemeTransition.FromVerticalOffset" Value="0" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="RightPlacement">
+                                    <VisualState.Setters>
+                                        <Setter Target="EntranceThemeTransition.FromHorizontalOffset" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.Width}" />
+                                        <Setter Target="EntranceThemeTransition.FromVerticalOffset" Value="0" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

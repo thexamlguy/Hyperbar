@@ -15,7 +15,7 @@ public class WritableConfiguration<TConfiguration>(IConfigurationWriter<TConfigu
 
     public TConfiguration Get(string? name) => options.Get(name);
 
-    public void Update(Action<TConfiguration?> updateDelegate, 
+    public void Write(Action<TConfiguration> updateDelegate, 
         bool reload = true)
     {
         writer.Write(updateDelegate);

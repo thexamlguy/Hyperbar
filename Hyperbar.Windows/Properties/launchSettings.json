@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Hyperbar.Windows (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Hyperbar.Windows (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

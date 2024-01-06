@@ -7,6 +7,6 @@ public interface IWritableConfiguration<out TConfiguration> :
     where TConfiguration :
     class, new()
 {
-    void Update(Action<TConfiguration?> updateAction, 
+    void Write(Action<TConfiguration> updateAction, 
         bool reload = true);
 }

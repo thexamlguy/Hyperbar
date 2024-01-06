@@ -23,15 +23,16 @@ public class ConfigurationWriter<TConfiguration>(string path,
 
     private readonly JsonSerializerOptions? serializerOptions = serializerOptions ??= DefaultSerializerOptions();
 
-    public void Write(Action<TConfiguration?>? updateDelegate = null)
+    public void Write(Action<TConfiguration> updateDelegate)
     {
-        TConfiguration? updatedValue = TryGet(out TConfiguration? value) ? value : new TConfiguration();
-
-        updateDelegate?.Invoke(updatedValue);
-        Write(updatedValue);
+        if ((TryGet(out TConfiguration? value) ? value : new TConfiguration()) is TConfiguration updatedValue)
+        {
+            updateDelegate?.Invoke(updatedValue);
+            Write(updatedValue);
+        }
     }
 
-    public void Write(TConfiguration? value)
+    public void Write(TConfiguration value)
     {
         if (!File.Exists(path))
         {
@@ -81,7 +82,7 @@ public class ConfigurationWriter<TConfiguration>(string path,
         stream.SetLength(stream.Position);
     }
 
-    private bool TryGet<T>(out T? value)
+    private bool TryGet(out TConfiguration? value)
     {
         if (File.Exists(path))
         {
@@ -90,7 +91,7 @@ public class ConfigurationWriter<TConfiguration>(string path,
             using JsonDocument jsonDocument = JsonDocument.Parse(jsonContent);
             if (jsonDocument.RootElement.TryGetProperty(section, out JsonElement sectionValue))
             {
-                value = JsonSerializer.Deserialize<T>(sectionValue.ToString(), serializerOptions);
+                value = JsonSerializer.Deserialize<TConfiguration>(sectionValue.ToString(), serializerOptions);
                 return true;
             }
         }
