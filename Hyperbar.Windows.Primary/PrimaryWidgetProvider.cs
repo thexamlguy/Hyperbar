@@ -7,7 +7,7 @@ public class PrimaryWidgetProvider :
     IWidgetProvider
 {
     public void Create(IServiceCollection services) => services.AddConfiguration<PrimaryWidgetConfiguration>()
-            .AddTransient<PrimaryWidgetViewModelFactory>()
-            .AddTransient(provider => provider.GetRequiredService<PrimaryWidgetViewModelFactory>().Create())
+            .AddTransient<WidgetComponentMappinglFactory>()
+            .AddTransient(provider => provider.GetRequiredService<WidgetComponentMappinglFactory>().Create())
             .AddWidgetTemplate<PrimaryWidgetViewModel>();
 }
