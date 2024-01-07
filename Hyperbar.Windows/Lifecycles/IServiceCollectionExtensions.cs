@@ -41,11 +41,12 @@ namespace Hyperbar.Windows
                     isolatedServices.AddTransient<ITemplateGeneratorFactory, TemplateGeneratorFactory>();
 
                     builder.Create(context, isolatedServices);
+
                 }).Build();
 
             services.AddTransient<IWidgetContext>(provider => new WidgetContext(host.Services));
-            services.AddTransient(provider => host);
 
+            host.Start();
             return services;
         }
     }

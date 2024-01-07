@@ -106,9 +106,7 @@ public static class IServiceCollectionExtensions
     {
         services.Configure<TConfiguration>(configuration);
         services.AddSingleton<IConfigureOptions<TConfiguration>>(new ConfigureNamedOptions<TConfiguration>("", args => { }));
-        services.AddTransient(provider => {
-            
-            return provider.GetService<IOptionsMonitor<TConfiguration>>()!.CurrentValue; });
+        services.AddTransient(provider => provider.GetService<IOptionsMonitor<TConfiguration>>()!.CurrentValue);
 
         services.AddSingleton<IConfigurationWriter<TConfiguration>>(provider =>
         {
