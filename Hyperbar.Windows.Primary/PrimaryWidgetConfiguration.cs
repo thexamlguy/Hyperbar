@@ -5,6 +5,6 @@ public class PrimaryWidgetConfiguration :
 {
     public static PrimaryWidgetConfiguration Defaults => new()
     {
-        new KeyAcceleratorCommandConfiguration { Icon = "Test", Key = "Test", Modifiers = ["Test", "Test"] }
+        new KeyAcceleratorCommandConfiguration { Icon = "\uE720", Key = "Test", Modifiers = ["Test", "Test"] }
     };
 }

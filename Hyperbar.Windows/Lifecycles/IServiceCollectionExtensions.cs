@@ -1,10 +1,8 @@
 ﻿using Hyperbar.Extensions;
 using Hyperbar.Windows.Interop;
-using Hyperbar.Windows.Primary;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 
 namespace Hyperbar.Windows
 {
@@ -45,11 +43,8 @@ namespace Hyperbar.Windows
                     builder.Create(context, isolatedServices);
                 }).Build();
 
-
             services.AddTransient<IWidgetContext>(provider => new WidgetContext(host.Services));
-            host.Start();
-
-            var d = host.Services.GetService<IOptionsMonitor<PrimaryWidgetConfiguration>>();
+            services.AddTransient(provider => host);
 
             return services;
         }
