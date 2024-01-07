@@ -1,6 +1,9 @@
 ﻿namespace Hyperbar;
 
-public interface IRequestHandler<in TRequest, TResponse>
+public interface IHandler;
+
+public interface IHandler<in TRequest, TResponse> :
+    IHandler
     where TRequest :
     IRequest<TResponse>
 {
@@ -8,8 +11,8 @@ public interface IRequestHandler<in TRequest, TResponse>
         CancellationToken cancellationToken);
 }
 
-public interface IRequestHandler<in TRequest> :
-    IRequestHandler<TRequest, Unit>
+public interface IRequestHandler<in TRequest> : 
+    IHandler<TRequest, Unit>
     where TRequest :
     IRequest<Unit>
 {

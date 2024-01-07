@@ -1,4 +1,3 @@
-using Hyperbar.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -10,7 +9,6 @@ public class PrimaryWidgetProvider :
     public void Create(HostBuilderContext comtext, IServiceCollection services) => 
             services.AddConfiguration(comtext.Configuration.GetSection(nameof(PrimaryWidgetConfiguration)), 
                 PrimaryWidgetConfiguration.Defaults)
-            .AddTransient<WidgetComponentMappingFactory>()
-            .AddTransient(provider => provider.GetRequiredService<WidgetComponentMappingFactory>().Create())
+            .AddHandler<WidgetComponentMappingHandler>()
             .AddWidgetTemplate<PrimaryWidgetViewModel>();
 }

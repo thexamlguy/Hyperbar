@@ -6,14 +6,14 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
 
-namespace Hyperbar.Extensions;
+namespace Hyperbar;
 
 public static class IServiceCollectionExtensions
 {
-    public static IServiceCollection AddHandler<THandler>(this IServiceCollection serviceCollection, 
+    public static IServiceCollection AddHandler<THandler>(this IServiceCollection services, 
         ServiceLifetime lifetime = ServiceLifetime.Transient) 
-        where THandler : 
-        notnull
+        where THandler :
+        IHandler
     {
         if (typeof(THandler).GetInterface(typeof(INotificationHandler<>).Name) is { } notificationContract)
         {
@@ -21,13 +21,13 @@ public static class IServiceCollectionExtensions
             {
                 Type notificationType = arguments[0];
 
-                serviceCollection.TryAdd(new ServiceDescriptor(typeof(THandler), typeof(THandler), ServiceLifetime.Singleton));
-                serviceCollection.Add(new ServiceDescriptor(typeof(INotificationHandler<>).MakeGenericType(notificationType),
+                services.TryAdd(new ServiceDescriptor(typeof(THandler), typeof(THandler), ServiceLifetime.Singleton));
+                services.Add(new ServiceDescriptor(typeof(INotificationHandler<>).MakeGenericType(notificationType),
                     provider => provider.GetRequiredService<THandler>(), lifetime));
             }
         }
 
-        if (typeof(THandler).GetInterface(typeof(IRequestHandler<,>).Name) is { } requestContract)
+        if (typeof(THandler).GetInterface(typeof(IHandler<,>).Name) is { } requestContract)
         {
             if (requestContract.GetGenericArguments() is { Length: 2 } arguments)
             {
@@ -36,8 +36,8 @@ public static class IServiceCollectionExtensions
 
                 Type wrapperType = typeof(RequestClassHandlerWrapper<,>).MakeGenericType(requestType, responseType);
 
-                serviceCollection.TryAdd(new ServiceDescriptor(typeof(THandler), typeof(THandler), lifetime));
-                serviceCollection.Add(new ServiceDescriptor(wrapperType,
+                services.TryAdd(new ServiceDescriptor(typeof(THandler), typeof(THandler), lifetime));
+                services.Add(new ServiceDescriptor(wrapperType,
                     provider => provider.GetService<IServiceFactory>()?.Create(wrapperType,
                         provider.GetRequiredService<THandler>(),
                         provider.GetServices(typeof(IPipelineBehavior<,>).MakeGenericType(requestType, responseType)))!,
@@ -46,44 +46,19 @@ public static class IServiceCollectionExtensions
             }
         }
 
-        if (typeof(THandler).GetInterface(typeof(ICommandHandler<,>).Name) is { } commandContract)
+        if (typeof(THandler).GetInterface(typeof(IMappingHandler<,>).Name) is { } mappingContract)
         {
-            if (commandContract.GetGenericArguments() is { Length: 2 } arguments)
+            if (mappingContract.GetGenericArguments() is { Length: 2 } arguments)
             {
                 Type requestType = arguments[0];
                 Type responseType = arguments[1];
 
-                Type wrapperType = typeof(CommandClassHandlerWrapper<,>).MakeGenericType(requestType, responseType);
-
-                serviceCollection.TryAdd(new ServiceDescriptor(typeof(THandler), typeof(THandler), lifetime));
-                serviceCollection.Add(new ServiceDescriptor(wrapperType,
-                    provider => provider.GetService<IServiceFactory>()?.Create(wrapperType, 
-                        provider.GetRequiredService<THandler>(),
-                        provider.GetServices(typeof(IPipelineBehavior<,>).MakeGenericType(requestType, responseType)))!,
-                    lifetime
-                ));
+                services.AddTransient(typeof(THandler));
+                services.AddTransient(responseType, provider => ((dynamic)provider.GetRequiredService<THandler>()).Handle());
             }
         }
 
-        if (typeof(THandler).GetInterface(typeof(IQueryHandler<,>).Name) is { } queryContract)
-        {
-            if (queryContract.GetGenericArguments() is { Length: 2 } arguments)
-            {
-                Type requestType = arguments[0];
-                Type responseType = arguments[1];
-
-                Type wrapperType = typeof(QueryClassHandlerWrapper<,>).MakeGenericType(requestType, responseType);
-
-                serviceCollection.TryAdd(new ServiceDescriptor(typeof(THandler), typeof(THandler), lifetime));
-                serviceCollection.Add(new ServiceDescriptor(wrapperType,
-                    provider => provider.GetService<IServiceFactory>()?.Create(wrapperType, 
-                        provider.GetRequiredService<THandler>(), 
-                        provider.GetServices(typeof(IPipelineBehavior<,>).MakeGenericType(requestType, responseType)))!,
-                    lifetime
-                ));
-            }
-        }
-        return serviceCollection;
+        return services;
     }
 
     public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services,

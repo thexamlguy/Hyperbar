@@ -2,8 +2,8 @@
 
 namespace Hyperbar.Windows;
 
-public class KeyAcceleratorCommandHandler(IVirtualKeyboard virtualKeyboard) :
-    ICommandHandler<KeyAcceleratorCommand>
+public class KeyAcceleratorHandler(IVirtualKeyboard virtualKeyboard) :
+    IRequestHandler<KeyAcceleratorCommand>
 {
     public ValueTask<Unit> Handle(KeyAcceleratorCommand command,
         CancellationToken cancellationToken)

@@ -7,7 +7,7 @@ public class RequestClassHandlerWrapper<TRequest, TResponse>
 {
     private readonly MessageHandlerDelegate<TRequest, TResponse> handler;
 
-    public RequestClassHandlerWrapper(IRequestHandler<TRequest, TResponse> concreteHandler,
+    public RequestClassHandlerWrapper(IHandler<TRequest, TResponse> concreteHandler,
         IEnumerable<IPipelineBehavior<TRequest, TResponse>> pipelineBehaviours)
     {
         MessageHandlerDelegate<TRequest, TResponse> handler = concreteHandler.Handle;

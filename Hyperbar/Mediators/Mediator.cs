@@ -50,45 +50,6 @@ public class Mediator(IServiceProvider provider) :
         return default;
     }
 
-    public ValueTask<TResponse> SendAsync<TResponse>(ICommand<TResponse> command,
-        CancellationToken cancellationToken = default)
-    {
-        dynamic? handler = provider.GetService(typeof(CommandClassHandlerWrapper<,>)
-            .MakeGenericType(command.GetType(), typeof(TResponse)));
-
-        if (handler is not null)
-        {
-            return handler.Handle((dynamic)command, cancellationToken);
-        }
-
-        return default;
-    }
-
-    public void Send<TResponse>(ICommand<TResponse> command)
-    {
-        dynamic? handler = provider.GetService(typeof(CommandClassHandlerWrapper<,>)
-            .MakeGenericType(command.GetType(), typeof(TResponse)));
-
-        if (handler is not null)
-        {
-            _ = handler.Handle((dynamic)command, default(CancellationToken));
-        }
-    }
-
-    public ValueTask<TResponse> SendAsync<TResponse>(IQuery<TResponse> query,
-        CancellationToken cancellationToken = default)
-    {
-        dynamic? handler = provider.GetService(typeof(QueryClassHandlerWrapper<,>)
-            .MakeGenericType(query.GetType(), typeof(TResponse)));
-
-        if (handler is not null)
-        {
-            return handler.Handle((dynamic)query, cancellationToken);
-        }
-
-        return default;
-    }
-
     public ValueTask<object?> SendAsync(object message,
         CancellationToken cancellationToken = default)
     {
@@ -101,37 +62,6 @@ public class Mediator(IServiceProvider provider) :
                 dynamic? handler = provider.GetService(typeof(RequestClassHandlerWrapper<,>)
                     .MakeGenericType(message.GetType(), responseType));
 
-                if (handler is not null)
-                {
-                    return handler.Handle((dynamic)message, cancellationToken);
-                }
-            }
-        }
-
-        if (message.GetType().GetInterface(typeof(ICommand<>).Name) is { } commandType)
-        {
-            if (commandType.GetGenericArguments() is { Length: 1 } arguments)
-            {
-                Type responseType = arguments[0];
-
-                dynamic? handler = provider.GetService(typeof(CommandClassHandlerWrapper<,>)
-                    .MakeGenericType(message.GetType(), responseType));
-
-                if (handler is not null)
-                {
-                    return handler.Handle((dynamic)message, cancellationToken);
-                }
-            }
-        }
-
-        if (message.GetType().GetInterface(typeof(IQuery<>).Name) is { } queryType)
-        {
-            if (queryType.GetGenericArguments() is { Length: 1 } arguments)
-            {
-                Type responseType = arguments[0];
-
-                dynamic? handler = provider.GetService(typeof(QueryClassHandlerWrapper<,>)
-                    .MakeGenericType(message.GetType(), responseType));
                 if (handler is not null)
                 {
                     return handler.Handle((dynamic)message, cancellationToken);

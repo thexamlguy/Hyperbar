@@ -1,6 +1,6 @@
 ﻿namespace Hyperbar;
 
-public interface IMappingFactory<TFrom, TTo>
+public interface IMapping<TFrom, TTo>
 {
     TTo Create();
 }

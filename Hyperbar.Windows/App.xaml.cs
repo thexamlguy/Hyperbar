@@ -1,11 +1,9 @@
-﻿using Hyperbar.Extensions;
-using Hyperbar.Widget.Contextual;
+﻿using Hyperbar.Widget.Contextual;
 using Hyperbar.Windows.Controls;
 using Hyperbar.Windows.Primary;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Microsoft.UI.Xaml;
 
 namespace Hyperbar.Windows;

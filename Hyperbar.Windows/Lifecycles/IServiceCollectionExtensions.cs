@@ -1,5 +1,4 @@
-﻿using Hyperbar.Extensions;
-using Hyperbar.Windows.Interop;
+﻿using Hyperbar.Windows.Interop;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -32,7 +31,7 @@ namespace Hyperbar.Windows
                     isolatedServices.AddSingleton<IVirtualKeyboard, VirtualKeyboard>();
 
                     isolatedServices.AddSingleton<IMediator, Mediator>();
-                    isolatedServices.AddHandler<KeyAcceleratorCommandHandler>();
+                    isolatedServices.AddHandler<KeyAcceleratorHandler>();
 
                     isolatedServices.AddTransient<IWidgetView, WidgetView>();
                     isolatedServices.AddContentTemplate<WidgetButtonViewModel, WidgetButtonView>();
