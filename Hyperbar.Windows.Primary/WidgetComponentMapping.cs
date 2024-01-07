@@ -1,4 +1,5 @@
 ﻿
+
 namespace Hyperbar.Windows.Primary;
 
 public class WidgetComponentMappingHandler(PrimaryWidgetConfiguration configuration,
@@ -6,7 +7,7 @@ public class WidgetComponentMappingHandler(PrimaryWidgetConfiguration configurat
     IMediator mediator) :
     IMappingHandler<PrimaryWidgetConfiguration, IEnumerable<IWidgetComponentViewModel>>
 {
-    public IEnumerable<IWidgetComponentViewModel> Handle()
+    public IEnumerable<IWidgetComponentViewModel> Map()
     {
         foreach (IPrimaryCommandConfiguration item in configuration)
         {

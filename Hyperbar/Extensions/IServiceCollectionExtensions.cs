@@ -50,11 +50,10 @@ public static class IServiceCollectionExtensions
         {
             if (mappingContract.GetGenericArguments() is { Length: 2 } arguments)
             {
-                Type requestType = arguments[0];
                 Type responseType = arguments[1];
 
                 services.AddTransient(typeof(THandler));
-                services.AddTransient(responseType, provider => ((dynamic)provider.GetRequiredService<THandler>()).Handle());
+                services.AddTransient(responseType, provider => ((dynamic)provider.GetRequiredService<THandler>()).Map());
             }
         }
 
