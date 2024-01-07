@@ -3,19 +3,29 @@
 namespace Hyperbar;
 
 public class ObservableCollectionViewModel<TItem> :
-    ObservableCollection<TItem>
+    ObservableCollection<TItem>,
+    INotificationHandler<CollectionChanged<IEnumerable<TItem>>>
 {
     private readonly IServiceFactory serviceFactory;
-
-    public ObservableCollectionViewModel(IServiceFactory serviceFactory)
+    private SynchronizationContext? context;
+    public ObservableCollectionViewModel(IServiceFactory serviceFactory, 
+        IMediator mediator)
     {
+        context = SynchronizationContext.Current;
+
         this.serviceFactory = serviceFactory;
+        mediator.Subscribe(this);
     }
 
-    public ObservableCollectionViewModel(IServiceFactory serviceFactory, 
+    public ObservableCollectionViewModel(IServiceFactory serviceFactory,
+        IMediator mediator,
         IEnumerable<TItem> items)
     {
+        context = SynchronizationContext.Current;
+
         this.serviceFactory = serviceFactory;
+        mediator.Subscribe(this);
+
         AddRange(items);
     }
 
@@ -31,7 +41,7 @@ public class ObservableCollectionViewModel<TItem> :
         where T : TItem
     {
         T? item = serviceFactory.Create<T>(parameters);
-        Add(item);
+        context?.Post(state => Add(item), null);
 
         return item;
     }
@@ -41,7 +51,7 @@ public class ObservableCollectionViewModel<TItem> :
         TItem
     {
         T? item = serviceFactory.Create<T>();
-        Add(item);
+        context?.Post(state => Add(item), null);
 
         return item;
     }
@@ -50,12 +60,19 @@ public class ObservableCollectionViewModel<TItem> :
     {
         foreach (TItem? item in items)
         {
-            Add(item);
+            context?.Post(state => Add(item), null);
         }
+    }
+
+    public ValueTask Handle(CollectionChanged<IEnumerable<TItem>> notification, 
+        CancellationToken cancellationToken)
+    {
+        context?.Post(state => Clear(), null);
+        AddRange(notification.Items);
+
+        return ValueTask.CompletedTask;
     }
 }
 
-public class ObservableCollectionViewModel(IServiceFactory serviceFactory) :
-    ObservableCollectionViewModel<object>(serviceFactory)
-{
-}
+public class ObservableCollectionViewModel(IServiceFactory serviceFactory, IMediator mediator) :
+    ObservableCollectionViewModel<object>(serviceFactory, mediator);

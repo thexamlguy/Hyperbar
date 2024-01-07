@@ -4,6 +4,7 @@ using Hyperbar.Windows.Primary;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
 
 namespace Hyperbar.Windows;
@@ -16,6 +17,10 @@ public partial class App :
     protected override async void OnLaunched(LaunchActivatedEventArgs args)
     {
         base.OnLaunched(args);
+
+        var context = new DispatcherQueueSynchronizationContext(
+                    DispatcherQueue.GetForCurrentThread());
+        SynchronizationContext.SetSynchronizationContext(context);
 
         IHost? host = Host.CreateDefaultBuilder()
             .UseContentRoot(AppContext.BaseDirectory)
@@ -31,10 +36,11 @@ public partial class App :
                 services.AddSingleton<IServiceFactory>(provider =>
                     new ServiceFactory((type, parameters) => ActivatorUtilities.CreateInstance(provider, type, parameters!)));
 
+                services.AddSingleton<IMediator, Mediator>();
                 services.AddHostedService<AppService>();
+
                 services.AddTransient<IInitializer, AppInitializer>();
                 services.AddTransient<ITemplateFactory, TemplateFactory>();
-                services.AddTransient<ITemplateGeneratorFactory, TemplateGeneratorFactory>();
 
                 services.AddTransient<DesktopFlyout>();
                 services.AddContentTemplate<CommandViewModel, CommandView>();

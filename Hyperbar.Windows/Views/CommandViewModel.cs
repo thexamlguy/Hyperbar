@@ -6,8 +6,9 @@ public partial class CommandViewModel :
     ITemplatedViewModel
 {
     public CommandViewModel(ITemplateFactory templateFactory, 
-        IServiceFactory serviceFactory, 
-        IEnumerable<IWidgetViewModel> items) : base(serviceFactory, items)
+        IServiceFactory serviceFactory,
+        IMediator mediator,
+        IEnumerable<IWidgetViewModel> items) : base(serviceFactory, mediator, items)
     {
         TemplateFactory = templateFactory;
     }

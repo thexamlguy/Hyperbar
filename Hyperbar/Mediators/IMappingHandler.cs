@@ -2,5 +2,5 @@
 
 public interface IMappingHandler<TFrom, TTo> : IHandler 
 {
-    TTo Map();
+    TTo Handle();
 }

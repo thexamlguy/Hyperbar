@@ -7,8 +7,8 @@ public class PrimaryWidgetProvider :
     IWidgetProvider
 {
     public void Create(HostBuilderContext comtext, IServiceCollection services) => 
-            services.AddConfiguration(comtext.Configuration.GetSection(nameof(PrimaryWidgetConfiguration)), 
-                PrimaryWidgetConfiguration.Defaults)
-            .AddHandler<WidgetComponentMappingHandler>()
+            services.AddConfiguration< PrimaryWidgetConfiguration>(comtext.Configuration.GetSection(nameof(PrimaryWidgetConfiguration)))
+            .AddHandler<WidgetComponentMapping>()
+            .AddHandler<PrimaryWidgetConfigurationChangedHandler>()
             .AddWidgetTemplate<PrimaryWidgetViewModel>();
 }

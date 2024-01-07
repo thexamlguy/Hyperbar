@@ -1,6 +1,7 @@
 ﻿namespace Hyperbar;
 
-public interface INotificationHandler<in TNotification>
+public interface INotificationHandler<in TNotification> :
+    IHandler
     where TNotification :
     INotification
 {

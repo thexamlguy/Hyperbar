@@ -6,9 +6,9 @@ namespace Hyperbar;
 public class Mediator(IServiceProvider provider) :
     IMediator
 {
-    private readonly ConditionalWeakTable<Type, dynamic> handlers = [];
+    private readonly ConditionalWeakTable<Type, dynamic> addedHandlers = [];
 
-    public ValueTask PublishAsync<TNotification>(TNotification notification,
+    public async ValueTask PublishAsync<TNotification>(TNotification notification,
         CancellationToken cancellationToken = default)
         where TNotification :
         INotification
@@ -16,7 +16,7 @@ public class Mediator(IServiceProvider provider) :
         List<INotificationHandler<TNotification>> handlers =
             provider.GetServices<INotificationHandler<TNotification>>().ToList();
 
-        foreach (KeyValuePair<Type, dynamic> handler in this.handlers)
+        foreach (KeyValuePair<Type, dynamic> handler in addedHandlers)
         {
             if (handler.Key == typeof(TNotification))
             {
@@ -26,14 +26,12 @@ public class Mediator(IServiceProvider provider) :
 
         if (handlers.Count == 0)
         {
-            return default;
         }
         else if (handlers.Count == 1)
         {
-            return handlers[0].Handle(notification, cancellationToken);
+            await handlers[0].Handle(notification, cancellationToken);
         }
 
-        return default;
     }
 
     public ValueTask<TResponse> SendAsync<TResponse>(IRequest<TResponse> request,
@@ -82,7 +80,7 @@ public class Mediator(IServiceProvider provider) :
                 if (interfaceType.GetGenericArguments() is { Length: 1 } arguments)
                 {
                     Type notificationType = arguments[0];
-                    handlers.Add(notificationType, subject);
+                    addedHandlers.Add(notificationType, subject);
                 }
             }
         }

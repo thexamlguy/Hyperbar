@@ -1,12 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
-using System.Threading;
+﻿using Microsoft.Extensions.Options;
 
 namespace Hyperbar;
-
-public record ConfigurationChanged<TConfiguration>(TConfiguration Configuration) : INotification 
-    where TConfiguration : 
-    class;
 
 public class ConfigurationInitializer<TConfiguration>(DefaultConfiguration<TConfiguration> defaults,
     IConfigurationWriter<TConfiguration> writer,
@@ -17,12 +11,16 @@ public class ConfigurationInitializer<TConfiguration>(DefaultConfiguration<TConf
 {
     public Task InitializeAsync()
     {
-        options.OnChange(args =>
+        options.OnChange(async args =>
         {
-            mediator.PublishAsync(new ConfigurationChanged<TConfiguration>(args));
+            await mediator.PublishAsync(new ConfigurationChanged<TConfiguration>(args));
         });
 
-        writer.Write(defaults.Configuration);
+        if (defaults.Configuration is not null)
+        {
+            writer.Write(defaults.Configuration);
+        }
+
         return Task.CompletedTask;
     }
 }

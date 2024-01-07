@@ -2,8 +2,9 @@
 <UserControl
     x:Class="Hyperbar.Windows.WidgetView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <ItemsControl ItemTemplateSelector="{Binding TemplateFactory}" ItemsSource="{Binding}">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:windows="using:Hyperbar.Windows">
+    <ItemsControl ItemTemplateSelector="{Binding Mode=TwoWay, Converter={windows:DataTemplateConverter}}" ItemsSource="{Binding}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
                 <StackPanel Orientation="Horizontal" Spacing="8" />

@@ -21,7 +21,7 @@ public static class IServiceCollectionExtensions
             {
                 Type notificationType = arguments[0];
 
-                services.TryAdd(new ServiceDescriptor(typeof(THandler), typeof(THandler), ServiceLifetime.Singleton));
+                services.TryAdd(new ServiceDescriptor(typeof(THandler), typeof(THandler), lifetime));
                 services.Add(new ServiceDescriptor(typeof(INotificationHandler<>).MakeGenericType(notificationType),
                     provider => provider.GetRequiredService<THandler>(), lifetime));
             }
@@ -53,11 +53,22 @@ public static class IServiceCollectionExtensions
                 Type responseType = arguments[1];
 
                 services.AddTransient(typeof(THandler));
-                services.AddTransient(responseType, provider => ((dynamic)provider.GetRequiredService<THandler>()).Map());
+                services.AddTransient(responseType, provider =>
+                {
+                    return ((dynamic)provider.GetRequiredService<THandler>()).Handle();
+                });
             }
         }
 
         return services;
+    }
+
+    public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services,
+        IConfiguration configuration)
+        where TConfiguration :
+        class, new()
+    {
+        return services.AddConfiguration<TConfiguration>(configuration, typeof(TConfiguration).Name, "Settings.json", null);
     }
 
     public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services,
@@ -107,9 +118,10 @@ public static class IServiceCollectionExtensions
 
         if (defaults is not null)
         {
-            services.AddTransient(provider => new DefaultConfiguration<TConfiguration>(defaults));
-            services.AddTransient<IInitializer, ConfigurationInitializer<TConfiguration>>();
         }
+
+        services.AddTransient(provider => new DefaultConfiguration<TConfiguration>(defaults));
+        services.AddTransient<IInitializer, ConfigurationInitializer<TConfiguration>>();
 
         services.AddTransient<IWritableConfiguration<TConfiguration>, WritableConfiguration<TConfiguration>>();
         return services;

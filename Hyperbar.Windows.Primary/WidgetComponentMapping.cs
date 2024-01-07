@@ -1,13 +1,12 @@
 ﻿
-
 namespace Hyperbar.Windows.Primary;
 
-public class WidgetComponentMappingHandler(PrimaryWidgetConfiguration configuration,
+public class WidgetComponentMapping(PrimaryWidgetConfiguration configuration,
     IServiceFactory service,
     IMediator mediator) :
     IMappingHandler<PrimaryWidgetConfiguration, IEnumerable<IWidgetComponentViewModel>>
 {
-    public IEnumerable<IWidgetComponentViewModel> Map()
+    public IEnumerable<IWidgetComponentViewModel> Handle()
     {
         foreach (IPrimaryCommandConfiguration item in configuration)
         {

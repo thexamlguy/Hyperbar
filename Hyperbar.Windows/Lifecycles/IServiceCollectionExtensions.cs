@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.UI.Dispatching;
 
 namespace Hyperbar.Windows
 {
@@ -11,6 +12,9 @@ namespace Hyperbar.Windows
             where TWidgetProvider :
             IWidgetProvider, new()
         {
+            DispatcherQueueSynchronizationContext context = new(DispatcherQueue.GetForCurrentThread());
+            SynchronizationContext.SetSynchronizationContext(context);
+
             TWidgetProvider builder = new();
             IHost? host = new HostBuilder()
                 .UseContentRoot(AppContext.BaseDirectory)
@@ -37,7 +41,6 @@ namespace Hyperbar.Windows
                     isolatedServices.AddContentTemplate<WidgetButtonViewModel, WidgetButtonView>();
 
                     isolatedServices.AddTransient<ITemplateFactory, TemplateFactory>();
-                    isolatedServices.AddTransient<ITemplateGeneratorFactory, TemplateGeneratorFactory>();
 
                     builder.Create(context, isolatedServices);
 
