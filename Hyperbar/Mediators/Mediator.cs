@@ -8,7 +8,7 @@ public class Mediator(IServiceProvider provider) :
 {
     private readonly ConditionalWeakTable<Type, dynamic> addedHandlers = [];
 
-    public async ValueTask PublishAsync<TNotification>(TNotification notification,
+    public ValueTask PublishAsync<TNotification>(TNotification notification,
         CancellationToken cancellationToken = default)
         where TNotification :
         INotification
@@ -24,14 +24,12 @@ public class Mediator(IServiceProvider provider) :
             }
         }
 
-        if (handlers.Count == 0)
+        foreach (INotificationHandler<TNotification> handler in handlers)
         {
-        }
-        else if (handlers.Count == 1)
-        {
-            await handlers[0].Handle(notification, cancellationToken);
+            return  handler.Handle(notification, cancellationToken);
         }
 
+        return default;
     }
 
     public ValueTask<TResponse> SendAsync<TResponse>(IRequest<TResponse> request,
