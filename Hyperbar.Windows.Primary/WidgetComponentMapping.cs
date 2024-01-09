@@ -1,5 +1,4 @@
-﻿
-namespace Hyperbar.Windows.Primary;
+﻿namespace Hyperbar.Windows.Primary;
 
 public class WidgetComponentMapping(PrimaryWidgetConfiguration configuration,
     IServiceFactory service,
@@ -8,12 +7,18 @@ public class WidgetComponentMapping(PrimaryWidgetConfiguration configuration,
 {
     public IEnumerable<IWidgetComponentViewModel> Handle()
     {
-        foreach (IPrimaryCommandConfiguration item in configuration)
+        foreach (var item in configuration)
         {
-            if (item is KeyAcceleratorCommandConfiguration keyAcceleratorCommand)
+            if (item is KeyAcceleratorCommandConfiguration keyAcceleratorCommandConfiguration)
             {
-                yield return service.Create<WidgetButtonViewModel>(keyAcceleratorCommand.Icon, new Action(async () =>
-                   await mediator.SendAsync(new KeyAcceleratorCommand(VirtualKey.LeftWindows))));
+                 yield return service.Create<WidgetButtonViewModel>(keyAcceleratorCommandConfiguration.Icon, new Action(async () =>
+                   await mediator.SendAsync(new KeyAcceleratorRequest((VirtualKey)keyAcceleratorCommandConfiguration.Key, 
+                    keyAcceleratorCommandConfiguration.Modifiers?.Select(modifier => (VirtualKey)modifier).ToArray()))));
+            }
+
+            if (item is ProcessCommandConfiguration processCommandConfiguration)
+            {
+
             }
         }
     }

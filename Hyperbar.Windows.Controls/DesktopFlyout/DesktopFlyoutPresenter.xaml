@@ -5,21 +5,22 @@
     xmlns:controls="using:Hyperbar.Windows.Controls">
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Default">
-            <StaticResource x:Key="CommandBarFlyoutBackground" ResourceKey="AcrylicInAppFillColorDefaultBrush" />
-            <StaticResource x:Key="CommandBarFlyoutForeground" ResourceKey="TextFillColorPrimaryBrush" />
-            <StaticResource x:Key="CommandBarFlyoutBorderBrush" ResourceKey="ControlStrokeColorDefaultBrush" />
+            <StaticResource x:Key="DesktopFlyoutPresenterBackground" ResourceKey="AcrylicInAppFillColorDefaultBrush" />
+            <StaticResource x:Key="DesktopFlyoutPresenterForeground" ResourceKey="TextFillColorPrimaryBrush" />
+            <StaticResource x:Key="DesktopFlyoutPresenterBorderBrush" ResourceKey="ControlStrokeColorDefaultBrush" />
         </ResourceDictionary>
         <ResourceDictionary x:Key="Light">
-            <StaticResource x:Key="CommandBarFlyoutBackground" ResourceKey="AcrylicInAppFillColorDefaultBrush" />
-            <StaticResource x:Key="CommandBarFlyoutForeground" ResourceKey="TextFillColorPrimaryBrush" />
-            <StaticResource x:Key="CommandBarFlyoutBorderBrush" ResourceKey="ControlStrokeColorDefaultBrush" />
+            <StaticResource x:Key="DesktopFlyoutPresenterBackground" ResourceKey="AcrylicInAppFillColorDefaultBrush" />
+            <StaticResource x:Key="DesktopFlyoutPresenterForeground" ResourceKey="TextFillColorPrimaryBrush" />
+            <StaticResource x:Key="DesktopFlyoutPresenterBorderBrush" ResourceKey="ControlStrokeColorDefaultBrush" />
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
+    <Thickness x:Key="DesktopFlyoutPresenterBorderThemeThickness">1</Thickness>
     <Style TargetType="controls:DesktopFlyoutPresenter">
-        <Setter Property="Background" Value="{ThemeResource CommandBarFlyoutBackground}" />
-        <Setter Property="Foreground" Value="{ThemeResource CommandBarFlyoutForeground}" />
-        <Setter Property="BorderBrush" Value="{ThemeResource CommandBarFlyoutBorderBrush}" />
-        <Setter Property="BorderThickness" Value="{ThemeResource CommandBarFlyoutBorderThemeThickness}" />
+        <Setter Property="Background" Value="{ThemeResource DesktopFlyoutPresenterBackground}" />
+        <Setter Property="Foreground" Value="{ThemeResource DesktopFlyoutPresenterForeground}" />
+        <Setter Property="BorderBrush" Value="{ThemeResource DesktopFlyoutPresenterBorderBrush}" />
+        <Setter Property="BorderThickness" Value="{ThemeResource DesktopFlyoutPresenterBorderThemeThickness}" />
         <Setter Property="CornerRadius" Value="{ThemeResource OverlayCornerRadius}" />
         <Setter Property="Template">
             <Setter.Value>
@@ -29,9 +30,9 @@
                             x:Name="BackgroundElement"
                             Height="48"
                             MinWidth="40"
-                            Margin="24"
+                            Margin="16"
                             Background="{TemplateBinding Background}"
-                            BackgroundSizing="InnerBorderEdge"
+                            BackgroundSizing="OuterBorderEdge"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             CornerRadius="{TemplateBinding CornerRadius}"
@@ -42,7 +43,8 @@
                                 </TransitionCollection>
                             </Border.Transitions>
                             <ContentControl
-                                Margin="{TemplateBinding Padding}"
+                                Height="40"
+                                Margin="4"
                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                 Content="{TemplateBinding Content}"

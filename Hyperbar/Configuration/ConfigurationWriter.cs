@@ -4,7 +4,62 @@ using System.Text.Json.Serialization;
 
 namespace Hyperbar;
 
-public class ConfigurationWriter<TConfiguration>(string path,
+public interface IConfigurationReader<TConfiguration>
+    where TConfiguration :
+    class, new()
+{
+    TConfiguration Read();
+}
+
+public class ConfigurationReader<TConfiguration>(string path,
+    string section,
+    JsonSerializerOptions? serializerOptions = null) :
+    IConfigurationReader<TConfiguration>
+    where TConfiguration :
+    class, new()
+{
+    private static readonly Func<JsonSerializerOptions> defaultSerializerOptions = new(() =>
+    {
+        return new JsonSerializerOptions
+        {
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            Converters = 
+            { 
+                new JsonStringEnumConverter() 
+            }
+        };
+    });
+
+    public TConfiguration Read()
+    {
+        if ((TryGet(out TConfiguration? value) ? value : new TConfiguration()) is TConfiguration configuration)
+        {
+            return configuration;
+        }
+
+        return new TConfiguration();
+    }
+
+    private bool TryGet(out TConfiguration? value)
+    {
+        if (File.Exists(path))
+        {
+            byte[] jsonContent = File.ReadAllBytes(path);
+
+            using JsonDocument jsonDocument = JsonDocument.Parse(jsonContent);
+            if (jsonDocument.RootElement.TryGetProperty(section, out JsonElement sectionValue))
+            {
+                value = JsonSerializer.Deserialize<TConfiguration>(sectionValue.ToString(), serializerOptions ?? defaultSerializerOptions());
+                return true;
+            }
+        }
+
+        value = default;
+        return false;
+    }
+}
+
+ public class ConfigurationWriter<TConfiguration>(string path,
     string section,
     JsonSerializerOptions? serializerOptions = null) :
     IConfigurationWriter<TConfiguration>

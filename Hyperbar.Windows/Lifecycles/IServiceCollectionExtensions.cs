@@ -36,7 +36,7 @@ namespace Hyperbar.Windows
 
                     isolatedServices.AddSingleton<IMediator, Mediator>();
                     isolatedServices.AddHandler<KeyAcceleratorHandler>();
-
+                    isolatedServices.AddHandler<ProcesssAcceleratorHandler>();
                     isolatedServices.AddTransient<IWidgetView, WidgetView>();
                     isolatedServices.AddContentTemplate<WidgetButtonViewModel, WidgetButtonView>();
 

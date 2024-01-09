@@ -3,15 +3,113 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using System.Text.Json;
 
 namespace Hyperbar;
 
 public static class IServiceCollectionExtensions
 {
-    public static IServiceCollection AddHandler<THandler>(this IServiceCollection services, 
-        ServiceLifetime lifetime = ServiceLifetime.Transient) 
+    public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services)
+        where TConfiguration :
+        class, new()
+    {
+        return services.AddConfiguration<TConfiguration>(typeof(TConfiguration).Name, "Settings.json", null);
+    }
+
+    public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services,
+        IConfiguration configuration,
+        TConfiguration? defaults = null)
+        where TConfiguration :
+        class, new()
+    {
+        return services.AddConfiguration(typeof(TConfiguration).Name, "Settings.json", defaults);
+    }
+
+    public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services,
+        string section,
+        string path = "Settings.json",
+        TConfiguration? defaults = null,
+        Action<JsonSerializerOptions>? serializerDelegate = null)
+        where TConfiguration :
+        class, new()
+    {
+        services.AddTransient(provider => provider.GetRequiredService<IConfigurationReader<TConfiguration>>().Read());
+
+        services.AddSingleton<IConfigurationReader<TConfiguration>>(provider =>
+        {
+            string? jsonFilePath = null;
+            if (provider.GetService<IHostEnvironment>() is IHostEnvironment hostEnvironment)
+            {
+                IFileProvider fileProvider = hostEnvironment.ContentRootFileProvider;
+                IFileInfo fileInfo = fileProvider.GetFileInfo(path);
+
+                jsonFilePath = fileInfo.PhysicalPath;
+            }
+
+            jsonFilePath ??= Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
+
+            JsonSerializerOptions? defaultSerializer = null;
+            if (serializerDelegate is not null)
+            {
+                defaultSerializer = new JsonSerializerOptions();
+                serializerDelegate.Invoke(defaultSerializer);
+            }
+
+            return new ConfigurationReader<TConfiguration>(jsonFilePath, section, defaultSerializer);
+        });
+
+        services.AddSingleton<IConfigurationWriter<TConfiguration>>(provider =>
+        {
+            string? jsonFilePath = null;
+            if (provider.GetService<IHostEnvironment>() is IHostEnvironment hostEnvironment)
+            {
+                IFileProvider fileProvider = hostEnvironment.ContentRootFileProvider;
+                IFileInfo fileInfo = fileProvider.GetFileInfo(path);
+
+                jsonFilePath = fileInfo.PhysicalPath;
+            }
+
+            jsonFilePath ??= Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
+
+            JsonSerializerOptions? defaultSerializer = null;
+            if (serializerDelegate is not null)
+            {
+                defaultSerializer = new JsonSerializerOptions();
+                serializerDelegate.Invoke(defaultSerializer);
+            }
+
+            return new ConfigurationWriter<TConfiguration>(jsonFilePath, section, defaultSerializer);
+        });
+
+        services.AddTransient(provider => new DefaultConfiguration<TConfiguration>(defaults));
+        services.AddTransient<IInitializer, ConfigurationInitializer<TConfiguration>>();
+
+        services.AddTransient<IWritableConfiguration<TConfiguration>, WritableConfiguration<TConfiguration>>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddContentTemplate<TContent, TTemplate>(this IServiceCollection services,
+        object? key = null)
+    {
+        Type contentType = typeof(TContent);
+        Type templateType = typeof(TTemplate);
+
+        key ??= contentType.Name;
+
+        services.AddTransient(contentType);
+        services.TryAddTransient(templateType);
+
+        services.AddKeyedTransient(contentType, key);
+        services.AddKeyedTransient(templateType, key);
+
+        services.AddTransient<IContentTemplateDescriptor>(provider => new ContentTemplateDescriptor { ContentType = contentType, TemplateType = templateType, Key = key });
+
+        return services;
+    }
+
+    public static IServiceCollection AddHandler<THandler>(this IServiceCollection services,
+                        ServiceLifetime lifetime = ServiceLifetime.Transient) 
         where THandler :
         IHandler
     {
@@ -62,71 +160,6 @@ public static class IServiceCollectionExtensions
 
         return services;
     }
-
-    public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services,
-        IConfiguration configuration)
-        where TConfiguration :
-        class, new()
-    {
-        return services.AddConfiguration<TConfiguration>(configuration, typeof(TConfiguration).Name, "Settings.json", null);
-    }
-
-    public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services,
-        IConfiguration configuration,
-        TConfiguration? defaults = null)
-        where TConfiguration :
-        class, new()
-    {
-        return services.AddConfiguration(configuration, typeof(TConfiguration).Name, "Settings.json", defaults);
-    }
-
-    public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services,
-        IConfiguration configuration,
-        string section,
-        string path = "Settings.json",
-        TConfiguration? defaults = null,
-        Action<JsonSerializerOptions>? serializerDelegate = null)
-        where TConfiguration :
-        class, new()
-    {
-        services.Configure<TConfiguration>(configuration);
-        services.AddSingleton<IConfigureOptions<TConfiguration>>(new ConfigureNamedOptions<TConfiguration>("", args => { }));
-        services.AddTransient(provider => provider.GetService<IOptionsMonitor<TConfiguration>>()!.CurrentValue);
-
-        services.AddSingleton<IConfigurationWriter<TConfiguration>>(provider =>
-        {
-            string? jsonFilePath = null;
-            if (provider.GetService<IHostEnvironment>() is IHostEnvironment hostEnvironment)
-            {
-                IFileProvider fileProvider = hostEnvironment.ContentRootFileProvider;
-                IFileInfo fileInfo = fileProvider.GetFileInfo(path);
-
-                jsonFilePath = fileInfo.PhysicalPath;
-            }
-
-            jsonFilePath ??= Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
-
-            JsonSerializerOptions? defaultSerializer = null;
-            if (serializerDelegate is not null)
-            {
-                defaultSerializer = new JsonSerializerOptions();
-                serializerDelegate.Invoke(defaultSerializer);
-            }
-
-            return new ConfigurationWriter<TConfiguration>(jsonFilePath, section, defaultSerializer);
-        });
-
-        if (defaults is not null)
-        {
-        }
-
-        services.AddTransient(provider => new DefaultConfiguration<TConfiguration>(defaults));
-        services.AddTransient<IInitializer, ConfigurationInitializer<TConfiguration>>();
-
-        services.AddTransient<IWritableConfiguration<TConfiguration>, WritableConfiguration<TConfiguration>>();
-        return services;
-    }
-
     public static IServiceCollection AddWidgetTemplate<TWidgetContent>(this IServiceCollection services)
         where TWidgetContent :
         IWidgetViewModel
@@ -161,25 +194,6 @@ public static class IServiceCollectionExtensions
 
         services.AddKeyedTransient(typeof(IWidgetViewModel), key, contentType);
         services.TryAddKeyedTransient(templateType, key);
-
-        services.AddTransient<IContentTemplateDescriptor>(provider => new ContentTemplateDescriptor { ContentType = contentType, TemplateType = templateType, Key = key });
-
-        return services;
-    }
-
-    public static IServiceCollection AddContentTemplate<TContent, TTemplate>(this IServiceCollection services,
-        object? key = null)
-    {
-        Type contentType = typeof(TContent);
-        Type templateType = typeof(TTemplate);
-
-        key ??= contentType.Name;
-
-        services.AddTransient(contentType);
-        services.TryAddTransient(templateType);
-
-        services.AddKeyedTransient(contentType, key);
-        services.AddKeyedTransient(templateType, key);
 
         services.AddTransient<IContentTemplateDescriptor>(provider => new ContentTemplateDescriptor { ContentType = contentType, TemplateType = templateType, Key = key });
 

@@ -24,8 +24,7 @@ public class VirtualKeyboard :
         91      // LeftWindows
        ];
 
-    public void Send(int key,
-        params int[] modifierKeys)
+    public void Send(int key, params int[] modifierKeys)
     {
         foreach (int modiferKey in modifierKeys)
         {

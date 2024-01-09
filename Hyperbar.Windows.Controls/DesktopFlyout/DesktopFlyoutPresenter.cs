@@ -12,7 +12,7 @@ public class DesktopFlyoutPresenter :
             typeof(DesktopFlyoutPresenterTemplateSettings), typeof(DesktopFlyoutPresenter),
             new PropertyMetadata(null));
 
-    internal new DesktopFlyout Parent;
+    internal new DesktopFlyout? Parent;
 
     public DesktopFlyoutPresenter()
     {

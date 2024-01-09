@@ -3,6 +3,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Hyperbar.Windows.UI;
 using Hyperbar.Windows.Interop;
+using Windows.Foundation;
 
 namespace Hyperbar.Windows.Controls;
 
@@ -37,8 +38,8 @@ internal class DesktopFlyoutHost : Window
         {
             return;
         }
-
-        //  presenter.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+        
+        presenter.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
 
         double height = presenter.DesiredSize.Height;
         double width = presenter.DesiredSize.Width;

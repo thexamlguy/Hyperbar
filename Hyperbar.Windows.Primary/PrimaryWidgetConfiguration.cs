@@ -1,10 +1,10 @@
 ﻿namespace Hyperbar.Windows.Primary;
 
 public class PrimaryWidgetConfiguration :
-    List<KeyAcceleratorCommandConfiguration>
+    List<PrimaryCommandConfiguration>
 {
     public static PrimaryWidgetConfiguration Defaults => new()
     {
-        new KeyAcceleratorCommandConfiguration { Icon = "\uE720", Key = "Test", Modifiers = ["Test", "Test"] }
+        new KeyAcceleratorCommandConfiguration { Icon = "\uE720", Key = 91, Modifiers = [] }
     };
 }

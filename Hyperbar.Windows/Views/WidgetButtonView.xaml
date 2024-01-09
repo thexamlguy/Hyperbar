@@ -10,13 +10,14 @@
         <SolidColorBrush x:Key="ButtonBorderBrushPressed" Color="Transparent" />
         <SolidColorBrush x:Key="ButtonBorderBrushDisabled" Color="Transparent" />
         <Thickness x:Key="ButtonPadding">0</Thickness>
-        <x:Double x:Key="ButtonWidth">32</x:Double>
-        <x:Double x:Key="ButtonHeight">32</x:Double>
+        <x:Double x:Key="ButtonWidth">40</x:Double>
+        <x:Double x:Key="ButtonHeight">40</x:Double>
     </UserControl.Resources>
     <Button
         Width="{StaticResource ButtonWidth}"
         Height="{StaticResource ButtonHeight}"
-        Padding="0"
+        Padding="{StaticResource ButtonPadding}"
+        FontSize="16"
         Command="{Binding Click}"
         Content="{Binding Icon}"
         FontFamily="{StaticResource SymbolThemeFontFamily}" />

@@ -1,5 +1,5 @@
 ﻿namespace Hyperbar;
 
-public record KeyAcceleratorCommand(VirtualKey Key,
+public record KeyAcceleratorRequest(VirtualKey Key,
     VirtualKey[]? Modifiers = null) :
     IRequest;
