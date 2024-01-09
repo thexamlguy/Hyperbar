@@ -1,4 +1,5 @@
 ﻿using Hyperbar.Windows.Interop;
+using Hyperbar.Windows.Primary;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

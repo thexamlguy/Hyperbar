@@ -1,12 +1,8 @@
-﻿using Microsoft.Extensions.Options;
+﻿namespace Hyperbar;
 
-namespace Hyperbar;
-
-public interface IWritableConfiguration<out TConfiguration> :
-    IOptionsSnapshot<TConfiguration>
+public interface IWritableConfiguration<out TConfiguration>
     where TConfiguration :
     class, new()
 {
-    void Write(Action<TConfiguration> updateAction,
-        bool reload = true);
+    void Write(Action<TConfiguration> updateDelegate);
 }

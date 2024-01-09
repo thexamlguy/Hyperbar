@@ -4,63 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Hyperbar;
 
-public interface IConfigurationReader<TConfiguration>
-    where TConfiguration :
-    class, new()
-{
-    TConfiguration Read();
-}
-
-public class ConfigurationReader<TConfiguration>(string path,
-    string section,
-    JsonSerializerOptions? serializerOptions = null) :
-    IConfigurationReader<TConfiguration>
-    where TConfiguration :
-    class, new()
-{
-    private static readonly Func<JsonSerializerOptions> defaultSerializerOptions = new(() =>
-    {
-        return new JsonSerializerOptions
-        {
-            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-            Converters = 
-            { 
-                new JsonStringEnumConverter() 
-            }
-        };
-    });
-
-    public TConfiguration Read()
-    {
-        if ((TryGet(out TConfiguration? value) ? value : new TConfiguration()) is TConfiguration configuration)
-        {
-            return configuration;
-        }
-
-        return new TConfiguration();
-    }
-
-    private bool TryGet(out TConfiguration? value)
-    {
-        if (File.Exists(path))
-        {
-            byte[] jsonContent = File.ReadAllBytes(path);
-
-            using JsonDocument jsonDocument = JsonDocument.Parse(jsonContent);
-            if (jsonDocument.RootElement.TryGetProperty(section, out JsonElement sectionValue))
-            {
-                value = JsonSerializer.Deserialize<TConfiguration>(sectionValue.ToString(), serializerOptions ?? defaultSerializerOptions());
-                return true;
-            }
-        }
-
-        value = default;
-        return false;
-    }
-}
-
- public class ConfigurationWriter<TConfiguration>(string path,
-    string section,
+public class ConfigurationWriter<TConfiguration>(IConfigurationSource<TConfiguration> source,
     JsonSerializerOptions? serializerOptions = null) :
     IConfigurationWriter<TConfiguration>
     where TConfiguration :
@@ -87,21 +31,21 @@ public class ConfigurationReader<TConfiguration>(string path,
 
     public void Write(TConfiguration value)
     {
-        if (!File.Exists(path))
+        if (!File.Exists(source.Path))
         {
-            string? fileDirectoryPath = Path.GetDirectoryName(path);
+            string? fileDirectoryPath = Path.GetDirectoryName(source.Path);
             if (!string.IsNullOrEmpty(fileDirectoryPath))
             {
                 Directory.CreateDirectory(fileDirectoryPath);
             }
 
-            File.WriteAllText(path, "{}");
+            File.WriteAllText(source.Path, "{}");
         }
 
-        byte[] jsonContent = File.ReadAllBytes(path);
+        byte[] jsonContent = File.ReadAllBytes(source.Path);
 
         using JsonDocument jsonDocument = JsonDocument.Parse(jsonContent);
-        using FileStream stream = File.OpenWrite(path);
+        using FileStream stream = File.OpenWrite(source.Path);
         Utf8JsonWriter writer = new(stream, new JsonWriterOptions()
         {
             Indented = true,
@@ -114,7 +58,7 @@ public class ConfigurationReader<TConfiguration>(string path,
 
         foreach (JsonProperty element in jsonDocument.RootElement.EnumerateObject())
         {
-            if (element.Name != section)
+            if (element.Name != source.Section)
             {
                 element.WriteTo(writer);
                 continue;
@@ -126,7 +70,7 @@ public class ConfigurationReader<TConfiguration>(string path,
 
         if (!isWritten)
         {
-            writer.WritePropertyName(section);
+            writer.WritePropertyName(source.Section);
             optionsElement.WriteTo(writer);
         }
 
@@ -137,12 +81,12 @@ public class ConfigurationReader<TConfiguration>(string path,
 
     private bool TryGet(out TConfiguration? value)
     {
-        if (File.Exists(path))
+        if (File.Exists(source.Path))
         {
-            byte[] jsonContent = File.ReadAllBytes(path);
+            byte[] jsonContent = File.ReadAllBytes(source.Path);
 
             using JsonDocument jsonDocument = JsonDocument.Parse(jsonContent);
-            if (jsonDocument.RootElement.TryGetProperty(section, out JsonElement sectionValue))
+            if (jsonDocument.RootElement.TryGetProperty(source.Section, out JsonElement sectionValue))
             {
                 value = JsonSerializer.Deserialize<TConfiguration>(sectionValue.ToString(), serializerOptions ?? defaultSerializerOptions());
                 return true;

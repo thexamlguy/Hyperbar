@@ -46,7 +46,7 @@ public partial class App :
                 services.AddTransient<DesktopFlyout>();
                 services.AddContentTemplate<CommandViewModel, CommandView>();
 
-                services.AddWidgetProvider<ContextualWidgetProvider>();
+             //   services.AddWidgetProvider<ContextualWidgetProvider>();
                 services.AddWidgetProvider<PrimaryWidgetProvider>();
 
                 services.AddTransient(provider =>

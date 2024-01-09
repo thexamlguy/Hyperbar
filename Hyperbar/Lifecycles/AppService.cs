@@ -13,8 +13,5 @@ public class AppService(IEnumerable<IInitializer> initializers) :
         }
     }
 
-    public Task StopAsync(CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
+    public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 }

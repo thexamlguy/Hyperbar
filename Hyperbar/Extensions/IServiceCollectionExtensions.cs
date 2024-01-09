@@ -33,9 +33,7 @@ public static class IServiceCollectionExtensions
         where TConfiguration :
         class, new()
     {
-        services.AddTransient(provider => provider.GetRequiredService<IConfigurationReader<TConfiguration>>().Read());
-
-        services.AddSingleton<IConfigurationReader<TConfiguration>>(provider =>
+        services.AddSingleton<IConfigurationSource<TConfiguration>>(provider =>
         {
             string? jsonFilePath = null;
             if (provider.GetService<IHostEnvironment>() is IHostEnvironment hostEnvironment)
@@ -47,30 +45,11 @@ public static class IServiceCollectionExtensions
             }
 
             jsonFilePath ??= Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
-
-            JsonSerializerOptions? defaultSerializer = null;
-            if (serializerDelegate is not null)
-            {
-                defaultSerializer = new JsonSerializerOptions();
-                serializerDelegate.Invoke(defaultSerializer);
-            }
-
-            return new ConfigurationReader<TConfiguration>(jsonFilePath, section, defaultSerializer);
+            return new ConfigurationSource<TConfiguration>(jsonFilePath, section);
         });
 
-        services.AddSingleton<IConfigurationWriter<TConfiguration>>(provider =>
+        services.AddTransient<IConfigurationReader<TConfiguration>>(provider =>
         {
-            string? jsonFilePath = null;
-            if (provider.GetService<IHostEnvironment>() is IHostEnvironment hostEnvironment)
-            {
-                IFileProvider fileProvider = hostEnvironment.ContentRootFileProvider;
-                IFileInfo fileInfo = fileProvider.GetFileInfo(path);
-
-                jsonFilePath = fileInfo.PhysicalPath;
-            }
-
-            jsonFilePath ??= Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
-
             JsonSerializerOptions? defaultSerializer = null;
             if (serializerDelegate is not null)
             {
@@ -78,13 +57,30 @@ public static class IServiceCollectionExtensions
                 serializerDelegate.Invoke(defaultSerializer);
             }
 
-            return new ConfigurationWriter<TConfiguration>(jsonFilePath, section, defaultSerializer);
+            return new ConfigurationReader<TConfiguration>(provider.GetRequiredService<IConfigurationSource<TConfiguration>>(), 
+                defaultSerializer);
+        });
+
+        services.AddTransient<IConfigurationWriter<TConfiguration>>(provider =>
+        { 
+            JsonSerializerOptions? defaultSerializer = null;
+            if (serializerDelegate is not null)
+            {
+                defaultSerializer = new JsonSerializerOptions();
+                serializerDelegate.Invoke(defaultSerializer);
+            }
+
+            return new ConfigurationWriter<TConfiguration>(provider.GetRequiredService<IConfigurationSource<TConfiguration>>(), 
+                defaultSerializer);
         });
 
         services.AddTransient(provider => new DefaultConfiguration<TConfiguration>(defaults));
         services.AddTransient<IInitializer, ConfigurationInitializer<TConfiguration>>();
 
         services.AddTransient<IWritableConfiguration<TConfiguration>, WritableConfiguration<TConfiguration>>();
+
+        services.AddTransient<IConfiguration<TConfiguration>, Configuration<TConfiguration>>();
+        services.AddTransient(provider => provider.GetRequiredService<IConfiguration<TConfiguration>>().Value);
 
         return services;
     }
@@ -109,7 +105,7 @@ public static class IServiceCollectionExtensions
     }
 
     public static IServiceCollection AddHandler<THandler>(this IServiceCollection services,
-                        ServiceLifetime lifetime = ServiceLifetime.Transient) 
+        ServiceLifetime lifetime = ServiceLifetime.Transient) 
         where THandler :
         IHandler
     {

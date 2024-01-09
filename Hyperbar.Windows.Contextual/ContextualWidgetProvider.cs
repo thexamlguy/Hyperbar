@@ -7,6 +7,5 @@ public class ContextualWidgetProvider :
     IWidgetProvider
 {
     public void Create(HostBuilderContext comtext, IServiceCollection services) => services
-            .AddConfiguration<ContextualWidgetConfiguration>(comtext.Configuration.GetSection(nameof(ContextualWidgetConfiguration)))
             .AddWidgetTemplate<ContextualWidgetViewModel>();
 }
