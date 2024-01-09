@@ -48,7 +48,7 @@ public static class IServiceCollectionExtensions
             return new ConfigurationSource<TConfiguration>(jsonFilePath, section);
         });
 
-        services.AddTransient<IConfigurationReader<TConfiguration>>(provider =>
+        services.AddSingleton<IConfigurationReader<TConfiguration>>(provider =>
         {
             JsonSerializerOptions? defaultSerializer = null;
             if (serializerDelegate is not null)
@@ -61,7 +61,7 @@ public static class IServiceCollectionExtensions
                 defaultSerializer);
         });
 
-        services.AddTransient<IConfigurationWriter<TConfiguration>>(provider =>
+        services.AddSingleton<IConfigurationWriter<TConfiguration>>(provider =>
         { 
             JsonSerializerOptions? defaultSerializer = null;
             if (serializerDelegate is not null)
@@ -73,6 +73,8 @@ public static class IServiceCollectionExtensions
             return new ConfigurationWriter<TConfiguration>(provider.GetRequiredService<IConfigurationSource<TConfiguration>>(), 
                 defaultSerializer);
         });
+
+        services.AddSingleton<IInitializer, ConfigurationMonitor<TConfiguration>>();
 
         services.AddTransient(provider => new DefaultConfiguration<TConfiguration>(defaults));
         services.AddTransient<IInitializer, ConfigurationInitializer<TConfiguration>>();
