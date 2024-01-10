@@ -52,13 +52,16 @@ public partial class App :
                 {
                     static IEnumerable<WidgetContainerViewModel> Resolve(IServiceProvider services)
                     {
+                        int index = 0;
                         foreach (IWidgetContext widgetContext in services.GetServices<IWidgetContext>())
                         {
                             if (widgetContext.ServiceProvider.GetServices<IWidgetViewModel>() is
                                 IEnumerable<IWidgetViewModel> viewModels)
                             {
                                 yield return (WidgetContainerViewModel)ActivatorUtilities.CreateInstance(widgetContext.ServiceProvider,
-                                    typeof(WidgetContainerViewModel), viewModels);
+                                    typeof(WidgetContainerViewModel), viewModels, index % 2 == 0);
+
+                                index++;
                             }
                         }
                     }
