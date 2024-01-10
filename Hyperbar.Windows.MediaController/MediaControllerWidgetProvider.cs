@@ -9,6 +9,7 @@ public class MediaControllerWidgetProvider :
 {
     public void Create(HostBuilderContext comtext, IServiceCollection services) =>
             services.AddWidgetTemplate<MediaControllerWidgetViewModel, MediaControllerWidgetView>()
+                .AddTransient<IInitializer, MediaControllerInitializer>()
                 .AddContentTemplate<MediaControllerViewModel, MediaControllerView>()
                 .AddContentTemplate<MediaControllerViewModel, MediaControllerView>()
                 .AddContentTemplate<MediaControllerViewModel, MediaControllerView>()

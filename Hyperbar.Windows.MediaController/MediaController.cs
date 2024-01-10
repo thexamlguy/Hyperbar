@@ -1,9 +1,23 @@
-﻿namespace Hyperbar.Windows.Primary;
+﻿using Windows.Media.Control;
 
-public class MediaController :
-    IInitializer
+namespace Hyperbar.Windows.Primary;
+
+public class MediaController : 
+    INotificationHandler<PlayRequest>, 
+    IDisposable
 {
-    public Task InitializeAsync()
+    public MediaController(GlobalSystemMediaTransportControlsSession session)
+    {
+
+    }
+
+    public void Dispose()
+    {
+        throw new NotImplementedException();
+    }
+
+    public ValueTask Handle(PlayRequest notification, 
+        CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
