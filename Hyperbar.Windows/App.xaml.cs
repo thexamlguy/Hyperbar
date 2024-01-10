@@ -1,13 +1,11 @@
-﻿using Hyperbar.Widget.Contextual;
-using Hyperbar.Windows.Controls;
+﻿using Hyperbar.Windows.Controls;
 using Hyperbar.Windows.Primary;
+using Hyperbar.Windows.UI;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
-using System.Text.Json;
 
 namespace Hyperbar.Windows;
 
@@ -17,7 +15,7 @@ public partial class App :
     public App() => InitializeComponent();
 
     protected override async void OnLaunched(LaunchActivatedEventArgs args)
-    {
+    {        
         base.OnLaunched(args);
 
         DispatcherQueueSynchronizationContext context = new(DispatcherQueue.GetForCurrentThread());
@@ -44,21 +42,23 @@ public partial class App :
                 services.AddTransient<ITemplateFactory, TemplateFactory>();
 
                 services.AddTransient<DesktopFlyout>();
-                services.AddContentTemplate<CommandViewModel, CommandView>();
 
-             //   services.AddWidgetProvider<ContextualWidgetProvider>();
+                services.AddContentTemplate<WidgetBarViewModel, WidgetBarView>();
+
+                services.AddWidgetProvider<MediaControllerWidgetProvider>();
                 services.AddWidgetProvider<PrimaryWidgetProvider>();
 
                 services.AddTransient(provider =>
                 {
-                    static IEnumerable<IWidgetViewModel> Resolve(IServiceProvider services)
+                    static IEnumerable<WidgetContainerViewModel> Resolve(IServiceProvider services)
                     {
                         foreach (IWidgetContext widgetContext in services.GetServices<IWidgetContext>())
                         {
-                            if (widgetContext.ServiceProvider.GetService<IWidgetViewModel>() is
-                                IWidgetViewModel viewModel)
+                            if (widgetContext.ServiceProvider.GetServices<IWidgetViewModel>() is
+                                IEnumerable<IWidgetViewModel> viewModels)
                             {
-                                yield return viewModel;
+                                yield return (WidgetContainerViewModel)ActivatorUtilities.CreateInstance(widgetContext.ServiceProvider,
+                                    typeof(WidgetContainerViewModel), viewModels);
                             }
                         }
                     }

@@ -14,5 +14,6 @@
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Hyperbar.Windows.Interop\Hyperbar.Windows.Interop.csproj" />
+		<ProjectReference Include="..\Hyperbar\Hyperbar.csproj" />
 	</ItemGroup>
 </Project>

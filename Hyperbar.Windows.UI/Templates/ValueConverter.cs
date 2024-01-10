@@ -2,7 +2,7 @@
 using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Markup;
 
-namespace Hyperbar.Windows;
+namespace Hyperbar.Windows.UI;
 
 public abstract class ValueConverter<TSource, TTarget> :
     MarkupExtension,

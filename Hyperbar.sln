@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hyperbar.Widget.Primary", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hyperbar.Windows.UI", "Hyperbar.Windows.UI\Hyperbar.Windows.UI.csproj", "{ED489968-89A5-42B5-9FC3-20DCF5D78A5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hyperbar.Windows.Interop", "Hyperbar.Windows.Interop\Hyperbar.Windows.Interop.csproj", "{7263FB8C-4007-4581-8AD7-DCAB2AD7C444}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hyperbar.Windows.Interop", "Hyperbar.Windows.Interop\Hyperbar.Windows.Interop.csproj", "{7263FB8C-4007-4581-8AD7-DCAB2AD7C444}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hyperbar.Windows.MediaController", "Hyperbar.Windows.MediaController\Hyperbar.Windows.MediaController.csproj", "{88C3EC90-C48C-47B9-89A8-740EFFFE5AAD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -149,6 +151,22 @@ Global
 		{7263FB8C-4007-4581-8AD7-DCAB2AD7C444}.Release|x64.Build.0 = Release|Any CPU
 		{7263FB8C-4007-4581-8AD7-DCAB2AD7C444}.Release|x86.ActiveCfg = Release|Any CPU
 		{7263FB8C-4007-4581-8AD7-DCAB2AD7C444}.Release|x86.Build.0 = Release|Any CPU
+		{88C3EC90-C48C-47B9-89A8-740EFFFE5AAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88C3EC90-C48C-47B9-89A8-740EFFFE5AAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88C3EC90-C48C-47B9-89A8-740EFFFE5AAD}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{88C3EC90-C48C-47B9-89A8-740EFFFE5AAD}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{88C3EC90-C48C-47B9-89A8-740EFFFE5AAD}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{88C3EC90-C48C-47B9-89A8-740EFFFE5AAD}.Debug|x64.Build.0 = Debug|Any CPU
+		{88C3EC90-C48C-47B9-89A8-740EFFFE5AAD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{88C3EC90-C48C-47B9-89A8-740EFFFE5AAD}.Debug|x86.Build.0 = Debug|Any CPU
+		{88C3EC90-C48C-47B9-89A8-740EFFFE5AAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88C3EC90-C48C-47B9-89A8-740EFFFE5AAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88C3EC90-C48C-47B9-89A8-740EFFFE5AAD}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{88C3EC90-C48C-47B9-89A8-740EFFFE5AAD}.Release|ARM64.Build.0 = Release|Any CPU
+		{88C3EC90-C48C-47B9-89A8-740EFFFE5AAD}.Release|x64.ActiveCfg = Release|Any CPU
+		{88C3EC90-C48C-47B9-89A8-740EFFFE5AAD}.Release|x64.Build.0 = Release|Any CPU
+		{88C3EC90-C48C-47B9-89A8-740EFFFE5AAD}.Release|x86.ActiveCfg = Release|Any CPU
+		{88C3EC90-C48C-47B9-89A8-740EFFFE5AAD}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

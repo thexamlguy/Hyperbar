@@ -2,12 +2,14 @@
 
 namespace Hyperbar;
 
+
 public class ObservableCollectionViewModel<TItem> :
     ObservableCollection<TItem>,
     INotificationHandler<CollectionChanged<IEnumerable<TItem>>>
 {
     private readonly IServiceFactory serviceFactory;
-    private SynchronizationContext? context;
+    private readonly SynchronizationContext? context;
+
     public ObservableCollectionViewModel(IServiceFactory serviceFactory, 
         IMediator mediator)
     {

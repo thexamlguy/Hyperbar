@@ -1,7 +1,7 @@
 ﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
-namespace Hyperbar.Windows;
+namespace Hyperbar.Windows.UI;
 
 public class TemplateGeneratorControl :
     ContentControl
@@ -16,6 +16,10 @@ public class TemplateGeneratorControl :
         if (DataContext is ITemplatedViewModel templatedViewModel)
         {
             Content = templatedViewModel.TemplateFactory.Create(DataContext.GetType().Name);
+        }
+        else
+        {
+
         }
     }
 }

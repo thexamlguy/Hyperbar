@@ -1,5 +1,3 @@
 ﻿namespace Hyperbar;
 
-public interface IWidgetView
-{
-}
+public interface IWidgetView;

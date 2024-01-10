@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 namespace Hyperbar;
 
 public partial class WidgetButtonViewModel :
-    WidgetComponentViewModelBase
+    WidgetComponentViewModel
 {
     [ObservableProperty]
     private string? icon;

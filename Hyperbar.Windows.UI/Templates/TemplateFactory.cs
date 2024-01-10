@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Hyperbar.Windows;
+namespace Hyperbar.Windows.UI;
 
 public class TemplateFactory(IEnumerable<IContentTemplateDescriptor> descriptors,
     IServiceProvider provider) :

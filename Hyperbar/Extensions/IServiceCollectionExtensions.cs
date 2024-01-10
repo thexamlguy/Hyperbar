@@ -96,7 +96,7 @@ public static class IServiceCollectionExtensions
         key ??= contentType.Name;
 
         services.AddTransient(contentType);
-        services.TryAddTransient(templateType);
+        services.AddTransient(templateType);
 
         services.AddKeyedTransient(contentType, key);
         services.AddKeyedTransient(templateType, key);

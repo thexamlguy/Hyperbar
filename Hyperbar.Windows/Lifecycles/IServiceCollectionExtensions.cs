@@ -1,5 +1,5 @@
 ﻿using Hyperbar.Windows.Interop;
-using Hyperbar.Windows.Primary;
+using Hyperbar.Windows.UI;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -28,20 +28,23 @@ namespace Hyperbar.Windows
                 })
                 .ConfigureServices((context, isolatedServices) =>
                 {
-                    isolatedServices.AddHostedService<WidgetService>();
-
                     isolatedServices.AddSingleton<IServiceFactory>(provider =>
                         new ServiceFactory((type, parameters) => ActivatorUtilities.CreateInstance(provider, type, parameters!)));
-                    
-                    isolatedServices.AddSingleton<IVirtualKeyboard, VirtualKeyboard>();
 
-                    isolatedServices.AddSingleton<IMediator, Mediator>();
-                    isolatedServices.AddHandler<KeyAcceleratorHandler>();
-                    isolatedServices.AddHandler<ProcesssAcceleratorHandler>();
-                    isolatedServices.AddTransient<IWidgetView, WidgetView>();
-                    isolatedServices.AddContentTemplate<WidgetButtonViewModel, WidgetButtonView>();
+                    isolatedServices.AddHostedService<WidgetService>();
 
                     isolatedServices.AddTransient<ITemplateFactory, TemplateFactory>();
+                    isolatedServices.AddSingleton<IMediator, Mediator>();
+
+                    isolatedServices.AddSingleton<IVirtualKeyboard, VirtualKeyboard>();
+
+                    isolatedServices.AddHandler<KeyAcceleratorHandler>();
+                    isolatedServices.AddHandler<ProcesssAcceleratorHandler>();
+
+                    isolatedServices.AddTransient<IWidgetView, WidgetView>();
+
+                    isolatedServices.AddContentTemplate<WidgetContainerViewModel, WidgetContainerView>();
+                    isolatedServices.AddContentTemplate<WidgetButtonViewModel, WidgetButtonView>();
 
                     builder.Create(context, isolatedServices);
 

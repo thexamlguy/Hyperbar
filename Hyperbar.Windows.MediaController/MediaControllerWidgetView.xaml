@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<UserControl
+    x:Class="Hyperbar.Windows.MediaController.MediaControllerWidgetView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="using:Hyperbar.Windows.UI">
+    <FlipView
+        x:Name="FlipView"
+        Width="320"
+        Background="Transparent"
+        ItemTemplateSelector="{Binding Converter={ui:DataTemplateConverter}}"
+        ItemsSource="{Binding}">
+        <FlipView.ItemContainerStyle>
+            <Style TargetType="FlipViewItem">
+                <Setter Property="HorizontalAlignment" Value="Right" />
+                <Setter Property="HorizontalContentAlignment" Value="Right" />
+
+            </Style>
+        </FlipView.ItemContainerStyle>
+        <FlipView.ItemsPanel>
+            <ItemsPanelTemplate>
+                <StackPanel AreScrollSnapPointsRegular="False" Orientation="Horizontal" />
+            </ItemsPanelTemplate>
+        </FlipView.ItemsPanel>
+    </FlipView>
+</UserControl>

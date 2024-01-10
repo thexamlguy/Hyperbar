@@ -2,7 +2,7 @@
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Markup;
 
-namespace Hyperbar.Windows;
+namespace Hyperbar.Windows.UI;
 
 public class TemplateGenerator : DataTemplateSelector
 {
@@ -10,8 +10,8 @@ public class TemplateGenerator : DataTemplateSelector
     {
         string xamlString = @"
                 <DataTemplate xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation'
-                                xmlns:desktop='using:Hyperbar.Windows'>
-                    <desktop:TemplateGeneratorControl />
+                                xmlns:ui='using:Hyperbar.Windows.UI'>
+                    <ui:TemplateGeneratorControl />
                 </DataTemplate>";
 
         return (DataTemplate)XamlReader.Load(xamlString);
@@ -21,8 +21,8 @@ public class TemplateGenerator : DataTemplateSelector
     {
         string xamlString = @"
                 <DataTemplate xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation'
-                                xmlns:desktop='using:Hyperbar.Windows'>
-                    <desktop:TemplateGeneratorControl />
+                                xmlns:ui='using:Hyperbar.Windows.UI'>
+                    <ui:TemplateGeneratorControl />
                 </DataTemplate>";
 
         return (DataTemplate)XamlReader.Load(xamlString);

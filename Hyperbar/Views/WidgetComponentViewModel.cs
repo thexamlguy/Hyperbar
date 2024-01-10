@@ -2,7 +2,7 @@
 
 namespace Hyperbar;
 
-public partial class WidgetComponentViewModelBase(ITemplateFactory templateFactory) :
+public partial class WidgetComponentViewModel(ITemplateFactory templateFactory) :
     ObservableObject,
     IWidgetComponentViewModel,
     ITemplatedViewModel

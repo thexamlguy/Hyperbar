@@ -3,8 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Hyperbar.Windows;
 
-public class AppInitializer([FromKeyedServices(nameof(CommandViewModel))] CommandView view,
-    [FromKeyedServices(nameof(CommandViewModel))] CommandViewModel viewModel,
+public class AppInitializer([FromKeyedServices(nameof(WidgetBarViewModel))] WidgetBarView view,
+    [FromKeyedServices(nameof(WidgetBarViewModel))] WidgetBarViewModel viewModel,
     DesktopFlyout desktopFlyout) :
     IInitializer
 {
