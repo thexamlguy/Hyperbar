@@ -59,7 +59,7 @@ public partial class App :
                                 IEnumerable<IWidgetViewModel> viewModels)
                             {
                                 yield return (WidgetContainerViewModel)ActivatorUtilities.CreateInstance(widgetContext.ServiceProvider,
-                                    typeof(WidgetContainerViewModel), viewModels, index % 2 == 0);
+                                    typeof(WidgetContainerViewModel), viewModels, index % 2 == 1);
 
                                 index++;
                             }

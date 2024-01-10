@@ -11,8 +11,9 @@
         </Grid.ColumnDefinitions>
         <Rectangle
             Width="1"
-            Margin="6,0,6,0"
-            Fill="Red" />
+            Margin="6,8,6,8"
+            Fill="{ThemeResource DividerStrokeColorDefaultBrush}"
+            Visibility="{Binding Alternate}" />
         <ItemsControl
             Grid.Column="1"
             ItemTemplateSelector="{Binding Converter={ui:DataTemplateConverter}}"
