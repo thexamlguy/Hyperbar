@@ -3,7 +3,7 @@
 public class KeyAcceleratorCommandConfiguration :
     PrimaryCommandConfiguration
 {
-    public int Key { get; set; }
+    public required int Key { get; set; }
 
     public int[]? Modifiers { get; set; }
 }

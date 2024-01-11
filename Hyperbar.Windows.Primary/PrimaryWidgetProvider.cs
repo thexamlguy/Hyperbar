@@ -6,9 +6,11 @@ namespace Hyperbar.Windows.Primary;
 public class PrimaryWidgetProvider :
     IWidgetProvider
 {
-    public void Create(HostBuilderContext comtext, IServiceCollection services) => 
+    public void Create(HostBuilderContext comtext, IServiceCollection services) =>
             services.AddConfiguration<PrimaryWidgetConfiguration>()
-                .AddHandler<WidgetComponentMapping>()
-                .AddHandler<PrimaryWidgetConfigurationChangedHandler>()
-                .AddWidgetTemplate<PrimaryWidgetViewModel>();
+                .AddTransient<IFactory<IEnumerable<IWidgetComponentViewModel>>, WidgetComponentViewModelFactory>()
+                .AddWidgetTemplate<PrimaryWidgetViewModel>()
+                .AddNotificationPipeline<ConfigurationChanged<PrimaryWidgetConfiguration>, 
+                    ValueChanging<IEnumerable<IWidgetComponentViewModel>>>();
+
 }

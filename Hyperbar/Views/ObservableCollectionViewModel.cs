@@ -5,13 +5,9 @@ using System.Collections.Specialized;
 
 namespace Hyperbar;
 
-public partial class ObservableCollectionViewModel<TItem> : 
+public partial class ObservableCollectionViewModel<TItem> :
     ObservableObject,
-    IList<TItem>, 
-    IList, 
-    IReadOnlyList<TItem>, 
-    INotifyCollectionChanged,
-    INotificationHandler<CollectionChanged<IEnumerable<TItem>>>
+    IObservableCollectionViewModel<TItem>
 {
     public ObservableCollection<TItem> collection = [];
     private readonly SynchronizationContext? context;
@@ -26,6 +22,23 @@ public partial class ObservableCollectionViewModel<TItem> :
         mediator.Subscribe(this);
 
         collection.CollectionChanged += OnCollectionChanged;
+    }
+
+    public ObservableCollectionViewModel(IServiceFactory serviceFactory,
+        IMediator mediator,
+        IFactory<IEnumerable<TItem>> factory)
+    {
+        context = SynchronizationContext.Current;
+
+        this.serviceFactory = serviceFactory;
+        mediator.Subscribe(this);
+
+        collection.CollectionChanged += OnCollectionChanged;
+
+        if (factory is not null && factory.Create() is { } items)
+        {
+            AddRange(factory.Create());
+        }
     }
 
     public ObservableCollectionViewModel(IServiceFactory serviceFactory,
@@ -158,14 +171,14 @@ public partial class ObservableCollectionViewModel<TItem> :
 
     IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)collection).GetEnumerator();
 
-    public ValueTask Handle(CollectionChanged<IEnumerable<TItem>> notification,
-        CancellationToken cancellationToken)
-    {
-        context?.Post(state => Clear(), null);
-        AddRange(notification.Items);
+    //public ValueTask Handle(CollectionChanged<IEnumerable<TItem>> notification,
+    //    CancellationToken cancellationToken)
+    //{
+    //    context?.Post(state => Clear(), null);
+    //    AddRange(notification.Items);
 
-        return ValueTask.CompletedTask;
-    }
+    //    return ValueTask.CompletedTask;
+    //}
 
     public int IndexOf(TItem item) => collection.IndexOf(item);
 
@@ -212,9 +225,17 @@ public partial class ObservableCollectionViewModel<TItem> :
 
     protected virtual void SetItem(int index, TItem item) => collection[index] = item;
 
-    private static bool IsCompatibleObject(object? value) => (value is TItem) || (value == null && default(TItem) == null);
+    private static bool IsCompatibleObject(object? value) => (value is TItem) || 
+        (value == null && default(TItem) == null);
 
-    private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args) => CollectionChanged?.Invoke(this, args);
+    private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args) => 
+        CollectionChanged?.Invoke(this, args);
+
+    public ValueTask Handle(ValueChanging<IEnumerable<TItem>> notification, 
+        CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
 }
 
 public class ObservableCollectionViewModel(IServiceFactory serviceFactory, IMediator mediator) :

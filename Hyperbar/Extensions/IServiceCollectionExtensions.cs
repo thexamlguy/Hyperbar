@@ -16,8 +16,16 @@ public static class IServiceCollectionExtensions
         return services.AddConfiguration<TConfiguration>(typeof(TConfiguration).Name, "Settings.json", null);
     }
 
+    public static IServiceCollection AddNotificationPipeline<TFromNotification, TToNotification>(this IServiceCollection services)
+        where TFromNotification :
+        INotification
+        where TToNotification :
+        INotification, new()
+    {
+        return services.AddHandler<NotficationPipelineHandler<TFromNotification, TToNotification>>();
+    }
+
     public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services,
-        IConfiguration configuration,
         TConfiguration? defaults = null)
         where TConfiguration :
         class, new()

@@ -4,8 +4,8 @@ namespace Hyperbar.Windows.Primary;
 public class PrimaryWidgetViewModel(ITemplateFactory templateFactory,
     IServiceFactory serviceFactory,
     IMediator mediator,
-    IEnumerable<IWidgetComponentViewModel> items) :
-    ObservableCollectionViewModel<IWidgetComponentViewModel>(serviceFactory, mediator, items),
+    IFactory<IEnumerable<IWidgetComponentViewModel>> factory) :
+    ObservableCollectionViewModel<IWidgetComponentViewModel>(serviceFactory, mediator, factory),
     IWidgetViewModel,
     ITemplatedViewModel
 {
