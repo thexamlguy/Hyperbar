@@ -3,26 +3,34 @@
 namespace Hyperbar.Windows.Primary;
 
 public class WidgetComponentViewModelFactory(IServiceFactory service,
-    IMediator mediator) :
+    IMediator mediator,
+    IViewModelCache<Guid, IWidgetComponentViewModel> cache) :
     IViewModelFactory<PrimaryCommandConfiguration, IWidgetComponentViewModel?>
 {
     public async ValueTask<IWidgetComponentViewModel?> CreateAsync(PrimaryCommandConfiguration value)
     {
+        IWidgetComponentViewModel? viewModel = null;
+
         if (value is KeyAcceleratorCommandConfiguration keyAcceleratorCommand)
         {
-            return await ValueTask.FromResult(service.Create<WidgetButtonViewModel>(keyAcceleratorCommand.Id, keyAcceleratorCommand.Icon,
+            viewModel = service.Create<WidgetButtonViewModel>(keyAcceleratorCommand.Id, keyAcceleratorCommand.Icon,
                 new RelayCommand(async () => await mediator.SendAsync(new KeyAcceleratorRequest((VirtualKey)
                     keyAcceleratorCommand.Key, keyAcceleratorCommand.Modifiers?
-                        .Select(modifier => (VirtualKey)modifier).ToArray())))));
+                        .Select(modifier => (VirtualKey)modifier).ToArray()))));
         }
 
         if (value is ProcessCommandConfiguration commandConfiguration)
         {
-            return await ValueTask.FromResult(service.Create<WidgetButtonViewModel>(commandConfiguration.Id,
+            viewModel = service.Create<WidgetButtonViewModel>(commandConfiguration.Id,
                 commandConfiguration.Icon, new RelayCommand(async () =>
-                    await mediator.SendAsync(new ProcessRequest(commandConfiguration.Path)))));
+                    await mediator.SendAsync(new ProcessRequest(commandConfiguration.Path))));
         }
 
-        return default;
+        if (viewModel is not null)
+        {
+            cache.Add(value.Id, viewModel);
+        }
+
+        return viewModel ?? default;
     }
 }

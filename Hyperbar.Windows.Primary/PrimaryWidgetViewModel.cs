@@ -1,4 +1,5 @@
 ﻿
+
 namespace Hyperbar.Windows.Primary;
 
 public class PrimaryWidgetViewModel(ITemplateFactory templateFactory,

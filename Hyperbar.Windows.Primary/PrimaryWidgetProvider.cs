@@ -8,10 +8,10 @@ public class PrimaryWidgetProvider :
 {
     public void Create(HostBuilderContext comtext, IServiceCollection services) =>
             services.AddConfiguration<PrimaryWidgetConfiguration>()
-                .AddTransient<IViewModelEnumerator<IWidgetComponentViewModel>, WidgetComponentViewModelEnumerator>()
+                .AddTransient<IViewModelCache<Guid, IWidgetComponentViewModel>, ViewModelCache<Guid, IWidgetComponentViewModel>>()
                 .AddTransient<IViewModelFactory<PrimaryCommandConfiguration, IWidgetComponentViewModel?>, WidgetComponentViewModelFactory>()
+                .AddTransient<IViewModelEnumerator<IWidgetComponentViewModel>, WidgetComponentViewModelEnumerator>()
                 .AddWidgetTemplate<PrimaryWidgetViewModel>()
-                .AddNotificationPipeline<ConfigurationChanged<PrimaryWidgetConfiguration>, 
-                    CollectionChanged<IEnumerable<IWidgetComponentViewModel>>>();
+                .AddHandler<ConfigurationChangedHandler>();
 
 }
