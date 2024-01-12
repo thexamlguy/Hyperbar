@@ -1,20 +1,17 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.Input;
 
 namespace Hyperbar.Windows.Primary;
 
-public partial class MediaInformationViewModel :
-    WidgetComponentViewModel
-{
-    [ObservableProperty]
-    private string title = "this is a test";
-
-    [ObservableProperty]
-    private string description = "this is a test description";
-
-    public MediaInformationViewModel(ITemplateFactory templateFactory) : base(templateFactory)
-    {
-    }
-}
+//public class MediaControllerViewModelFactory(IServiceFactory service,
+//    IMediator mediator,
+//    Queue<MediaController> mediaControllers) :
+//    IFactory<MediaControllerViewModel>
+//{
+//    public MediaControllerViewModel Create()
+//    {
+//        throw new NotImplementedException();
+//    }
+//}
 
 public class MediaControllerViewModel : 
     ObservableCollectionViewModel<WidgetComponentViewModel>,
@@ -22,7 +19,8 @@ public class MediaControllerViewModel :
 {
     public MediaControllerViewModel(ITemplateFactory templateFactory,
         IServiceFactory serviceFactory,
-        IMediator mediator) : base(serviceFactory, mediator)
+        IMediator mediator,
+        IDisposer disposer) : base(serviceFactory, mediator, disposer)
     {
         TemplateFactory = templateFactory;
 

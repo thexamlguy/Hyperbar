@@ -3,22 +3,17 @@
 namespace Hyperbar.Windows.Primary;
 
 public class MediaController : 
-    INotificationHandler<PlayRequest>, 
-    IDisposable
+    INotificationHandler<PlayRequest>
 {
-    public MediaController(GlobalSystemMediaTransportControlsSession session)
-    {
+    private readonly GlobalSystemMediaTransportControlsSession session;
 
+    public MediaController(GlobalSystemMediaTransportControlsSession session, 
+        IMediator mediator)
+    {
+        this.session = session;
+        mediator.Subscribe(this);
     }
 
-    public void Dispose()
-    {
-        throw new NotImplementedException();
-    }
-
-    public ValueTask Handle(PlayRequest notification, 
-        CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
+    public async ValueTask Handle(PlayRequest notification, CancellationToken cancellationToken) => 
+        await session.TryPlayAsync();
 }

@@ -36,6 +36,8 @@ public partial class App :
                     new ServiceFactory((type, parameters) => ActivatorUtilities.CreateInstance(provider, type, parameters!)));
 
                 services.AddSingleton<IMediator, Mediator>();
+                services.AddSingleton<IDisposer, Disposer>();
+
                 services.AddHostedService<AppService>();
 
                 services.AddTransient<IInitializer, AppInitializer>();
@@ -45,7 +47,7 @@ public partial class App :
 
                 services.AddContentTemplate<WidgetBarViewModel, WidgetBarView>();
 
-                services.AddWidgetProvider<MediaControllerWidgetProvider>();
+                //services.AddWidgetProvider<MediaControllerWidgetProvider>();
                 services.AddWidgetProvider<PrimaryWidgetProvider>();
 
                 services.AddTransient(provider =>

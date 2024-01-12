@@ -8,4 +8,4 @@ public interface IObservableCollectionViewModel<TItem> :
     IList,
     IReadOnlyList<TItem>,
     INotifyCollectionChanged,
-    INotificationHandler<ValueChanging<IEnumerable<TItem>>>;
+    IInitializer;

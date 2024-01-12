@@ -1,7 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Reactive.Disposables;
+using System.Windows.Input;
 
 namespace Hyperbar;
 
@@ -11,14 +14,19 @@ public partial class ObservableCollectionViewModel<TItem> :
 {
     public ObservableCollection<TItem> collection = [];
     private readonly SynchronizationContext? context;
+    private readonly IViewModelEnumerator<TItem>? enumerator;
     private readonly IServiceFactory serviceFactory;
+    private readonly IDisposer disposer;
 
     public ObservableCollectionViewModel(IServiceFactory serviceFactory,
-        IMediator mediator)
+        IMediator mediator,
+        IDisposer disposer)
     {
         context = SynchronizationContext.Current;
 
         this.serviceFactory = serviceFactory;
+        this.disposer = disposer;
+
         mediator.Subscribe(this);
 
         collection.CollectionChanged += OnCollectionChanged;
@@ -26,28 +34,44 @@ public partial class ObservableCollectionViewModel<TItem> :
 
     public ObservableCollectionViewModel(IServiceFactory serviceFactory,
         IMediator mediator,
-        IFactory<IEnumerable<TItem>> factory)
+        IDisposer disposer,
+        IViewModelEnumerator<TItem> enumerator)
     {
         context = SynchronizationContext.Current;
 
         this.serviceFactory = serviceFactory;
+        this.disposer = disposer;
+        this.enumerator = enumerator;
+
         mediator.Subscribe(this);
 
         collection.CollectionChanged += OnCollectionChanged;
-
-        if (factory is not null && factory.Create() is { } items)
+        
+        if (enumerator is not null)
         {
-            AddRange(factory.Create());
+            Task.Run(async () =>
+            {
+                await foreach (TItem? item in enumerator.Next())
+                {
+                    if (item is not null)
+                    {
+                        Add(item);
+                    }
+                }
+            });
         }
     }
 
     public ObservableCollectionViewModel(IServiceFactory serviceFactory,
         IMediator mediator,
+        IDisposer disposer,
         IEnumerable<TItem> items)
     {
         context = SynchronizationContext.Current;
 
         this.serviceFactory = serviceFactory;
+        this.disposer = disposer;
+
         mediator.Subscribe(this);
 
         collection.CollectionChanged += OnCollectionChanged;
@@ -58,6 +82,10 @@ public partial class ObservableCollectionViewModel<TItem> :
     public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
     public int Count => collection.Count;
+
+    public ICommand Initialize => new AsyncRelayCommand(InitializeAsync);
+
+    public bool Initialized { get; private set; }
 
     bool IList.IsFixedSize => false;
 
@@ -157,6 +185,7 @@ public partial class ObservableCollectionViewModel<TItem> :
             context?.Post(state => Add(item), null);
         }
     }
+
     public void Clear() => ClearItems();
 
     public bool Contains(TItem item) => collection.Contains(item);
@@ -171,18 +200,20 @@ public partial class ObservableCollectionViewModel<TItem> :
 
     IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)collection).GetEnumerator();
 
-    //public ValueTask Handle(CollectionChanged<IEnumerable<TItem>> notification,
-    //    CancellationToken cancellationToken)
-    //{
-    //    context?.Post(state => Clear(), null);
-    //    AddRange(notification.Items);
-
-    //    return ValueTask.CompletedTask;
-    //}
-
     public int IndexOf(TItem item) => collection.IndexOf(item);
 
     int IList.IndexOf(object? value) => IsCompatibleObject(value) ? IndexOf((TItem)value!) : -1;
+
+    public Task InitializeAsync()
+    {
+        if (Initialized)
+        {
+            return Task.CompletedTask;
+        }
+
+        Initialized = true;
+        return Task.CompletedTask;
+    }
 
     public void Insert(int index, TItem item) => InsertItem(index, item);
 
@@ -209,6 +240,7 @@ public partial class ObservableCollectionViewModel<TItem> :
             Remove((TItem)value!);
         }
     }
+
     public void RemoveAt(int index) => RemoveItem(index);
 
     protected virtual void ClearItems() => collection.Clear();
@@ -217,7 +249,15 @@ public partial class ObservableCollectionViewModel<TItem> :
     {
         if (value is TItem item)
         {
-            collection.Insert(index, item);
+            disposer.Add(item, Disposable.Create(() =>
+            {
+                if (Contains(item))
+                {
+                    Remove(item);
+                }
+            }));
+
+            context?.Post(state => collection.Insert(index, item), null);
         }
     }
 
@@ -230,13 +270,9 @@ public partial class ObservableCollectionViewModel<TItem> :
 
     private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args) => 
         CollectionChanged?.Invoke(this, args);
-
-    public ValueTask Handle(ValueChanging<IEnumerable<TItem>> notification, 
-        CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
 }
 
-public class ObservableCollectionViewModel(IServiceFactory serviceFactory, IMediator mediator) :
-    ObservableCollectionViewModel<object>(serviceFactory, mediator);
+public class ObservableCollectionViewModel(IServiceFactory serviceFactory, 
+    IMediator mediator,
+    IDisposer disposer) :
+    ObservableCollectionViewModel<object>(serviceFactory, mediator, disposer);

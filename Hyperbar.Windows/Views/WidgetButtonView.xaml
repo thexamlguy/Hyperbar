@@ -17,8 +17,8 @@
         Width="{StaticResource ButtonWidth}"
         Height="{StaticResource ButtonHeight}"
         Padding="{StaticResource ButtonPadding}"
-        FontSize="16"
         Command="{Binding Click}"
         Content="{Binding Icon}"
-        FontFamily="{StaticResource SymbolThemeFontFamily}" />
+        FontFamily="{StaticResource SymbolThemeFontFamily}"
+        FontSize="16" />
 </UserControl>

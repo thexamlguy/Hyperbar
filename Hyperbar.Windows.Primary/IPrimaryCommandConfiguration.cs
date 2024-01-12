@@ -6,7 +6,7 @@ namespace Hyperbar.Windows.Primary;
 [JsonDerivedType(typeof(ProcessCommandConfiguration), typeDiscriminator: "ProcessCommand")]
 public class PrimaryCommandConfiguration
 {
-    public required string Id { get; set; }
+    public required Guid Id { get; set; }
 
     public required string Icon { get; set; }
 }

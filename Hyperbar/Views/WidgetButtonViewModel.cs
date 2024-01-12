@@ -3,23 +3,20 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace Hyperbar;
 
-public partial class WidgetButtonViewModel :
-    WidgetComponentViewModel
+public partial class WidgetButtonViewModel(IServiceFactory serviceFactory,
+    IMediator mediator,
+    IDisposer disposer,
+    ITemplateFactory templateFactory,
+    Guid id = default,
+    string? icon = null,
+    RelayCommand? command = null) : WidgetComponentViewModel(serviceFactory, mediator, disposer, templateFactory)
 {
     [ObservableProperty]
-    private string? icon;
+    private Guid id = id;
 
     [ObservableProperty]
-    private IRelayCommand? click;
+    private string? icon = icon;
 
-    public WidgetButtonViewModel(ITemplateFactory templateFactory,
-        string? icon = null,
-        Action? action = null) : base(templateFactory)
-    {
-        this.icon = icon;
-        if (action is not null)
-        {
-            click = new RelayCommand(action);
-        }
-    }
+    [ObservableProperty]
+    private IRelayCommand? click = command;
 }

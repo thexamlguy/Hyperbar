@@ -10,9 +10,6 @@ public class NotficationPipelineHandler<TFromNotification, ToNotification>(IMedi
 {
     private readonly IMediator mediator = mediator;
 
-    public ValueTask Handle(TFromNotification notification, CancellationToken cancellationToken)
-    {
-        return mediator.PublishAsync(new ToNotification(), 
-            cancellationToken);
-    }
+    public ValueTask Handle(TFromNotification notification, CancellationToken cancellationToken) =>
+        mediator.PublishAsync(new ToNotification(), cancellationToken);
 }

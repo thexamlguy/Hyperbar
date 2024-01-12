@@ -1,18 +1,13 @@
-﻿
-namespace Hyperbar.Widget.Contextual;
+﻿namespace Hyperbar.Widget.Contextual;
 
-public class ContextualWidgetViewModel :
-    ObservableCollectionViewModel<IWidgetComponentViewModel>,
+public class ContextualWidgetViewModel(ITemplateFactory templateFactory,
+    IServiceFactory serviceFactory,
+    IMediator mediator,
+    IDisposer disposer,
+    IEnumerable<IWidgetComponentViewModel> items) :
+    ObservableCollectionViewModel<IWidgetComponentViewModel>(serviceFactory, mediator, disposer, items),
     IWidgetViewModel,
     ITemplatedViewModel
 {
-    public ContextualWidgetViewModel(ITemplateFactory templateFactory,
-        IServiceFactory serviceFactory, 
-        IMediator mediator, 
-        IEnumerable<IWidgetComponentViewModel> items) : base(serviceFactory, mediator, items)
-    {
-        TemplateFactory = templateFactory;
-    }
-
-    public ITemplateFactory TemplateFactory { get; }
+    public ITemplateFactory TemplateFactory => templateFactory;
 }

@@ -35,6 +35,7 @@ namespace Hyperbar.Windows
 
                     isolatedServices.AddTransient<ITemplateFactory, TemplateFactory>();
                     isolatedServices.AddSingleton<IMediator, Mediator>();
+                    isolatedServices.AddSingleton<IDisposer, Disposer>();
 
                     isolatedServices.AddSingleton<IVirtualKeyboard, VirtualKeyboard>();
 
