@@ -5,8 +5,7 @@ namespace Hyperbar;
 public partial class WidgetComponentViewModel :
     ObservableViewModel,
     IWidgetComponentViewModel,
-    ITemplatedViewModel,
-    INotificationHandler<Removed<IWidgetComponentViewModel>>
+    ITemplatedViewModel
 {
     private readonly IMediator mediator;
     private readonly IServiceFactory serviceFactory;
@@ -30,15 +29,4 @@ public partial class WidgetComponentViewModel :
     }
 
     public ITemplateFactory TemplateFactory { get; private set; }
-
-    public ValueTask Handle(Removed<IWidgetComponentViewModel> notification,
-        CancellationToken cancellationToken)
-    {
-        if (notification.Value.Equals(this))
-        {
-            Dispose();
-        }
-
-        return ValueTask.CompletedTask;
-    }
 }

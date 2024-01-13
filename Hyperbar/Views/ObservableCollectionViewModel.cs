@@ -10,7 +10,9 @@ namespace Hyperbar;
 
 public partial class ObservableCollectionViewModel<TItem> :
     ObservableObject,
-    IObservableCollectionViewModel<TItem>
+    IObservableCollectionViewModel<TItem>,
+    INotificationHandler<Removed<TItem>>,
+    INotificationHandler<Created<TItem>>
 {
     public ObservableCollection<TItem> collection = [];
     private readonly SynchronizationContext? context;
@@ -214,6 +216,37 @@ public partial class ObservableCollectionViewModel<TItem> :
     IEnumerator IEnumerable.GetEnumerator() => 
         ((IEnumerable)collection).GetEnumerator();
 
+    public ValueTask Handle(Removed<TItem> notification,
+        CancellationToken cancellationToken)
+    {
+        foreach (TItem item in this)
+        {
+            if (notification.Value is not null)
+            {
+                if (notification.Value.Equals(item))
+                {
+                    if (item is IDisposable disposable)
+                    {
+                        disposable.Dispose();
+                    }
+                }
+            }
+        }
+
+        return ValueTask.CompletedTask;
+    }
+
+    public ValueTask Handle(Created<TItem> notification,
+        CancellationToken cancellationToken)
+    {
+        if (notification.Value is not null)
+        {
+            Add(notification.Value);
+        }
+
+        return ValueTask.CompletedTask;
+    }
+
     public int IndexOf(TItem item) => collection.IndexOf(item);
 
     int IList.IndexOf(object? value) => 
@@ -256,7 +289,6 @@ public partial class ObservableCollectionViewModel<TItem> :
 
         return true;
     }
-
     void IList.Remove(object? value)
     {
         if (IsCompatibleObject(value))
