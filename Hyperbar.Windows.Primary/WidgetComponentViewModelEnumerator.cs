@@ -4,11 +4,11 @@ public class WidgetComponentViewModelEnumerator(PrimaryWidgetConfiguration confi
     IViewModelFactory<PrimaryCommandConfiguration, IWidgetComponentViewModel?> factory) :
     IViewModelEnumerator<IWidgetComponentViewModel>
 {
-    public async IAsyncEnumerable<IWidgetComponentViewModel?> Next()
+    public IEnumerable<IWidgetComponentViewModel?> Next()
     {
         foreach (PrimaryCommandConfiguration item in configuration)
         {
-            yield return await factory.CreateAsync(item);
+            yield return factory.Create(item);
         }
     }
 }

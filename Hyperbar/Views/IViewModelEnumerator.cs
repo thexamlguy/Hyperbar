@@ -2,5 +2,5 @@
 
 public interface IViewModelEnumerator<TItem>
 {
-    IAsyncEnumerable<TItem?> Next();
+    IEnumerable<TItem?> Next();
 }

@@ -11,7 +11,10 @@ public partial class MediaInformationViewModel :
     [ObservableProperty]
     private string description = "this is a test description";
 
-    public MediaInformationViewModel(IServiceFactory serviceFactory, IMediator mediator, IDisposer disposer, ITemplateFactory templateFactory) : base(serviceFactory, mediator, disposer, templateFactory)
+    public MediaInformationViewModel(IServiceFactory serviceFactory, 
+        IMediator mediator, 
+        IDisposer disposer, 
+        ITemplateFactory templateFactory) : base(serviceFactory, mediator, disposer, templateFactory)
     {
     }
 }

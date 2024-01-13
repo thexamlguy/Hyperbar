@@ -14,10 +14,9 @@ public partial class ObservableCollectionViewModel<TItem> :
 {
     public ObservableCollection<TItem> collection = [];
     private readonly SynchronizationContext? context;
+    private readonly IDisposer disposer;
     private readonly IViewModelEnumerator<TItem>? enumerator;
     private readonly IServiceFactory serviceFactory;
-    private readonly IDisposer disposer;
-
     public ObservableCollectionViewModel(IServiceFactory serviceFactory,
         IMediator mediator,
         IDisposer disposer)
@@ -49,16 +48,13 @@ public partial class ObservableCollectionViewModel<TItem> :
         
         if (enumerator is not null)
         {
-            Task.Run(async () =>
+            foreach (TItem? item in enumerator.Next())
             {
-                await foreach (TItem? item in enumerator.Next())
+                if (item is not null)
                 {
-                    if (item is not null)
-                    {
-                        Add(item);
-                    }
+                    Add(item);
                 }
-            });
+            }
         }
     }
 
@@ -150,15 +146,27 @@ public partial class ObservableCollectionViewModel<TItem> :
         TItem
     {
         T? item = serviceFactory.Create<T>();
-        context?.Post(state => Add(item), null);
+        Add(item);
 
         return item;
     }
 
     public void Add(TItem item)
     {
-        int index = collection.Count;
-        InsertItem(index, item);
+        context?.Post(state =>
+        {
+            disposer.Add(this, item);
+            disposer.Add(item, Disposable.Create(item, args =>
+            {
+                if (Contains(args))
+                {
+                    Remove(args);
+                }
+            }));
+
+            int index = collection.Count;
+            InsertItem(index, item);
+        }, null);
     }
 
     int IList.Add(object? value)
@@ -182,27 +190,35 @@ public partial class ObservableCollectionViewModel<TItem> :
     {
         foreach (TItem? item in items)
         {
-            context?.Post(state => Add(item), null);
+            Add(item);
         }
     }
 
     public void Clear() => ClearItems();
 
-    public bool Contains(TItem item) => collection.Contains(item);
+    public bool Contains(TItem item) => 
+        collection.Contains(item);
 
-    bool IList.Contains(object? value) => IsCompatibleObject(value) && Contains((TItem)value!);
+    bool IList.Contains(object? value) =>
+        IsCompatibleObject(value) && Contains((TItem)value!);
 
-    public void CopyTo(TItem[] array, int index) => collection.CopyTo(array, index);
+    public void CopyTo(TItem[] array, int index) => 
+        collection.CopyTo(array, index);
 
-    void ICollection.CopyTo(Array array, int index) => collection.CopyTo((TItem[])array, index);
+    void ICollection.CopyTo(Array array, int index) =>
+        collection.CopyTo((TItem[])array, index);
 
-    public IEnumerator<TItem> GetEnumerator() => collection.GetEnumerator();
+    public IEnumerator<TItem> GetEnumerator() => 
+        collection.GetEnumerator();
 
-    IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)collection).GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator() => 
+        ((IEnumerable)collection).GetEnumerator();
 
     public int IndexOf(TItem item) => collection.IndexOf(item);
 
-    int IList.IndexOf(object? value) => IsCompatibleObject(value) ? IndexOf((TItem)value!) : -1;
+    int IList.IndexOf(object? value) => 
+        IsCompatibleObject(value) ? 
+        IndexOf((TItem)value!) : -1;
 
     public Task InitializeAsync()
     {
@@ -215,9 +231,11 @@ public partial class ObservableCollectionViewModel<TItem> :
         return Task.CompletedTask;
     }
 
-    public void Insert(int index, TItem item) => InsertItem(index, item);
+    public void Insert(int index, TItem item) => 
+        InsertItem(index, item);
 
-    void IList.Insert(int index, object? value)
+    void IList.Insert(int index,
+        object? value)
     {
         if (value is TItem item)
         {
@@ -229,7 +247,13 @@ public partial class ObservableCollectionViewModel<TItem> :
     {
         int index = collection.IndexOf(item);
         if (index < 0) return false;
-        RemoveItem(index);
+
+        context?.Post(state =>
+        {
+            context?.Post(state => RemoveItem(index), null);
+
+        }, null);
+
         return true;
     }
 
@@ -241,32 +265,23 @@ public partial class ObservableCollectionViewModel<TItem> :
         }
     }
 
-    public void RemoveAt(int index) => RemoveItem(index);
+    public void RemoveAt(int index) =>
+        RemoveItem(index);
 
-    protected virtual void ClearItems() => collection.Clear();
+    protected virtual void ClearItems() => 
+        collection.Clear();
 
-    protected virtual void InsertItem(int index, TItem value)
-    {
-        if (value is TItem item)
-        {
-            disposer.Add(item, Disposable.Create(() =>
-            {
-                if (Contains(item))
-                {
-                    Remove(item);
-                }
-            }));
+    protected virtual void InsertItem(int index,
+        TItem value) => collection.Insert(index, value);
 
-            context?.Post(state => collection.Insert(index, item), null);
-        }
-    }
+    protected virtual void RemoveItem(int index) => 
+        collection.RemoveAt(index);
 
-    protected virtual void RemoveItem(int index) => collection.RemoveAt(index);
+    protected virtual void SetItem(int index, TItem item) => 
+        collection[index] = item;
 
-    protected virtual void SetItem(int index, TItem item) => collection[index] = item;
-
-    private static bool IsCompatibleObject(object? value) => (value is TItem) || 
-        (value == null && default(TItem) == null);
+    private static bool IsCompatibleObject(object? value) => 
+        (value is TItem) || (value == null && default(TItem) == null);
 
     private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args) => 
         CollectionChanged?.Invoke(this, args);

@@ -8,7 +8,7 @@ public class PrimaryWidgetProvider :
 {
     public void Create(HostBuilderContext comtext, IServiceCollection services) =>
             services.AddConfiguration<PrimaryWidgetConfiguration>()
-                .AddTransient<IViewModelCache<Guid, IWidgetComponentViewModel>, ViewModelCache<Guid, IWidgetComponentViewModel>>()
+                .AddSingleton<IViewModelCache<Guid, IWidgetComponentViewModel>, ViewModelCache<Guid, IWidgetComponentViewModel>>()
                 .AddTransient<IViewModelFactory<PrimaryCommandConfiguration, IWidgetComponentViewModel?>, WidgetComponentViewModelFactory>()
                 .AddTransient<IViewModelEnumerator<IWidgetComponentViewModel>, WidgetComponentViewModelEnumerator>()
                 .AddWidgetTemplate<PrimaryWidgetViewModel>()

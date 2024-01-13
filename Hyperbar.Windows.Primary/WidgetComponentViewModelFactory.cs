@@ -7,9 +7,9 @@ public class WidgetComponentViewModelFactory(IServiceFactory service,
     IViewModelCache<Guid, IWidgetComponentViewModel> cache) :
     IViewModelFactory<PrimaryCommandConfiguration, IWidgetComponentViewModel?>
 {
-    public async ValueTask<IWidgetComponentViewModel?> CreateAsync(PrimaryCommandConfiguration value)
+    public IWidgetComponentViewModel? Create(PrimaryCommandConfiguration value)
     {
-        IWidgetComponentViewModel? viewModel = null;
+        IWidgetComponentViewModel? viewModel = default;
 
         if (value is KeyAcceleratorCommandConfiguration keyAcceleratorCommand)
         {
@@ -31,6 +31,6 @@ public class WidgetComponentViewModelFactory(IServiceFactory service,
             cache.Add(value.Id, viewModel);
         }
 
-        return viewModel ?? default;
+        return viewModel;
     }
 }
