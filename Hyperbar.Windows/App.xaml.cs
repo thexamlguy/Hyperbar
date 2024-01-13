@@ -39,13 +39,16 @@ public partial class App :
                 services.AddSingleton<IDisposer, Disposer>();
 
                 services.AddHostedService<AppService>();
+                services.AddConfiguration<AppConfiguration>();
 
                 services.AddTransient<IInitializer, AppInitializer>();
                 services.AddTransient<ITemplateFactory, TemplateFactory>();
 
-                services.AddTransient<DesktopFlyout>();
+                services.AddSingleton<DesktopFlyout>();
 
                 services.AddContentTemplate<WidgetBarViewModel, WidgetBarView>();
+
+                services.AddHandler<AppConfigurationChangedHandler>();
 
                 //services.AddWidgetProvider<MediaControllerWidgetProvider>();
                 services.AddWidgetProvider<PrimaryWidgetProvider>();
