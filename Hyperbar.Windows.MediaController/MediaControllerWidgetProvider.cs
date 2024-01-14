@@ -13,10 +13,11 @@ public class MediaControllerWidgetProvider :
                 .AddSingleton<IInitializer, MediaControllerManager>()
                 .AddTransient<IServiceScopeFactory<MediaController>, ServiceScopeFactory<MediaController>>()
                 .AddTransient<IServiceScopeProvider<MediaController>, ServiceScopeProvider<MediaController>>()
-                .AddSingleton<ConcurrentDictionary<MediaController, IServiceScope>>()
+                .AddCache<MediaController, IServiceScope>()
                 .AddTransient<IFactory<GlobalSystemMediaTransportControlsSession, MediaController?>, MediaControllerFactory>()
                 .AddHandler<MediaControllerHandler>()
                 .AddTransient<IFactory<MediaControllerViewModel?>, MediaControllerViewModelFactory>()
+                .AddCache<MediaControllerViewModel>()
                 .AddContentTemplate<MediaControllerViewModel, MediaControllerView>()
                 .AddContentTemplate<MediaInformationViewModel, MediaInformationView>();
 }

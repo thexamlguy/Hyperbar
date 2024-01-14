@@ -38,6 +38,7 @@ public partial class App :
 
                 services.AddSingleton<IMediator, Mediator>();
                 services.AddSingleton<IDisposer, Disposer>();
+                services.AddSingleton<IDispatcher, Dispatcher>();
 
                 services.AddHostedService<AppService>();
                 services.AddConfiguration<AppConfiguration>();

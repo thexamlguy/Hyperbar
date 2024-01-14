@@ -9,20 +9,29 @@ namespace Hyperbar;
 
 public static class IServiceCollectionExtensions
 {
+    public static IServiceCollection AddCache<TKey, TValue>(this IServiceCollection services)
+        where TKey :
+        notnull
+    {
+        services.AddSingleton<ICache<TKey, TValue>, Cache<TKey, TValue>>();
+        services.AddTransient(provider => provider.GetService<ICache<TKey, TValue>>()!.Select(x => x.Value));
+
+        return services;
+    }
+
+    public static IServiceCollection AddCache<TValue>(this IServiceCollection services)
+    {
+        services.AddSingleton<ICache<TValue>, Cache<TValue>>();
+        services.AddTransient(provider => provider.GetService<ICache<TValue>>()!.Select(x => x));
+
+        return services;
+    }
+
     public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services)
-        where TConfiguration :
+            where TConfiguration :
         class, new()
     {
         return services.AddConfiguration<TConfiguration>(typeof(TConfiguration).Name, "Settings.json", null);
-    }
-
-    public static IServiceCollection AddNotificationPipeline<TFromNotification, TToNotification>(this IServiceCollection services)
-        where TFromNotification :
-        INotification
-        where TToNotification :
-        INotification, new()
-    {
-        return services.AddHandler<NotficationPipelineHandler<TFromNotification, TToNotification>>();
     }
 
     public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services,
@@ -65,12 +74,12 @@ public static class IServiceCollectionExtensions
                 serializerDelegate.Invoke(defaultSerializer);
             }
 
-            return new ConfigurationReader<TConfiguration>(provider.GetRequiredService<IConfigurationSource<TConfiguration>>(), 
+            return new ConfigurationReader<TConfiguration>(provider.GetRequiredService<IConfigurationSource<TConfiguration>>(),
                 defaultSerializer);
         });
 
         services.AddSingleton<IConfigurationWriter<TConfiguration>>(provider =>
-        { 
+        {
             JsonSerializerOptions? defaultSerializer = null;
             if (serializerDelegate is not null)
             {
@@ -78,7 +87,7 @@ public static class IServiceCollectionExtensions
                 serializerDelegate.Invoke(defaultSerializer);
             }
 
-            return new ConfigurationWriter<TConfiguration>(provider.GetRequiredService<IConfigurationSource<TConfiguration>>(), 
+            return new ConfigurationWriter<TConfiguration>(provider.GetRequiredService<IConfigurationSource<TConfiguration>>(),
                 defaultSerializer);
         });
 
@@ -115,7 +124,7 @@ public static class IServiceCollectionExtensions
     }
 
     public static IServiceCollection AddHandler<THandler>(this IServiceCollection services,
-        ServiceLifetime lifetime = ServiceLifetime.Transient) 
+        ServiceLifetime lifetime = ServiceLifetime.Transient)
         where THandler :
         IHandler
     {
@@ -134,30 +143,39 @@ public static class IServiceCollectionExtensions
                             provider => provider.GetRequiredService<THandler>(), lifetime));
                     }
                 }
-            }    
 
-        }
+                if (contract.Name == typeof(IHandler<,>).Name)
+                {
+                    if (contract.GetGenericArguments() is { Length: 2 } arguments)
+                    {
+                        Type requestType = arguments[0];
+                        Type responseType = arguments[1];
 
-        if (typeof(THandler).GetInterface(typeof(IHandler<,>).Name) is { } requestContract)
-        {
-            if (requestContract.GetGenericArguments() is { Length: 2 } arguments)
-            {
-                Type requestType = arguments[0];
-                Type responseType = arguments[1];
+                        Type wrapperType = typeof(RequestClassHandlerWrapper<,>).MakeGenericType(requestType, responseType);
 
-                Type wrapperType = typeof(RequestClassHandlerWrapper<,>).MakeGenericType(requestType, responseType);
-
-                services.TryAdd(new ServiceDescriptor(typeof(THandler), typeof(THandler), lifetime));
-                services.Add(new ServiceDescriptor(wrapperType,
-                    provider => provider.GetService<IServiceFactory>()?.Create(wrapperType,
-                        provider.GetRequiredService<THandler>(),
-                        provider.GetServices(typeof(IPipelineBehavior<,>).MakeGenericType(requestType, responseType)))!,
-                    lifetime
-                ));
+                        services.TryAdd(new ServiceDescriptor(typeof(THandler), typeof(THandler), lifetime));
+                        services.Add(new ServiceDescriptor(wrapperType,
+                            provider => provider.GetService<IServiceFactory>()?.Create(wrapperType,
+                                provider.GetRequiredService<THandler>(),
+                                provider.GetServices(typeof(IPipelineBehavior<,>).MakeGenericType(requestType, responseType)))!,
+                            lifetime
+                        ));
+                    }
+                }
             }
+
         }
 
         return services;
+    }
+
+    public static IServiceCollection AddNotificationPipeline<TFromNotification, TToNotification>(this IServiceCollection services)
+                        where TFromNotification :
+        INotification
+        where TToNotification :
+        INotification, new()
+    {
+        return services.AddHandler<NotficationPipelineHandler<TFromNotification, TToNotification>>();
     }
     public static IServiceCollection AddWidgetTemplate<TWidgetContent>(this IServiceCollection services)
         where TWidgetContent :

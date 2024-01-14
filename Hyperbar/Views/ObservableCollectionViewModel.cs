@@ -283,6 +283,7 @@ public partial class ObservableCollectionViewModel<TItem> :
 
         return true;
     }
+
     void IList.Remove(object? value)
     {
         if (IsCompatibleObject(value))

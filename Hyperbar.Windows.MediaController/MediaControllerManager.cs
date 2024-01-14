@@ -6,7 +6,7 @@ public class MediaControllerManager(IMediator mediator,
     IFactory<GlobalSystemMediaTransportControlsSession, MediaController> factory) :
     IInitializer
 {
-    private readonly ConcurrentDictionary<GlobalSystemMediaTransportControlsSession, MediaController> cachedSessions = [];
+    private readonly List<KeyValuePair<GlobalSystemMediaTransportControlsSession, MediaController>> cachedSessions = [];
 
     public async Task InitializeAsync()
     {
@@ -28,7 +28,7 @@ public class MediaControllerManager(IMediator mediator,
         if (factory.Create(session) is MediaController mediaController)
         {
             await mediator.PublishAsync(new Created<MediaController>(mediaController));
-            cachedSessions.TryAdd(session, mediaController);
+            cachedSessions.Add(new KeyValuePair<GlobalSystemMediaTransportControlsSession, MediaController>(session, mediaController));
         }
     }
 
@@ -39,17 +39,20 @@ public class MediaControllerManager(IMediator mediator,
             sender.GetSessions();
 
         foreach (KeyValuePair<GlobalSystemMediaTransportControlsSession, MediaController> session in
-            cachedSessions)
+            cachedSessions.ToList())
         {
-            if (!sessions.Contains(session.Key))
+            if (!sessions.Any(x => x.SourceAppUserModelId == session.Key.SourceAppUserModelId))
             {
-                cachedSessions.TryRemove(session);
+                cachedSessions.Remove(session);
             }
         }
 
         foreach (GlobalSystemMediaTransportControlsSession session in sessions)
         {
-            await InitializeSessionAsync(session);
+            if (!cachedSessions.Any(x => x.Key.SourceAppUserModelId == session.SourceAppUserModelId))
+            {
+                await InitializeSessionAsync(session);
+            }
         }
     }
 }

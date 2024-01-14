@@ -34,8 +34,10 @@ namespace Hyperbar.Windows
                     isolatedServices.AddHostedService<WidgetService>();
 
                     isolatedServices.AddTransient<ITemplateFactory, TemplateFactory>();
+
                     isolatedServices.AddScoped<IMediator, Mediator>();
                     isolatedServices.AddScoped<IDisposer, Disposer>();
+                    isolatedServices.AddSingleton<IDispatcher, Dispatcher>();
 
                     isolatedServices.AddScoped<IVirtualKeyboard, VirtualKeyboard>();
 

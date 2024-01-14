@@ -1,10 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Concurrent;
 
 namespace Hyperbar;
 
 public class ServiceScopeFactory<TService>(IServiceScopeFactory serviceScopeFactory, 
-    ConcurrentDictionary<TService, IServiceScope> services) :
+    ICache<TService, IServiceScope> cache) :
     IServiceScopeFactory<TService>
     where TService : notnull
 {
@@ -16,7 +15,7 @@ public class ServiceScopeFactory<TService>(IServiceScopeFactory serviceScopeFact
             {
                 if (serviceFactory.Create<TService>(parameters) is TService service)
                 {
-                    services.TryAdd(service, serviceScope);
+                    cache.Add(service, serviceScope);
                     return service;
                 }
             }

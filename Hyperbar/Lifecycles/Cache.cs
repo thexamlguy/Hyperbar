@@ -1,83 +1,68 @@
 ﻿using System.Collections;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Concurrent;
 using System.Reactive.Disposables;
 
 namespace Hyperbar;
 
-public class Cache<TKey, TService>(IDisposer disposer) :
-    ICache<TKey, TService>
-    where TKey : notnull
+public class Cache<TValue>(IDisposer disposer) :
+    ICache<TValue>
 {
-    private readonly IDictionary<TKey, TService> cache = new Dictionary<TKey, TService>();
+    private readonly List<TValue> cache = [];
 
-    public TService this[TKey key] 
+    public void Add(TValue value)
     {
-        get => cache[key]; 
-        set => cache[key] = value; 
+        disposer.Add(value!, Disposable.Create(() =>
+        {
+            Remove(value);
+        }));
+
+        cache.Add(value);
     }
 
-    public ICollection<TKey> Keys => cache.Keys;
+    public void Clear() => cache.Clear();
 
-    public ICollection<TService> Values => cache.Values;
+    public IEnumerator<TValue> GetEnumerator() => cache.GetEnumerator();
 
-    public int Count => cache.Count;
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-    public bool IsReadOnly => false;
+    public bool Remove(TValue value) => cache.Remove(value);
+}
 
-    public void Add(TKey key, TService value)
+public class Cache<TKey, TValue>(IDisposer disposer) :
+    ICache<TKey, TValue>
+    where TKey : notnull
+{
+    private readonly ConcurrentDictionary<TKey, TValue> cache = new();
+
+    public void Add(TKey key, 
+        TValue value)
     {
         disposer.Add(value!, Disposable.Create(() =>
         {
             Remove(key);
         }));
         
-        cache.Add(key, value);
-    }
-
-    public void Add(KeyValuePair<TKey, TService> item)
-    {
-        cache.Add(item);
+        cache.TryAdd(key, value);
     }
 
     public void Clear() => cache.Clear();
 
-    public bool Contains(KeyValuePair<TKey, TService> item)
-    {
-        return cache.Contains(item);
-    }
+    public bool ContainsKey(TKey key) => cache.ContainsKey(key);
 
-    public bool ContainsKey(TKey key)
-    {
-        return cache.ContainsKey(key);
-    }
+    public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => cache.GetEnumerator();
 
-    public void CopyTo(KeyValuePair<TKey, TService>[] array, int arrayIndex)
-    {
-         cache.CopyTo(array, arrayIndex);
-    }
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-    public IEnumerator<KeyValuePair<TKey, TService>> GetEnumerator()
-    {
-        return cache.GetEnumerator();
-    }
+    public bool Remove(TKey key) => cache.Remove(key, out _);
 
-    public bool Remove(TKey key)
+    public bool TryGetValue(TKey key, out TValue? value)
     {
-        return cache.Remove(key);
-    }
+        if (cache.TryGetValue(key, out value))
+        {
+            return true;
+        }
 
-    public bool Remove(KeyValuePair<TKey, TService> item)
-    {
-        return cache.Remove(item); 
-    }
-
-    public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out TService value)
-    {
-        return cache.TryGetValue(key, out value);
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return cache.GetEnumerator();
+        value = default;
+        return false;
     }
 }
