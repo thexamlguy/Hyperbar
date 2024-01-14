@@ -9,4 +9,8 @@ public class PrimaryCommandConfiguration
     public required Guid Id { get; set; }
 
     public required string Icon { get; set; }
+
+    public required string Text { get; set; }
+
+    public List<PrimaryCommandConfiguration>? Commands { get; set; } = [];
 }

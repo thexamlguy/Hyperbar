@@ -1,4 +1,4 @@
-﻿namespace Hyperbar.Windows.Primary;
+﻿namespace Hyperbar.Windows.MediaController;
 
 public class MediaControllerWidgetViewModel(ITemplateFactory templateFactory,
     IServiceFactory serviceFactory,

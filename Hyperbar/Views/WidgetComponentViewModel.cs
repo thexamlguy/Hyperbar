@@ -3,15 +3,23 @@
 namespace Hyperbar;
 
 public partial class WidgetComponentViewModel :
-    ObservableViewModel,
+    ObservableCollectionViewModel<IWidgetComponentViewModel>,
     IWidgetComponentViewModel,
     ITemplatedViewModel
 {
-    private readonly IMediator mediator;
-    private readonly IServiceFactory serviceFactory;
-
     [ObservableProperty]
     private Guid id;
+
+    public WidgetComponentViewModel(IServiceFactory serviceFactory,
+        IMediator mediator, 
+        IDisposer disposer,
+        ITemplateFactory templateFactory,
+        IEnumerable<IWidgetComponentViewModel> items,
+        Guid id = default) : base(serviceFactory, mediator, disposer, items)
+    {
+        this.id = id;
+        TemplateFactory = templateFactory;
+    }
 
     public WidgetComponentViewModel(IServiceFactory serviceFactory,
         IMediator mediator,
@@ -19,13 +27,8 @@ public partial class WidgetComponentViewModel :
         ITemplateFactory templateFactory,
         Guid id = default) : base(serviceFactory, mediator, disposer)
     {
-        this.serviceFactory = serviceFactory;
-        this.mediator = mediator;
         this.id = id;
-
         TemplateFactory = templateFactory;
-
-        mediator.Subscribe(this);
     }
 
     public ITemplateFactory TemplateFactory { get; private set; }

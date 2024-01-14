@@ -4,11 +4,16 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ui="using:Hyperbar.Windows.UI">
-    <ItemsControl ItemTemplateSelector="{Binding Mode=TwoWay, Converter={ui:DataTemplateConverter}}" ItemsSource="{Binding}">
-        <ItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-                <StackPanel Orientation="Horizontal" />
-            </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
-    </ItemsControl>
+    <Grid Width="400">
+        <ItemsControl
+            HorizontalAlignment="Center"
+            ItemTemplateSelector="{Binding Converter={ui:DataTemplateConverter}}"
+            ItemsSource="{Binding}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" Spacing="8" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+    </Grid>
 </UserControl>

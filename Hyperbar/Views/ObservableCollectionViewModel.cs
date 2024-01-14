@@ -19,6 +19,7 @@ public partial class ObservableCollectionViewModel<TItem> :
     private readonly IDisposer disposer;
     private readonly IViewModelEnumerator<TItem>? enumerator;
     private readonly IServiceFactory serviceFactory;
+
     public ObservableCollectionViewModel(IServiceFactory serviceFactory,
         IMediator mediator,
         IDisposer disposer)
@@ -138,7 +139,7 @@ public partial class ObservableCollectionViewModel<TItem> :
         where T : TItem
     {
         T? item = serviceFactory.Create<T>(parameters);
-        context?.Post(state => Add(item), null);
+        Add(item);
 
         return item;
     }
@@ -155,20 +156,17 @@ public partial class ObservableCollectionViewModel<TItem> :
 
     public void Add(TItem item)
     {
-        context?.Post(state =>
+        disposer.Add(this, item);
+        disposer.Add(item, Disposable.Create(item, args =>
         {
-            disposer.Add(this, item);
-            disposer.Add(item, Disposable.Create(item, args =>
+            if (Contains(args))
             {
-                if (Contains(args))
-                {
-                    Remove(args);
-                }
-            }));
+                Remove(args);
+            }
+        }));
 
-            int index = collection.Count;
-            InsertItem(index, item);
-        }, null);
+        int index = collection.Count;
+        InsertItem(index, item);
     }
 
     int IList.Add(object? value)
@@ -281,11 +279,7 @@ public partial class ObservableCollectionViewModel<TItem> :
         int index = collection.IndexOf(item);
         if (index < 0) return false;
 
-        context?.Post(state =>
-        {
-            context?.Post(state => RemoveItem(index), null);
-
-        }, null);
+        RemoveItem(index);
 
         return true;
     }

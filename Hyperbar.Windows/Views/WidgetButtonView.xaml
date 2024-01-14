@@ -20,5 +20,6 @@
         Command="{Binding Click}"
         Content="{Binding Icon}"
         FontFamily="{StaticResource SymbolThemeFontFamily}"
-        FontSize="16" />
+        FontSize="16"
+        ToolTipService.ToolTip="{Binding Text}" />
 </UserControl>

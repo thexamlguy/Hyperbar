@@ -28,24 +28,25 @@ namespace Hyperbar.Windows
                 })
                 .ConfigureServices((context, isolatedServices) =>
                 {
-                    isolatedServices.AddSingleton<IServiceFactory>(provider =>
+                    isolatedServices.AddScoped<IServiceFactory>(provider =>
                         new ServiceFactory((type, parameters) => ActivatorUtilities.CreateInstance(provider, type, parameters!)));
 
                     isolatedServices.AddHostedService<WidgetService>();
 
                     isolatedServices.AddTransient<ITemplateFactory, TemplateFactory>();
-                    isolatedServices.AddSingleton<IMediator, Mediator>();
-                    isolatedServices.AddSingleton<IDisposer, Disposer>();
+                    isolatedServices.AddScoped<IMediator, Mediator>();
+                    isolatedServices.AddScoped<IDisposer, Disposer>();
 
-                    isolatedServices.AddSingleton<IVirtualKeyboard, VirtualKeyboard>();
+                    isolatedServices.AddScoped<IVirtualKeyboard, VirtualKeyboard>();
 
                     isolatedServices.AddHandler<KeyAcceleratorHandler>();
-                    isolatedServices.AddHandler<ProcesssAcceleratorHandler>();
+                    isolatedServices.AddHandler<StartProcessHandler>();
 
                     isolatedServices.AddTransient<IWidgetView, WidgetView>();
 
                     isolatedServices.AddContentTemplate<WidgetContainerViewModel, WidgetContainerView>();
                     isolatedServices.AddContentTemplate<WidgetButtonViewModel, WidgetButtonView>();
+                    isolatedServices.AddContentTemplate<WidgetSplitButtonViewModel, WidgetSplitButtonView>();
 
                     builder.Create(context, isolatedServices);
 

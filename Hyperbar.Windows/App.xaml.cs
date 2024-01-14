@@ -1,4 +1,5 @@
 ﻿using Hyperbar.Windows.Controls;
+using Hyperbar.Windows.MediaController;
 using Hyperbar.Windows.Primary;
 using Hyperbar.Windows.UI;
 using Microsoft.Extensions.Configuration;
@@ -50,7 +51,7 @@ public partial class App :
 
                 services.AddHandler<AppConfigurationChangedHandler>();
 
-                //services.AddWidgetProvider<MediaControllerWidgetProvider>();
+                services.AddWidgetProvider<MediaControllerWidgetProvider>();
                 services.AddWidgetProvider<PrimaryWidgetProvider>();
 
                 services.AddTransient(provider =>

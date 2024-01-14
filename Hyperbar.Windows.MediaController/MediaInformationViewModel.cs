@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Hyperbar.Windows.Primary;
+namespace Hyperbar.Windows.MediaController;
 
 public partial class MediaInformationViewModel :
     WidgetComponentViewModel

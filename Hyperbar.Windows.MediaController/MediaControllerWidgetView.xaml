@@ -6,21 +6,8 @@
     xmlns:ui="using:Hyperbar.Windows.UI">
     <FlipView
         x:Name="FlipView"
-        Width="320"
+        Width="400"
         Background="Transparent"
         ItemTemplateSelector="{Binding Converter={ui:DataTemplateConverter}}"
-        ItemsSource="{Binding}">
-        <FlipView.ItemContainerStyle>
-            <Style TargetType="FlipViewItem">
-                <Setter Property="HorizontalAlignment" Value="Right" />
-                <Setter Property="HorizontalContentAlignment" Value="Right" />
-
-            </Style>
-        </FlipView.ItemContainerStyle>
-        <FlipView.ItemsPanel>
-            <ItemsPanelTemplate>
-                <StackPanel AreScrollSnapPointsRegular="False" Orientation="Horizontal" />
-            </ItemsPanelTemplate>
-        </FlipView.ItemsPanel>
-    </FlipView>
+        ItemsSource="{Binding}" />
 </UserControl>

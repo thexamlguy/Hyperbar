@@ -1,3 +1,3 @@
 ﻿namespace Hyperbar;
 
-public record Created<TValue>(TValue? Value = default) : INotification;
+public record Created<TValue>(TValue Value) : INotification;

@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System.Runtime.CompilerServices;
+using System.Collections.Concurrent;
 
 namespace Hyperbar;
 
@@ -8,7 +8,7 @@ public class Mediator(IServiceProvider provider) :
 {
     private readonly SynchronizationContext? context = SynchronizationContext.Current;
 
-    private readonly ConditionalWeakTable<Type, dynamic> subjects = [];
+    private readonly ConcurrentDictionary<Type, List<dynamic>> subjects = [];
 
     public ValueTask PublishAsync<TNotification>(TNotification notification,
         CancellationToken cancellationToken = default)
@@ -18,11 +18,14 @@ public class Mediator(IServiceProvider provider) :
         List<INotificationHandler<TNotification>> handlers =
             provider.GetServices<INotificationHandler<TNotification>>().ToList();
 
-        foreach (KeyValuePair<Type, dynamic> handler in subjects)
+        foreach (KeyValuePair<Type, List<dynamic>> handler in subjects)
         {
             if (handler.Key == typeof(TNotification))
             {
-                handlers.Add(handler.Value);
+                foreach (dynamic value in handler.Value)
+                {
+                    handlers.Add(value);
+                }
             }
         }
 
@@ -80,7 +83,11 @@ public class Mediator(IServiceProvider provider) :
                 if (interfaceType.GetGenericArguments() is { Length: 1 } arguments)
                 {
                     Type notificationType = arguments[0];
-                    subjects.Add(notificationType, subject);
+                    subjects.AddOrUpdate(notificationType, [subject], (value, collection) => 
+                    {
+                        collection.Add(subject);
+                        return collection; 
+                    });
                 }
             }
         }

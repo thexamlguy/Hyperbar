@@ -1,7 +1,7 @@
 ﻿namespace Hyperbar.Windows.Primary;
 
 public class WidgetComponentViewModelEnumerator(PrimaryWidgetConfiguration configuration,
-    IViewModelFactory<PrimaryCommandConfiguration, IWidgetComponentViewModel?> factory) :
+    IFactory<PrimaryCommandConfiguration, IWidgetComponentViewModel?> factory) :
     IViewModelEnumerator<IWidgetComponentViewModel>
 {
     public IEnumerable<IWidgetComponentViewModel?> Next()

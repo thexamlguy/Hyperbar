@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace Hyperbar;
 
-public partial class WidgetButtonViewModel(IServiceFactory serviceFactory,
+public partial class WidgetMenuViewModel(IServiceFactory serviceFactory,
     IMediator mediator,
     IDisposer disposer,
     ITemplateFactory templateFactory,

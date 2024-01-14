@@ -6,7 +6,6 @@
     xmlns:interactions="using:Microsoft.Xaml.Interactions.Core"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:ui="using:Hyperbar.Windows.UI">
-
     <ItemsControl ItemTemplateSelector="{Binding Converter={ui:DataTemplateConverter}}" ItemsSource="{Binding}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>

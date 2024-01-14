@@ -1,3 +1,5 @@
 ﻿namespace Hyperbar.Windows.MediaController;
 
-public record FowardRequest : INotification;
+public record Media;
+
+

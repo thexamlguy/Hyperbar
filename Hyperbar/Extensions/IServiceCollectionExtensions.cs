@@ -119,16 +119,23 @@ public static class IServiceCollectionExtensions
         where THandler :
         IHandler
     {
-        if (typeof(THandler).GetInterface(typeof(INotificationHandler<>).Name) is { } notificationContract)
+        if (typeof(THandler).GetInterfaces() is { } contracts)
         {
-            if (notificationContract.GetGenericArguments() is { Length: 1 } arguments)
+            foreach (Type contract in contracts)
             {
-                Type notificationType = arguments[0];
+                if (contract.Name == typeof(INotificationHandler<>).Name)
+                {
+                    if (contract.GetGenericArguments() is { Length: 1 } arguments)
+                    {
+                        Type notificationType = arguments[0];
 
-                services.TryAdd(new ServiceDescriptor(typeof(THandler), typeof(THandler), lifetime));
-                services.Add(new ServiceDescriptor(typeof(INotificationHandler<>).MakeGenericType(notificationType),
-                    provider => provider.GetRequiredService<THandler>(), lifetime));
-            }
+                        services.TryAdd(new ServiceDescriptor(typeof(THandler), typeof(THandler), lifetime));
+                        services.Add(new ServiceDescriptor(typeof(INotificationHandler<>).MakeGenericType(notificationType),
+                            provider => provider.GetRequiredService<THandler>(), lifetime));
+                    }
+                }
+            }    
+
         }
 
         if (typeof(THandler).GetInterface(typeof(IHandler<,>).Name) is { } requestContract)
@@ -147,20 +154,6 @@ public static class IServiceCollectionExtensions
                         provider.GetServices(typeof(IPipelineBehavior<,>).MakeGenericType(requestType, responseType)))!,
                     lifetime
                 ));
-            }
-        }
-
-        if (typeof(THandler).GetInterface(typeof(IMappingHandler<,>).Name) is { } mappingContract)
-        {
-            if (mappingContract.GetGenericArguments() is { Length: 2 } arguments)
-            {
-                Type responseType = arguments[1];
-
-                services.AddTransient(typeof(THandler));
-                services.AddTransient(responseType, provider =>
-                {
-                    return ((dynamic)provider.GetRequiredService<THandler>()).Handle();
-                });
             }
         }
 

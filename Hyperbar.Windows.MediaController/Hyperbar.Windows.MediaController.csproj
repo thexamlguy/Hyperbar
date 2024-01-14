@@ -14,29 +14,18 @@
 	  <None Remove="MediaInformationView.xaml" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.4.230913002" />
-		<PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.755" />
+		<PackageReference Include="CommunityToolkit.WinUI" Version="7.1.2" />
+		<PackageReference Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
+		<PackageReference Include="CommunityToolkit.WinUI.UI.Controls.Primitives" Version="7.1.2" />
+		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.231202003-experimental1" />
+		<PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.25936-preview" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
 	</ItemGroup>
 	<ItemGroup>
+		<ProjectReference Include="..\Hyperbar.Windows.Controls\Hyperbar.Windows.Controls.csproj" />
 		<ProjectReference Include="..\Hyperbar.Windows.UI\Hyperbar.Windows.UI.csproj" />
 		<ProjectReference Include="..\Hyperbar\Hyperbar.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Page Update="MediaInformationView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </Page>
-	</ItemGroup>
-	<ItemGroup>
-	  <Page Update="MediaControllerView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </Page>
-	</ItemGroup>
-	<ItemGroup>
-	  <Page Update="MediaControllerWidgetView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </Page>
 	</ItemGroup>
 </Project>

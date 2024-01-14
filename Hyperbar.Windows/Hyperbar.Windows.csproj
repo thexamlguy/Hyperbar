@@ -16,6 +16,7 @@
 	<ItemGroup>
 	  <None Remove="Views\WidgetButtonView.xaml" />
 	  <None Remove="Views\WidgetContainerView.xaml" />
+	  <None Remove="Views\WidgetSplitButtonView.xaml" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Include="Assets\SplashScreen.scale-200.png" />
@@ -44,6 +45,11 @@
 		<ProjectReference Include="..\Hyperbar.Windows.Primary\Hyperbar.Widget.Primary.csproj" />
 		<ProjectReference Include="..\Hyperbar.Windows.UI\Hyperbar.Windows.UI.csproj" />
 		<ProjectReference Include="..\Hyperbar\Hyperbar.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Page Update="Views\WidgetSplitButtonView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
 	</ItemGroup>
 	<ItemGroup>
 	  <Page Update="Views\WidgetContainerView.xaml">

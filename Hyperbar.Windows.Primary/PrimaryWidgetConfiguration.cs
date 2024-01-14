@@ -5,6 +5,6 @@ public class PrimaryWidgetConfiguration :
 {
     public static PrimaryWidgetConfiguration Defaults => new()
     {
-        new KeyAcceleratorCommandConfiguration { Id = Guid.NewGuid(), Icon = "\uE720", Key = 91, Modifiers = [] }
+        new KeyAcceleratorCommandConfiguration { Id = Guid.NewGuid(), Icon = "\uE720", Text = "Test", Key = 91, Modifiers = [] }
     };
 }

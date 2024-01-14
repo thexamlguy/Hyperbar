@@ -1,9 +1,9 @@
 ﻿namespace Hyperbar.Windows.Primary;
 
-public class ConfigurationChangedHandler(IMediator mediator,
+public class PrimaryWidgetConfigurationHandler(IMediator mediator,
     PrimaryWidgetConfiguration configuration,
-    IViewModelFactory<PrimaryCommandConfiguration, IWidgetComponentViewModel?> factory,
-    IViewModelCache<Guid, IWidgetComponentViewModel> cache) :
+    IFactory<PrimaryCommandConfiguration, IWidgetComponentViewModel?> factory,
+    ICache<Guid, IWidgetComponentViewModel> cache) :
     INotificationHandler<ConfigurationChanged<PrimaryWidgetConfiguration>>
 {
     public async ValueTask Handle(ConfigurationChanged<PrimaryWidgetConfiguration> notification,

@@ -1,3 +1,3 @@
-﻿namespace Hyperbar.Windows.Primary;
+﻿namespace Hyperbar.Windows.MediaController;
 
 public record BackwardRequest : INotification;

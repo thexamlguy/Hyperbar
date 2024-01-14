@@ -1,16 +1,22 @@
-using Hyperbar.Windows.MediaController;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Collections.Concurrent;
+using Windows.Media.Control;
 
-namespace Hyperbar.Windows.Primary;
+namespace Hyperbar.Windows.MediaController;
 
 public class MediaControllerWidgetProvider :
     IWidgetProvider
 {
     public void Create(HostBuilderContext comtext, IServiceCollection services) =>
             services.AddWidgetTemplate<MediaControllerWidgetViewModel, MediaControllerWidgetView>()
-                .AddSingleton<Queue<MediaController>>()
                 .AddSingleton<IInitializer, MediaControllerManager>()
-                .AddContentTemplate<MediaControllerViewModel, MediaControllerView>();
-
+                .AddTransient<IServiceScopeFactory<MediaController>, ServiceScopeFactory<MediaController>>()
+                .AddTransient<IServiceScopeProvider<MediaController>, ServiceScopeProvider<MediaController>>()
+                .AddSingleton<ConcurrentDictionary<MediaController, IServiceScope>>()
+                .AddTransient<IFactory<GlobalSystemMediaTransportControlsSession, MediaController?>, MediaControllerFactory>()
+                .AddHandler<MediaControllerHandler>()
+                .AddTransient<IFactory<MediaControllerViewModel?>, MediaControllerViewModelFactory>()
+                .AddContentTemplate<MediaControllerViewModel, MediaControllerView>()
+                .AddContentTemplate<MediaInformationViewModel, MediaInformationView>();
 }

@@ -1,6 +1,6 @@
 ﻿namespace Hyperbar;
 
-public interface IViewModelCache<TKey, TViewModel> : 
+public interface ICache<TKey, TViewModel> : 
     IDictionary<TKey, TViewModel> 
     where TKey : notnull
 {
