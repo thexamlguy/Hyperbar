@@ -3,8 +3,9 @@
 public class MediaControllerWidgetViewModel(ITemplateFactory templateFactory,
     IServiceFactory serviceFactory,
     IMediator mediator,
-    IDisposer disposer) :
-    ObservableCollectionViewModel<MediaControllerViewModel>(serviceFactory, mediator, disposer),
+    IDisposer disposer,
+    IEnumerable<MediaControllerViewModel> items) :
+    ObservableCollectionViewModel<MediaControllerViewModel>(serviceFactory, mediator, disposer, items),
     IWidgetViewModel,
     ITemplatedViewModel
 {
