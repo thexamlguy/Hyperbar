@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Windows.Media.Control;
+﻿using Windows.Media.Control;
 
 namespace Hyperbar.Windows.MediaController;
 public class MediaControllerManager(IMediator mediator,
@@ -31,8 +30,6 @@ public class MediaControllerManager(IMediator mediator,
         if (factory.Create(session) is MediaController mediaController)
         {
             await mediator.PublishAsync(new Created<MediaController>(mediaController));
-            Debug.WriteLine("Added " + session.SourceAppUserModelId + " " + session);
-
             cache.Add(new KeyValuePair<GlobalSystemMediaTransportControlsSession, MediaController>(session, mediaController));
         }
     }
