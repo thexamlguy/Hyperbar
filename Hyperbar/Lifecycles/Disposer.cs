@@ -1,18 +1,39 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Reactive.Disposables;
 using System.Collections;
+using System.Collections.Concurrent;
 
 namespace Hyperbar;
+
+public class AsyncLock(int initial = 1, 
+    int maximum = 1) : IDisposable
+{
+    private readonly SemaphoreSlim semaphore = new(initial, maximum);
+
+    public void Dispose()
+    {
+        semaphore.Release();
+    }
+
+    public TaskAwaiter<AsyncLock> GetAwaiter() => LockAsync().GetAwaiter();
+
+    private async Task<AsyncLock> LockAsync()
+    {
+        await semaphore.WaitAsync();
+        return this;
+    }
+}
+
 
 public class Disposer : 
     IDisposer
 {
-    private readonly ConditionalWeakTable<object, CompositeDisposable> subjects = [];
+    private readonly ConcurrentDictionary<object, CompositeDisposable> subjects = [];
 
     public void Add(object subject,
         params object[] objects)
     {
-        CompositeDisposable disposables = subjects.GetOrCreateValue(subject);
+        CompositeDisposable disposables = subjects.GetOrAdd(subject, args => new CompositeDisposable());
         foreach (IDisposable disposable in objects.OfType<IDisposable>())
         {
             disposables.Add(disposable);
@@ -26,17 +47,17 @@ public class Disposer :
 
     private void FromNotDisposable(object target)
     {
-        if (target is IEnumerable enumerableTarget)
+        if (target is IList collection && collection is { Count: > 0 })
         {
-            foreach (object? item in enumerableTarget)
+            foreach (object? item in collection)
             {
                 FromNotDisposable(item);
             }
         }
 
-        if (target is IDisposable disposableTarget)
+        if (target is IDisposable disposable)
         {
-            disposableTarget.Dispose();
+            disposable.Dispose();
         }
 
         if (target is not IDisposable)
@@ -51,7 +72,7 @@ public class Disposer :
         where TDisposable : 
         IDisposable
     {
-        CompositeDisposable disposables = subjects.GetOrCreateValue(subject);
+        CompositeDisposable disposables = subjects.GetOrAdd(subject, args => new CompositeDisposable());
         if (disposer is not null)
         {
             disposables.Remove(disposer);
@@ -64,7 +85,7 @@ public class Disposer :
     public void Remove(object subject, 
         IDisposable disposer)
     {
-        CompositeDisposable disposables = subjects.GetOrCreateValue(subject);
+        CompositeDisposable disposables = subjects.GetOrAdd(subject, args => new CompositeDisposable());
         if (disposer is not null)
         {
             disposables.Remove(disposer);

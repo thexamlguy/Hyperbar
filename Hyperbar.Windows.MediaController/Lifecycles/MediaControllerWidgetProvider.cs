@@ -1,6 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Collections.Concurrent;
 using Windows.Media.Control;
 
 namespace Hyperbar.Windows.MediaController;
@@ -16,8 +15,9 @@ public class MediaControllerWidgetProvider :
                 .AddCache<MediaController, IServiceScope>()
                 .AddTransient<IFactory<GlobalSystemMediaTransportControlsSession, MediaController?>, MediaControllerFactory>()
                 .AddHandler<MediaControllerHandler>()
-                .AddTransient<IFactory<MediaControllerViewModel?>, MediaControllerViewModelFactory>()
-                .AddCache<MediaControllerViewModel>()
+                .AddTransient<IFactory<MediaController, MediaControllerViewModel?>, MediaControllerViewModelFactory>()
+                .AddCache<MediaController, MediaControllerViewModel>()
                 .AddContentTemplate<MediaControllerViewModel, MediaControllerView>()
-                .AddContentTemplate<MediaInformationViewModel, MediaInformationView>();
+                .AddContentTemplate<MediaInformationViewModel, MediaInformationView>()
+                .AddContentTemplate<MediaButtonViewModel, MediaButtonView>();
 }

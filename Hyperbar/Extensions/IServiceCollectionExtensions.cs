@@ -13,7 +13,7 @@ public static class IServiceCollectionExtensions
         where TKey :
         notnull
     {
-        services.AddSingleton<ICache<TKey, TValue>, Cache<TKey, TValue>>();
+        services.AddScoped<ICache<TKey, TValue>, Cache<TKey, TValue>>();
         services.AddTransient(provider => provider.GetService<ICache<TKey, TValue>>()!.Select(x => x.Value));
 
         return services;

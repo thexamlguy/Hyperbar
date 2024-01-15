@@ -1,13 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Concurrent;
-using System.Reactive.Concurrency;
 
 namespace Hyperbar;
-
-public interface IDispatcher
-{
-    Task InvokeAsync(Action action);
-}
 
 public class Mediator(IServiceProvider provider, 
     IDispatcher dispatcher) :
@@ -41,6 +35,11 @@ public class Mediator(IServiceProvider provider,
             await dispatcher.InvokeAsync(async () => await handler.Handle(notification, cancellationToken));
         }
     }
+
+    public ValueTask PublishAsync<TNotification>(CancellationToken cancellationToken = default)
+        where TNotification :
+        INotification,
+        new() => PublishAsync(new TNotification(), cancellationToken);
 
     public ValueTask<TResponse> SendAsync<TResponse>(IRequest<TResponse> request,
         CancellationToken cancellationToken = default)

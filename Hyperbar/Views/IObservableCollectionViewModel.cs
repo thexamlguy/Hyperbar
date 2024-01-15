@@ -7,5 +7,4 @@ public interface IObservableCollectionViewModel<TItem> :
     IList<TItem>,
     IList,
     IReadOnlyList<TItem>,
-    INotifyCollectionChanged,
-    IInitializer;
+    INotifyCollectionChanged;

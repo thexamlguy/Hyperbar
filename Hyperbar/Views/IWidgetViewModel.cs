@@ -1,3 +1,3 @@
 ﻿namespace Hyperbar;
 
-public interface IWidgetViewModel;
+public interface IWidgetViewModel : IDisposable;

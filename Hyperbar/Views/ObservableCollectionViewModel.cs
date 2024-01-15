@@ -1,10 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Reactive.Disposables;
-using System.Windows.Input;
 
 namespace Hyperbar;
 
@@ -12,22 +10,21 @@ public partial class ObservableCollectionViewModel<TItem> :
     ObservableObject,
     IObservableCollectionViewModel<TItem>,
     INotificationHandler<Removed<TItem>>,
-    INotificationHandler<Created<TItem>>
+    INotificationHandler<Created<TItem>>,
+    IDisposable
+    where TItem :
+    IDisposable
 {
     public ObservableCollection<TItem> collection = [];
-    private readonly SynchronizationContext? context;
-    private readonly IDisposer disposer;
     private readonly IViewModelEnumerator<TItem>? enumerator;
-    private readonly IServiceFactory serviceFactory;
 
     public ObservableCollectionViewModel(IServiceFactory serviceFactory,
         IMediator mediator,
         IDisposer disposer)
     {
-        context = SynchronizationContext.Current;
-
-        this.serviceFactory = serviceFactory;
-        this.disposer = disposer;
+        ServiceFactory = serviceFactory;
+        Mediator = mediator;
+        Disposer = disposer;
 
         mediator.Subscribe(this);
 
@@ -39,16 +36,16 @@ public partial class ObservableCollectionViewModel<TItem> :
         IDisposer disposer,
         IViewModelEnumerator<TItem> enumerator)
     {
-        context = SynchronizationContext.Current;
+        ServiceFactory = serviceFactory;
+        Mediator = mediator;
+        Disposer = disposer;
 
-        this.serviceFactory = serviceFactory;
-        this.disposer = disposer;
         this.enumerator = enumerator;
 
         mediator.Subscribe(this);
 
         collection.CollectionChanged += OnCollectionChanged;
-        
+
         if (enumerator is not null)
         {
             foreach (TItem? item in enumerator.Next())
@@ -66,10 +63,9 @@ public partial class ObservableCollectionViewModel<TItem> :
         IDisposer disposer,
         IEnumerable<TItem> items)
     {
-        context = SynchronizationContext.Current;
-
-        this.serviceFactory = serviceFactory;
-        this.disposer = disposer;
+        ServiceFactory = serviceFactory;
+        Mediator = mediator;
+        Disposer = disposer;
 
         mediator.Subscribe(this);
 
@@ -82,10 +78,6 @@ public partial class ObservableCollectionViewModel<TItem> :
 
     public int Count => collection.Count;
 
-    public ICommand Initialize => new AsyncRelayCommand(InitializeAsync);
-
-    public bool Initialized { get; private set; }
-
     bool IList.IsFixedSize => false;
 
     bool ICollection<TItem>.IsReadOnly => false;
@@ -96,7 +88,13 @@ public partial class ObservableCollectionViewModel<TItem> :
 
     object ICollection.SyncRoot => this;
 
+    protected IDisposer Disposer { get; private set; }
+
     protected IList<TItem> Items => collection;
+
+    protected IMediator Mediator { get; private set; }
+
+    protected IServiceFactory ServiceFactory { get; private set; }
 
     public TItem this[int index]
     {
@@ -129,7 +127,7 @@ public partial class ObservableCollectionViewModel<TItem> :
 
     public TItem Add()
     {
-        TItem? item = serviceFactory.Create<TItem>();
+        TItem? item = ServiceFactory.Create<TItem>();
 
         Add(item);
         return item;
@@ -138,7 +136,7 @@ public partial class ObservableCollectionViewModel<TItem> :
     public TItem Add<T>(params object?[] parameters)
         where T : TItem
     {
-        T? item = serviceFactory.Create<T>(parameters);
+        T? item = ServiceFactory.Create<T>(parameters);
         Add(item);
 
         return item;
@@ -148,7 +146,7 @@ public partial class ObservableCollectionViewModel<TItem> :
         where T :
         TItem
     {
-        T? item = serviceFactory.Create<T>();
+        T? item = ServiceFactory.Create<T>();
         Add(item);
 
         return item;
@@ -156,15 +154,6 @@ public partial class ObservableCollectionViewModel<TItem> :
 
     public void Add(TItem item)
     {
-        disposer.Add(this, item);
-        disposer.Add(item, Disposable.Create(item, args =>
-        {
-            if (Contains(args))
-            {
-                Remove(args);
-            }
-        }));
-
         int index = collection.Count;
         InsertItem(index, item);
     }
@@ -208,7 +197,9 @@ public partial class ObservableCollectionViewModel<TItem> :
     void ICollection.CopyTo(Array array, int index) =>
         collection.CopyTo((TItem[])array, index);
 
-    public IEnumerator<TItem> GetEnumerator() => 
+    public void Dispose() => Disposer.Dispose(this);
+
+    public IEnumerator<TItem> GetEnumerator() =>
         collection.GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator() => 
@@ -245,22 +236,12 @@ public partial class ObservableCollectionViewModel<TItem> :
         return ValueTask.CompletedTask;
     }
 
-    public int IndexOf(TItem item) => collection.IndexOf(item);
+    public int IndexOf(TItem item) => 
+        collection.IndexOf(item);
 
     int IList.IndexOf(object? value) => 
         IsCompatibleObject(value) ? 
         IndexOf((TItem)value!) : -1;
-
-    public Task InitializeAsync()
-    {
-        if (Initialized)
-        {
-            return Task.CompletedTask;
-        }
-
-        Initialized = true;
-        return Task.CompletedTask;
-    }
 
     public void Insert(int index, TItem item) => 
         InsertItem(index, item);
@@ -279,6 +260,7 @@ public partial class ObservableCollectionViewModel<TItem> :
         int index = collection.IndexOf(item);
         if (index < 0) return false;
 
+        Disposer.Remove(this, item);
         RemoveItem(index);
 
         return true;
@@ -299,7 +281,20 @@ public partial class ObservableCollectionViewModel<TItem> :
         collection.Clear();
 
     protected virtual void InsertItem(int index,
-        TItem value) => collection.Insert(index, value);
+        TItem value)
+    {
+        Disposer.Add(this, Disposable.Create(() =>
+        {
+            Remove(value);
+        }));
+
+        Disposer.Add(value, Disposable.Create(() =>
+        {
+            Remove(value);
+        }));
+
+        collection.Insert(index, value);
+    }
 
     protected virtual void RemoveItem(int index) => 
         collection.RemoveAt(index);
@@ -317,4 +312,4 @@ public partial class ObservableCollectionViewModel<TItem> :
 public class ObservableCollectionViewModel(IServiceFactory serviceFactory, 
     IMediator mediator,
     IDisposer disposer) :
-    ObservableCollectionViewModel<object>(serviceFactory, mediator, disposer);
+    ObservableCollectionViewModel<IDisposable>(serviceFactory, mediator, disposer);

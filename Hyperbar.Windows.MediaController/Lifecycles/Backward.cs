@@ -1,5 +1,3 @@
 ﻿namespace Hyperbar.Windows.MediaController;
 
-public record Media;
-
-
+public record Backward : INotification;

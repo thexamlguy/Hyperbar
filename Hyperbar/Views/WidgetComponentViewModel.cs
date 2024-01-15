@@ -18,6 +18,7 @@ public partial class WidgetComponentViewModel :
         Guid id = default) : base(serviceFactory, mediator, disposer, items)
     {
         this.id = id;
+
         TemplateFactory = templateFactory;
     }
 
@@ -28,6 +29,7 @@ public partial class WidgetComponentViewModel :
         Guid id = default) : base(serviceFactory, mediator, disposer)
     {
         this.id = id;
+
         TemplateFactory = templateFactory;
     }
 

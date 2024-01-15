@@ -7,6 +7,11 @@ public interface IMediator
         where TNotification :
         INotification;
 
+    ValueTask PublishAsync<TNotification>(CancellationToken cancellationToken = default)
+        where TNotification :
+        INotification,
+        new();
+
     ValueTask<TResponse> SendAsync<TResponse>(IRequest<TResponse> request,
         CancellationToken cancellationToken = default);
 
