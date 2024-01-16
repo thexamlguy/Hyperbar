@@ -15,8 +15,23 @@ public static class HwndExtensions
         WS_EX_LAYERED = 0x80000
     }
 
+    public static void SetExtendedWindowStyle(this IntPtr hwnd, ExtendedWindowStyle newStyle)
+    {
+        int windowLong = PInvoke.GetWindowLong(new(hwnd), WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
+        if (PInvoke.SetWindowLong(new(hwnd), WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE, (int)newStyle) != windowLong)
+        {
+            Marshal.ThrowExceptionForHR(Marshal.GetLastWin32Error());
+        }
+
+        PInvoke.SetWindowPos(new(hwnd), new HWND(0), 0, 0, 0, 0, SET_WINDOW_POS_FLAGS.SWP_DRAWFRAME |
+            SET_WINDOW_POS_FLAGS.SWP_NOMOVE |
+            SET_WINDOW_POS_FLAGS.SWP_NOOWNERZORDER |
+            SET_WINDOW_POS_FLAGS.SWP_NOSIZE |
+            SET_WINDOW_POS_FLAGS.SWP_NOZORDER);
+    }
+
     public static void SetWindowOpacity(this IntPtr hWnd,
-        byte value)
+            byte value)
     {
         HWND hWND = new(hWnd);
         WindowStyles windowLong = (WindowStyles)PInvoke.GetWindowLong(hWND, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
@@ -30,7 +45,6 @@ public static class HwndExtensions
             Marshal.ThrowExceptionForHR(Marshal.GetLastWin32Error());
         }
     }
-
     public static void SetWindowStyle(this IntPtr hwnd,
         WindowStyle newStyle)
     {

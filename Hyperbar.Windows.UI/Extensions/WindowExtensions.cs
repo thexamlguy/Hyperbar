@@ -10,7 +10,7 @@ public static class WindowExtensions
     public static IntPtr GetHandle(this Window window) =>
         window is not null ? WindowNative.GetWindowHandle(window) : default;
 
-    public static void SetIsShownInSwitchers2(this Window window,
+    public static void SetIsAvailableInSwitchers(this Window window,
         bool value) => window.AppWindow.IsShownInSwitchers = value;
 
     public static void SetOpacity(this Window window,
@@ -18,6 +18,9 @@ public static class WindowExtensions
 
     public static void SetStyle(this Window window,
         WindowStyle style) => window.GetHandle().SetWindowStyle(style);
+
+    public static void SetStyle(this Window window,
+        ExtendedWindowStyle style) => window.GetHandle().SetExtendedWindowStyle(style);
 
     public static void SetTopMost(this Window window,
         bool value)

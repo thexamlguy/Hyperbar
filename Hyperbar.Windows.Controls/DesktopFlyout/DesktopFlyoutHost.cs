@@ -4,7 +4,7 @@ using Hyperbar.Windows.UI;
 using Windows.Foundation;
 using WinUIEx;
 using WindowStyle = Hyperbar.Windows.Interop.WindowStyle;
-using System.Diagnostics;
+using ExtendedWindowStyle = Hyperbar.Windows.Interop.ExtendedWindowStyle;
 
 namespace Hyperbar.Windows.Controls;
 
@@ -16,19 +16,25 @@ internal class DesktopFlyoutHost : Window
 
     public DesktopFlyoutHost(DesktopFlyoutPresenter presenter)
     {
+        SystemBackdrop = new TransparentTintBackdrop();
+
+        this.SetOpacity(0);
+        this.Snap(WindowPlacement.Top, 0, 0);
+
+        this.SetStyle(WindowStyle.SysMenu | WindowStyle.Visible);
+        this.SetStyle(ExtendedWindowStyle.NoActivate);
+
+        this.SetTopMost(true);
+        this.SetIsAvailableInSwitchers(false);
+
         Border root = new();
         root.Loaded += OnLoaded;
         Content = root;
 
         this.presenter = presenter;
-
-        this.SetOpacity(0);
-        this.SetStyle(WindowStyle.SysMenu | WindowStyle.Visible);
-        this.SetTopMost(true);
-        this.SetIsShownInSwitchers2(false);
     }
 
-    internal async void UpdatePlacement(DesktopFlyoutPlacement placement)
+    internal void UpdatePlacement(DesktopFlyoutPlacement placement)
     {
         this.placement = placement;
 
@@ -42,9 +48,6 @@ internal class DesktopFlyoutHost : Window
 
         double height = presenter.DesiredSize.Height;
         double width = presenter.DesiredSize.Width;
-
-        Debug.WriteLine(height);
-        Debug.WriteLine(width);
 
         switch (placement)
         {
@@ -74,8 +77,6 @@ internal class DesktopFlyoutHost : Window
         presenter.TemplateSettings.SetValue(DesktopFlyoutPresenterTemplateSettings.NegativeHeightProperty, -height);
         presenter.TemplateSettings.SetValue(DesktopFlyoutPresenterTemplateSettings.NegativeWidthProperty, -width);
 
-        await Task.Delay(TimeSpan.FromSeconds(4));
-
         presenter.UpdatePlacementState(placement);
     }
 
@@ -85,7 +86,6 @@ internal class DesktopFlyoutHost : Window
     private void OnLoaded(object sender,
         RoutedEventArgs args)
     {
-        SystemBackdrop = new TransparentTintBackdrop();
         this.SetOpacity(255);
 
         if (Content is Border border)
