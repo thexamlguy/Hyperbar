@@ -25,10 +25,10 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="controls:DesktopFlyoutPresenter">
-                    <Border x:Name="Container">
+                    <Border x:Name="Container" Background="Transparent">
                         <Border
                             x:Name="BackgroundElement"
-                            Height="48"
+                            MinHeight="48"
                             MinWidth="40"
                             Margin="16"
                             Background="{TemplateBinding Background}"
@@ -37,11 +37,6 @@
                             BorderThickness="{TemplateBinding BorderThickness}"
                             CornerRadius="{TemplateBinding CornerRadius}"
                             FlowDirection="{TemplateBinding FlowDirection}">
-                            <Border.Transitions>
-                                <TransitionCollection>
-                                    <EntranceThemeTransition x:Name="EntranceThemeTransition" FromVerticalOffset="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.NegativeHeight}" />
-                                </TransitionCollection>
-                            </Border.Transitions>
                             <ContentControl
                                 Height="40"
                                 Margin="4"
@@ -55,28 +50,16 @@
                             <VisualStateGroup x:Name="PlacementStates">
                                 <VisualState x:Name="DefaultPlacement" />
                                 <VisualState x:Name="BottomPlacement">
-                                    <VisualState.Setters>
-                                        <Setter Target="EntranceThemeTransition.FromHorizontalOffset" Value="0" />
-                                        <Setter Target="EntranceThemeTransition.FromVerticalOffset" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.Height}" />
-                                    </VisualState.Setters>
+                          
                                 </VisualState>
                                 <VisualState x:Name="TopPlacement">
-                                    <VisualState.Setters>
-                                        <Setter Target="EntranceThemeTransition.FromHorizontalOffset" Value="0" />
-                                        <Setter Target="EntranceThemeTransition.FromVerticalOffset" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.NegativeHeight}" />
-                                    </VisualState.Setters>
+                    
                                 </VisualState>
                                 <VisualState x:Name="LeftPlacement">
-                                    <VisualState.Setters>
-                                        <Setter Target="EntranceThemeTransition.FromHorizontalOffset" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.NegativeWidth}" />
-                                        <Setter Target="EntranceThemeTransition.FromVerticalOffset" Value="0" />
-                                    </VisualState.Setters>
+                     
                                 </VisualState>
                                 <VisualState x:Name="RightPlacement">
-                                    <VisualState.Setters>
-                                        <Setter Target="EntranceThemeTransition.FromHorizontalOffset" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.Width}" />
-                                        <Setter Target="EntranceThemeTransition.FromVerticalOffset" Value="0" />
-                                    </VisualState.Setters>
+                     
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>

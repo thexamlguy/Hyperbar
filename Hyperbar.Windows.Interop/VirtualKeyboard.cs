@@ -4,6 +4,7 @@ using Windows.Win32.UI.KeyboardAndMouseInput;
 
 namespace Hyperbar.Windows.Interop;
 
+
 public class VirtualKeyboard : 
     IVirtualKeyboard
 {

@@ -38,7 +38,7 @@ public class ConfigurationReader<TConfiguration>(IConfigurationSource<TConfigura
         {
             byte[] jsonContent = File.ReadAllBytes(source.Path);
 
-            using JsonDocument jsonDocument = JsonDocument.Parse(jsonContent);
+           using JsonDocument jsonDocument = JsonDocument.Parse(jsonContent);
             if (jsonDocument.RootElement.TryGetProperty(source.Section, out JsonElement sectionValue))
             {
                 value = JsonSerializer.Deserialize<TConfiguration>(sectionValue.ToString(), serializerOptions ?? defaultSerializerOptions());

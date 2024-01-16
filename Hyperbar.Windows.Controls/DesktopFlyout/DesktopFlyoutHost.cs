@@ -1,53 +1,55 @@
 ﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
 using Hyperbar.Windows.UI;
-using Hyperbar.Windows.Interop;
 using Windows.Foundation;
+using WinUIEx;
+using WindowStyle = Hyperbar.Windows.Interop.WindowStyle;
+using System.Diagnostics;
 
 namespace Hyperbar.Windows.Controls;
 
 internal class DesktopFlyoutHost : Window
 {
     private readonly DesktopFlyoutPresenter presenter;
+    private bool loaded;
     private DesktopFlyoutPlacement placement;
-    private Popup? popup;
 
     public DesktopFlyoutHost(DesktopFlyoutPresenter presenter)
     {
         Border root = new();
         root.Loaded += OnLoaded;
+        Content = root;
 
         this.presenter = presenter;
-        presenter.SizeChanged += OnChildSizeChanged;
-
-        Content = root;
 
         this.SetOpacity(0);
         this.SetStyle(WindowStyle.SysMenu | WindowStyle.Visible);
         this.SetTopMost(true);
-        this.SetIsShownInSwitchers(false);
+        this.SetIsShownInSwitchers2(false);
     }
 
-    internal void UpdatePlacement(DesktopFlyoutPlacement placement)
+    internal async void UpdatePlacement(DesktopFlyoutPlacement placement)
     {
         this.placement = placement;
 
         // Not ready
-        if (popup is null)
+        if (!loaded)
         {
             return;
         }
-        
+
         presenter.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
 
         double height = presenter.DesiredSize.Height;
         double width = presenter.DesiredSize.Width;
 
+        Debug.WriteLine(height);
+        Debug.WriteLine(width);
+
         switch (placement)
         {
             case DesktopFlyoutPlacement.Left:
-                this.Snap(WindowPlacement.Left, 0, 0);
+                this.Snap(WindowPlacement.Left, height, width);
                 break;
 
             case DesktopFlyoutPlacement.Top:
@@ -55,7 +57,7 @@ internal class DesktopFlyoutHost : Window
                 break;
 
             case DesktopFlyoutPlacement.Right:
-                this.Snap(WindowPlacement.Right, 0, 0);
+                this.Snap(WindowPlacement.Right, height, width);
                 break;
 
             case DesktopFlyoutPlacement.Bottom:
@@ -72,23 +74,31 @@ internal class DesktopFlyoutHost : Window
         presenter.TemplateSettings.SetValue(DesktopFlyoutPresenterTemplateSettings.NegativeHeightProperty, -height);
         presenter.TemplateSettings.SetValue(DesktopFlyoutPresenterTemplateSettings.NegativeWidthProperty, -width);
 
+        await Task.Delay(TimeSpan.FromSeconds(4));
+
         presenter.UpdatePlacementState(placement);
     }
 
     private void OnChildSizeChanged(object sender,
-        SizeChangedEventArgs args) => UpdatePlacement(this.placement);
+        SizeChangedEventArgs args) => UpdatePlacement(placement);
 
     private void OnLoaded(object sender,
         RoutedEventArgs args)
     {
-        popup = new Popup
-        {
-            Child = presenter,
-            XamlRoot = Content.XamlRoot,
-            ShouldConstrainToRootBounds = false,
-            IsOpen = true,
-        };
+        SystemBackdrop = new TransparentTintBackdrop();
+        this.SetOpacity(255);
 
+        if (Content is Border border)
+        {
+            border.Child = presenter;
+
+            double height = presenter.DesiredSize.Height;
+            double width = presenter.DesiredSize.Width;
+
+            presenter.SizeChanged += OnChildSizeChanged;
+        }
+
+        loaded = true;
         UpdatePlacement(placement);
     }
 }

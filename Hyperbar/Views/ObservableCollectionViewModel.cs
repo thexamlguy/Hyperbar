@@ -208,7 +208,7 @@ public partial class ObservableCollectionViewModel<TItem> :
     public ValueTask Handle(Removed<TItem> notification,
         CancellationToken cancellationToken)
     {
-        foreach (TItem item in this)
+        foreach (TItem item in this.ToList())
         {
             if (notification.Value is not null)
             {
