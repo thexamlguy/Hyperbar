@@ -25,8 +25,9 @@ public class PrimaryWidgetConfigurationHandler(IMediator mediator,
             {
                 if (factory.Create(item) is IWidgetComponentViewModel value)
                 {
-                    await mediator.PublishAsync(new Created<IWidgetComponentViewModel>(value),
-                        cancellationToken);
+                    await mediator.PublishAsync(Inserted<IWidgetComponentViewModel>
+                            .For<PrimaryWidgetViewModel>(item.Order, value),
+                                cancellationToken);
                 }
             }
         }

@@ -11,6 +11,7 @@ public partial class ObservableCollectionViewModel<TItem> :
     IObservableCollectionViewModel<TItem>,
     INotificationHandler<Removed<TItem>>,
     INotificationHandler<Created<TItem>>,
+    INotificationHandler<Inserted<TItem>>,
     IDisposable
     where TItem :
     IDisposable
@@ -228,16 +229,33 @@ public partial class ObservableCollectionViewModel<TItem> :
     public ValueTask Handle(Created<TItem> notification,
         CancellationToken cancellationToken)
     {
-        if (notification.Value is not null)
+        if (notification.Target.Equals(GetType().Name))
         {
-            Add(notification.Value);
+            if (notification.Value is TItem item)
+            {
+                Add(item);
+            }
         }
 
         return ValueTask.CompletedTask;
     }
 
-    public int IndexOf(TItem item) => 
-        collection.IndexOf(item);
+    public ValueTask Handle(Inserted<TItem> notification,
+        CancellationToken cancellationToken)
+    {
+        if (notification.Target.Equals(GetType().Name))
+        {
+            if (notification.Value is TItem item)
+            {
+                Insert(notification.Index, item);
+            }
+        }
+
+        return ValueTask.CompletedTask;
+    }
+
+    public int IndexOf(TItem item) =>
+            collection.IndexOf(item);
 
     int IList.IndexOf(object? value) => 
         IsCompatibleObject(value) ? 

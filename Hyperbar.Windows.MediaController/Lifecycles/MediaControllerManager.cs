@@ -29,7 +29,7 @@ public class MediaControllerManager(IMediator mediator,
     {
         if (factory.Create(session) is MediaController mediaController)
         {
-            await mediator.PublishAsync(new Created<MediaController>(mediaController));
+            //await mediator.PublishAsync(new Created<MediaController>(mediaController));
             cache.Add(new KeyValuePair<GlobalSystemMediaTransportControlsSession, MediaController>(session, mediaController));
         }
     }
