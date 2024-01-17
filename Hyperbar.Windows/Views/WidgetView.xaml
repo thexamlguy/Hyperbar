@@ -10,5 +10,10 @@
                 <StackPanel Orientation="Horizontal" Spacing="8" />
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemContainerTransitions>
+            <TransitionCollection>
+                <AddDeleteThemeTransition />
+            </TransitionCollection>
+        </ItemsControl.ItemContainerTransitions>
     </ItemsControl>
 </UserControl>
