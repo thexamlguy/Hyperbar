@@ -6,7 +6,7 @@ public class WidgetComponentViewModelEnumerator(PrimaryWidgetConfiguration confi
 {
     public IEnumerable<IWidgetComponentViewModel?> Next()
     {
-        foreach (PrimaryCommandConfiguration item in configuration)
+        foreach (PrimaryCommandConfiguration item in configuration.OrderBy(x => x.Order))
         {
             yield return factory.Create(item);
         }
