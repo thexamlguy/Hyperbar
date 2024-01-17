@@ -4,20 +4,20 @@ using Microsoft.UI.Xaml.Data;
 
 namespace Hyperbar.Windows.Controls;
 
-public class DesktopFlyoutPresenter :
+public class DesktopBarPresenter :
     ContentControl
 {
     public static readonly DependencyProperty TemplateSettingsProperty =
         DependencyProperty.Register(nameof(TemplateSettings),
-            typeof(DesktopFlyoutPresenterTemplateSettings), typeof(DesktopFlyoutPresenter),
+            typeof(DesktopBarPresenterTemplateSettings), typeof(DesktopBarPresenter),
             new PropertyMetadata(null));
 
-    internal new DesktopFlyout? Parent;
+    internal new DesktopBar? Parent;
 
-    public DesktopFlyoutPresenter()
+    public DesktopBarPresenter()
     {
-        DefaultStyleKey = typeof(DesktopFlyoutPresenter);
-        TemplateSettings = new DesktopFlyoutPresenterTemplateSettings();
+        DefaultStyleKey = typeof(DesktopBarPresenter);
+        TemplateSettings = new DesktopBarPresenterTemplateSettings();
     }
 
     protected override void OnApplyTemplate()
@@ -30,11 +30,11 @@ public class DesktopFlyoutPresenter :
         });
     }
 
-    public DesktopFlyoutPresenterTemplateSettings TemplateSettings
+    public DesktopBarPresenterTemplateSettings TemplateSettings
     {
-        get => (DesktopFlyoutPresenterTemplateSettings)GetValue(TemplateSettingsProperty);
+        get => (DesktopBarPresenterTemplateSettings)GetValue(TemplateSettingsProperty);
         set => SetValue(TemplateSettingsProperty, value);
     }
 
-    internal void UpdatePlacementState(DesktopFlyoutPlacement placement) => VisualStateManager.GoToState(this, $"{placement}Placement", true);
+    internal void UpdatePlacementState(DesktopBarPlacemenet placement) => VisualStateManager.GoToState(this, $"{placement}Placement", true);
 }

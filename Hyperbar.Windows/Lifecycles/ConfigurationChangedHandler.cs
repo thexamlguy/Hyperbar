@@ -2,7 +2,7 @@
 
 namespace Hyperbar.Windows.Primary;
 
-public class AppConfigurationChangedHandler(DesktopFlyout desktopFlyout,
+public class AppConfigurationChangedHandler(DesktopBar desktopFlyout,
     AppConfiguration configuration) :
     INotificationHandler<ConfigurationChanged<AppConfiguration>>
 {

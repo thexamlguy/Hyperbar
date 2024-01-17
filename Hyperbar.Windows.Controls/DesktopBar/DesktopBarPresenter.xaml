@@ -5,32 +5,30 @@
     xmlns:controls="using:Hyperbar.Windows.Controls">
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Default">
-            <StaticResource x:Key="DesktopFlyoutPresenterBackground" ResourceKey="AcrylicInAppFillColorDefaultBrush" />
-            <StaticResource x:Key="DesktopFlyoutPresenterForeground" ResourceKey="TextFillColorPrimaryBrush" />
-            <StaticResource x:Key="DesktopFlyoutPresenterBorderBrush" ResourceKey="ControlStrokeColorDefaultBrush" />
+            <StaticResource x:Key="DesktopBarPresenterBackground" ResourceKey="AcrylicInAppFillColorDefaultBrush" />
+            <StaticResource x:Key="DesktopBarPresenterForeground" ResourceKey="TextFillColorPrimaryBrush" />
+            <StaticResource x:Key="DesktopBarPresenterBorderBrush" ResourceKey="ControlStrokeColorDefaultBrush" />
         </ResourceDictionary>
         <ResourceDictionary x:Key="Light">
-            <StaticResource x:Key="DesktopFlyoutPresenterBackground" ResourceKey="AcrylicInAppFillColorDefaultBrush" />
-            <StaticResource x:Key="DesktopFlyoutPresenterForeground" ResourceKey="TextFillColorPrimaryBrush" />
-            <StaticResource x:Key="DesktopFlyoutPresenterBorderBrush" ResourceKey="ControlStrokeColorDefaultBrush" />
+            <StaticResource x:Key="DesktopBarPresenterBackground" ResourceKey="AcrylicInAppFillColorDefaultBrush" />
+            <StaticResource x:Key="DesktopBarPresenterForeground" ResourceKey="TextFillColorPrimaryBrush" />
+            <StaticResource x:Key="DesktopBarPresenterBorderBrush" ResourceKey="ControlStrokeColorDefaultBrush" />
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
-    <Thickness x:Key="DesktopFlyoutPresenterBorderThemeThickness">1</Thickness>
-    <Style TargetType="controls:DesktopFlyoutPresenter">
-        <Setter Property="Background" Value="{ThemeResource DesktopFlyoutPresenterBackground}" />
-        <Setter Property="Foreground" Value="{ThemeResource DesktopFlyoutPresenterForeground}" />
-        <Setter Property="BorderBrush" Value="{ThemeResource DesktopFlyoutPresenterBorderBrush}" />
-        <Setter Property="BorderThickness" Value="{ThemeResource DesktopFlyoutPresenterBorderThemeThickness}" />
-        <Setter Property="CornerRadius" Value="{ThemeResource OverlayCornerRadius}" />
+    <Thickness x:Key="DesktopBarPresenterBorderThemeThickness">0</Thickness>
+    <Style TargetType="controls:DesktopBarPresenter">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{ThemeResource DesktopBarPresenterForeground}" />
+        <Setter Property="BorderBrush" Value="{ThemeResource DesktopBarPresenterBorderBrush}" />
+        <Setter Property="BorderThickness" Value="{ThemeResource DesktopBarPresenterBorderThemeThickness}" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="controls:DesktopFlyoutPresenter">
+                <ControlTemplate TargetType="controls:DesktopBarPresenter">
                     <Border x:Name="Container" Background="Transparent">
                         <Border
                             x:Name="BackgroundElement"
+                            MinWidth="48"
                             MinHeight="48"
-                            MinWidth="40"
-                            Margin="16"
                             Background="{TemplateBinding Background}"
                             BackgroundSizing="OuterBorderEdge"
                             BorderBrush="{TemplateBinding BorderBrush}"
@@ -49,18 +47,10 @@
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="PlacementStates">
                                 <VisualState x:Name="DefaultPlacement" />
-                                <VisualState x:Name="BottomPlacement">
-                          
-                                </VisualState>
-                                <VisualState x:Name="TopPlacement">
-                    
-                                </VisualState>
-                                <VisualState x:Name="LeftPlacement">
-                     
-                                </VisualState>
-                                <VisualState x:Name="RightPlacement">
-                     
-                                </VisualState>
+                                <VisualState x:Name="BottomPlacement" />
+                                <VisualState x:Name="TopPlacement" />
+                                <VisualState x:Name="LeftPlacement" />
+                                <VisualState x:Name="RightPlacement" />
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
                     </Border>

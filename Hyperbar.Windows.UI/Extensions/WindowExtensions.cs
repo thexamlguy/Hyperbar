@@ -1,17 +1,31 @@
 ﻿using Hyperbar.Windows.Interop;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
+using Windows.Graphics;
 using WinRT.Interop;
 
 namespace Hyperbar.Windows.UI;
 
 public static class WindowExtensions
 {
+    public static WindowMessageListener CreateMessageListener(this Window window) =>
+        WindowMessageListener.Create(window.GetHandle());
+
     public static IntPtr GetHandle(this Window window) =>
-        window is not null ? WindowNative.GetWindowHandle(window) : default;
+            window is not null ? WindowNative.GetWindowHandle(window) : default;
+
+    public static void MoveAndResize(this Window window,
+        double x,
+        double y,
+        double width,
+        double height)
+    {
+        float num = HwndExtensions.GetDpiForWindow(window.GetHandle()) / 96f;
+        window.AppWindow.MoveAndResize(new RectInt32((int)x, (int)y, (int)(width * (double)num), (int)(height * (double)num)));
+    }
 
     public static void SetIsAvailableInSwitchers(this Window window,
-        bool value) => window.AppWindow.IsShownInSwitchers = value;
+            bool value) => window.AppWindow.IsShownInSwitchers = value;
 
     public static void SetOpacity(this Window window,
         byte value) => window.GetHandle().SetWindowOpacity(value);
@@ -31,9 +45,4 @@ public static class WindowExtensions
             presenter.IsAlwaysOnTop = value;
         }
     }
-
-    public static void Snap(this Window window,
-        WindowPlacement placement,
-        double? width = null,
-        double? height = null) => window.GetHandle().SnapWindow((int)placement, width, height);
 }

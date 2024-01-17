@@ -2,30 +2,30 @@
 
 namespace Hyperbar.Windows.Controls;
 
-public class DesktopFlyout :
+public class DesktopBar :
     DependencyObject
 {
     public static readonly DependencyProperty ContentProperty =
         DependencyProperty.Register(nameof(Content),
-            typeof(object), typeof(DesktopFlyout),
+            typeof(object), typeof(DesktopBar),
             new PropertyMetadata(null));
 
     public static readonly DependencyProperty PlacementProperty =
         DependencyProperty.Register(nameof(Placement),
-            typeof(DesktopFlyoutPlacement), typeof(DesktopFlyout),
-            new PropertyMetadata(DesktopFlyoutPlacement.Left, OnPlacementPropertyChanged));
+            typeof(DesktopBarPlacemenet), typeof(DesktopBar),
+            new PropertyMetadata(DesktopBarPlacemenet.Left, OnPlacementPropertyChanged));
 
-    private readonly DesktopFlyoutHost host;
-    private readonly DesktopFlyoutPresenter presenter;
+    private readonly DesktopBarHost host;
+    private readonly DesktopBarPresenter presenter;
 
-    public DesktopFlyout()
+    public DesktopBar()
     {
-        presenter = new DesktopFlyoutPresenter
+        presenter = new DesktopBarPresenter
         {
             Parent = this
         };
 
-        host = new DesktopFlyoutHost(presenter);
+        host = new DesktopBarHost(presenter);
         host.Activate();
     }
 
@@ -35,16 +35,16 @@ public class DesktopFlyout :
         set => SetValue(ContentProperty, value);
     }
 
-    public DesktopFlyoutPlacement Placement
+    public DesktopBarPlacemenet Placement
     {
-        get => (DesktopFlyoutPlacement)GetValue(PlacementProperty);
+        get => (DesktopBarPlacemenet)GetValue(PlacementProperty);
         set => SetValue(PlacementProperty, value);
     }
 
     private static void OnPlacementPropertyChanged(DependencyObject dependencyObject,
         DependencyPropertyChangedEventArgs args)
     {
-        if (dependencyObject is DesktopFlyout sender)
+        if (dependencyObject is DesktopBar sender)
         {
             sender.OnPlacementPropertyChanged();
         }

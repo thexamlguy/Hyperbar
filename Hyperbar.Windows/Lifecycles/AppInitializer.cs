@@ -5,7 +5,7 @@ namespace Hyperbar.Windows;
 
 public class AppInitializer([FromKeyedServices(nameof(WidgetBarViewModel))] WidgetBarView view,
     [FromKeyedServices(nameof(WidgetBarViewModel))] WidgetBarViewModel viewModel,
-    DesktopFlyout desktopFlyout, 
+    DesktopBar desktopFlyout, 
     AppConfiguration configuration) :
     IInitializer
 {

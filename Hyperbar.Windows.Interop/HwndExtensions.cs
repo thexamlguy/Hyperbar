@@ -1,5 +1,4 @@
-﻿using System;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.Graphics.Gdi;
@@ -30,8 +29,10 @@ public static class HwndExtensions
             SET_WINDOW_POS_FLAGS.SWP_NOZORDER);
     }
 
+    public static uint GetDpiForWindow(IntPtr hwnd) => PInvoke.GetDpiForWindow(new HWND(hwnd));
+
     public static void SetWindowOpacity(this IntPtr hWnd,
-            byte value)
+        byte value)
     {
         HWND hWND = new(hWnd);
         WindowStyles windowLong = (WindowStyles)PInvoke.GetWindowLong(hWND, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
@@ -45,6 +46,7 @@ public static class HwndExtensions
             Marshal.ThrowExceptionForHR(Marshal.GetLastWin32Error());
         }
     }
+
     public static void SetWindowStyle(this IntPtr hwnd,
         WindowStyle newStyle)
     {
@@ -55,54 +57,5 @@ public static class HwndExtensions
         }
 
         PInvoke.SetWindowPos(new HWND(hwnd), new HWND(0), 0, 0, 0, 0, SET_WINDOW_POS_FLAGS.SWP_DRAWFRAME | SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOOWNERZORDER | SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOZORDER);
-    }
-
-    public static void SnapWindow(this IntPtr hwnd,
-        int placement,
-        double? width = null,
-        double? height = null)
-    {
-        HMONITOR hwndDesktop = PInvoke.MonitorFromWindow(new(hwnd), MONITOR_FROM_FLAGS.MONITOR_DEFAULTTONEAREST);
-        MONITORINFO info = new()
-        {
-            cbSize = 40
-        };
-
-        PInvoke.GetMonitorInfo(hwndDesktop, ref info);
-
-        uint dpi = PInvoke.GetDpiForWindow(new HWND(hwnd));
-        PInvoke.GetWindowRect(new HWND(hwnd), out RECT windowRect);
-
-        double scalingFactor = dpi / 96d;
-        int actualWidth = width.HasValue ? (int)(width * scalingFactor) : windowRect.right - windowRect.left;
-        int actualHeight = height.HasValue ? (int)(height * scalingFactor) : windowRect.bottom - windowRect.top;
-
-        int left = 0;
-        int top = 0;
-
-        switch (placement)
-        {
-            case 0:
-                left = 0;
-                top = (info.rcWork.bottom + info.rcWork.top) / 2 - actualHeight / 2;
-                break;
-
-            case 1:
-                left = (info.rcWork.left + info.rcWork.right) / 2 - actualWidth / 2;
-                top = 0;
-                break;
-
-            case 2:
-                left = info.rcWork.left + info.rcWork.right - actualWidth;
-                top = (info.rcWork.bottom + info.rcWork.top) / 2 - actualHeight / 2;
-                break;
-
-            case 3:
-                left = (info.rcWork.left + info.rcWork.right) / 2 - actualWidth / 2;
-                top = info.rcWork.bottom + info.rcWork.top - actualHeight;
-                break;
-        }
-
-        PInvoke.SetWindowPos(new HWND(hwnd), new HWND(), left, top, actualWidth, actualHeight, 0);
     }
 }

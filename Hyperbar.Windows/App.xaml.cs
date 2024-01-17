@@ -46,7 +46,7 @@ public partial class App :
                 services.AddTransient<IInitializer, AppInitializer>();
                 services.AddTransient<ITemplateFactory, TemplateFactory>();
 
-                services.AddSingleton<DesktopFlyout>();
+                services.AddSingleton<DesktopBar>();
 
                 services.AddContentTemplate<WidgetBarViewModel, WidgetBarView>();
 

@@ -1,6 +1,6 @@
 ﻿namespace Hyperbar.Windows.Controls;
 
-public enum DesktopFlyoutPlacement
+public enum DesktopBarPlacemenet
 {
     Left,
     Top,

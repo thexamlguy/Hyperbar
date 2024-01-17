@@ -22,13 +22,18 @@
         FontSize="16">
         <SplitButton.Flyout>
             <Flyout ShouldConstrainToRootBounds="False">
-                <ItemsControl Margin="-16,-13,-16,-15" ItemsSource="{Binding}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <MenuFlyoutItem Text="{Binding Text}" />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                <Border
+                    Width="300"
+                    Height="300"
+                    Background="red">
+                    <ItemsControl Margin="-16,-13,-16,-15" ItemsSource="{Binding Mode=TwoWay}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <MenuFlyoutItem Text="{Binding Text}" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Border>
             </Flyout>
         </SplitButton.Flyout>
     </SplitButton>

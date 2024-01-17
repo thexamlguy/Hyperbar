@@ -2,26 +2,26 @@
 
 namespace Hyperbar.Windows.Controls;
 
-public class DesktopFlyoutPresenterTemplateSettings : DependencyObject
+public class DesktopBarPresenterTemplateSettings : DependencyObject
 {
     public static readonly DependencyProperty HeightProperty =
         DependencyProperty.Register(nameof(Height),
-            typeof(double), typeof(DesktopFlyoutPresenterTemplateSettings),
+            typeof(double), typeof(DesktopBarPresenterTemplateSettings),
             new PropertyMetadata(0d));
 
     public static readonly DependencyProperty NegativeHeightProperty =
         DependencyProperty.Register(nameof(NegativeHeight),
-            typeof(double), typeof(DesktopFlyoutPresenterTemplateSettings),
+            typeof(double), typeof(DesktopBarPresenterTemplateSettings),
             new PropertyMetadata(0d));
 
     public static readonly DependencyProperty NegativeWidthProperty =
         DependencyProperty.Register(nameof(NegativeWidth),
-            typeof(double), typeof(DesktopFlyoutPresenterTemplateSettings),
+            typeof(double), typeof(DesktopBarPresenterTemplateSettings),
             new PropertyMetadata(0d));
 
     public static readonly DependencyProperty WidthProperty =
         DependencyProperty.Register(nameof(Width),
-            typeof(double), typeof(DesktopFlyoutPresenterTemplateSettings),
+            typeof(double), typeof(DesktopBarPresenterTemplateSettings),
             new PropertyMetadata(0d));
 
     public double Height
