@@ -1,6 +1,6 @@
 ﻿namespace Hyperbar.Windows.Interop;
 
-public enum AppBarWindowPlacement
+public enum WindowSnappingPlacement
 {
     Left,
     Top,

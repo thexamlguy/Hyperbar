@@ -25,7 +25,6 @@ public class WidgetComponentViewModelFactory(IServiceFactory service,
             if (processCommandConfiguration.Commands is { Count: > 0 } childCommandConfigurations)
             {
                 List<IWidgetComponentViewModel> childViewModels = [];
-
                 foreach (PrimaryCommandConfiguration childCommandConfiguration in childCommandConfigurations)
                 {
                     WidgetComponentViewModel? childViewModel = null;

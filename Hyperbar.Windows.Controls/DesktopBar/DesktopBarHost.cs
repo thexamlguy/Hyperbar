@@ -11,8 +11,8 @@ namespace Hyperbar.Windows.Controls;
 internal class DesktopBarHost : Window
 {
     private readonly DesktopBarPresenter presenter;
-    private DesktopBarPlacemenet placement;
     private readonly WindowSnapping windowSnapping;
+    private DesktopBarPlacemenet placement;
 
     public DesktopBarHost(DesktopBarPresenter presenter)
     {
@@ -29,6 +29,8 @@ internal class DesktopBarHost : Window
         this.presenter = presenter;
         presenter.Loaded += OnLoaded;
         Content = presenter;
+
+        Closed += OnClosed;
     }
 
     internal void UpdatePlacement(DesktopBarPlacemenet placement)
@@ -45,19 +47,19 @@ internal class DesktopBarHost : Window
         switch (placement)
         {
             case DesktopBarPlacemenet.Left:
-                windowSnapping.Snap(AppBarWindowPlacement.Left, (int)size);
+                windowSnapping.Snap(WindowSnappingPlacement.Left, (int)size);
                 break;
 
             case DesktopBarPlacemenet.Top:
-                windowSnapping.Snap(AppBarWindowPlacement.Top, (int)size);
+                windowSnapping.Snap(WindowSnappingPlacement.Top, (int)size);
                 break;
 
             case DesktopBarPlacemenet.Right:
-                windowSnapping.Snap(AppBarWindowPlacement.Right, (int)size);
+                windowSnapping.Snap(WindowSnappingPlacement.Right, (int)size);
                 break;
 
             case DesktopBarPlacemenet.Bottom:
-                windowSnapping.Snap(AppBarWindowPlacement.Bottom, (int)size);
+                windowSnapping.Snap(WindowSnappingPlacement.Bottom, (int)size);
                 break;
 
             default:
@@ -67,6 +69,10 @@ internal class DesktopBarHost : Window
         presenter.UpdatePlacementState(placement);
     }
 
+    private void OnClosed(object sender, WindowEventArgs args)
+    {
+        windowSnapping.Dispose();
+    }
     private void OnLoaded(object sender,
         RoutedEventArgs args)
     {

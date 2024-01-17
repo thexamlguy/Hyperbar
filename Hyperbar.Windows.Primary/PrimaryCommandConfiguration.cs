@@ -12,5 +12,5 @@ public class PrimaryCommandConfiguration
 
     public required string Text { get; set; }
 
-    public List<PrimaryCommandConfiguration>? Commands { get; set; } = [];
+    public List<PrimaryCommandConfiguration> Commands { get; set; } = [];
 }

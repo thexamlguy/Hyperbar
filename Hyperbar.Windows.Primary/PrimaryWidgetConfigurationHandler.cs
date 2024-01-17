@@ -9,15 +9,14 @@ public class PrimaryWidgetConfigurationHandler(IMediator mediator,
     public async ValueTask Handle(ConfigurationChanged<PrimaryWidgetConfiguration> notification,
         CancellationToken cancellationToken)
     {
-        foreach (KeyValuePair<Guid, IWidgetComponentViewModel> item in cache)
-        {
-            if (configuration.FirstOrDefault(x => x.Id == item.Key) == null)
-            {
-                await mediator.PublishAsync(new Removed<IWidgetComponentViewModel>(item.Value),
-                    cancellationToken);
+        HashSet<Guid> configurationIds = new(configuration.SelectMany(item => new[] { item }
+            .Concat(item.Commands).Select(x => x.Id)));
 
-                cache.Remove(item.Key);
-            }
+        foreach (KeyValuePair<Guid, IWidgetComponentViewModel> item in cache.Where(x => !configurationIds.Contains(x.Key)))
+        {
+            await mediator.PublishAsync(new Removed<IWidgetComponentViewModel>(item.Value),
+                cancellationToken);
+            cache.Remove(item.Key);
         }
 
         foreach (PrimaryCommandConfiguration item in configuration)

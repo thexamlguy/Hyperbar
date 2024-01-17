@@ -12,7 +12,9 @@ public class WindowMessageListener :
     protected WindowMessageListener(IntPtr hwnd)
     {
         this.hwnd = hwnd;
-        Set();
+
+        callback = new SUBCLASSPROC(WindowProc);
+        PInvoke.SetWindowSubclass(new HWND(hwnd), callback, 101, 0);
     }
 
     ~WindowMessageListener()
@@ -22,19 +24,14 @@ public class WindowMessageListener :
 
     public static WindowMessageListener Create(IntPtr hwnd) => new(hwnd);
 
-    public void Dispose() => Remove();
-
-    private void Remove()
+    public void Dispose()
     {
+        GC.SuppressFinalize(this);
+
         PInvoke.RemoveWindowSubclass(new HWND(hwnd), callback, 101);
         callback = null;
     }
 
-    private void Set()
-    {
-        callback = new SUBCLASSPROC(WindowProc);
-        PInvoke.SetWindowSubclass(new HWND(hwnd), callback, 101, 0);
-    }
     private LRESULT WindowProc(HWND hWnd, uint uMsg, 
         WPARAM wParam,
         LPARAM lParam, 
