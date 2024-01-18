@@ -60,7 +60,7 @@ public partial class App :
                     static IEnumerable<WidgetContainerViewModel> Resolve(IServiceProvider services)
                     {
                         int index = 0;
-                        foreach (IWidgetContext widgetContext in services.GetServices<IWidgetContext>())
+                        foreach (WidgetContext widgetContext in services.GetServices<WidgetContext>())
                         {
                             if (widgetContext.ServiceProvider.GetServices<IWidgetViewModel>() is
                                 IEnumerable<IWidgetViewModel> viewModels)

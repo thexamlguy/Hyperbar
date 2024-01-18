@@ -1,7 +1,6 @@
 ﻿namespace Hyperbar;
 
-public class WidgetContext(IServiceProvider serviceProvider) :
-    IWidgetContext
+public sealed class WidgetContext(IServiceProvider serviceProvider) 
 {
     public IServiceProvider ServiceProvider => serviceProvider;
 }

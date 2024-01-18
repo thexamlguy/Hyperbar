@@ -2,7 +2,7 @@
 
 namespace Hyperbar;
 
-public class WidgetService(IEnumerable<IInitializer> initializers) :
+public sealed class WidgetService(IEnumerable<IInitializer> initializers) :
     IHostedService
 {
     public async Task StartAsync(CancellationToken cancellationToken)

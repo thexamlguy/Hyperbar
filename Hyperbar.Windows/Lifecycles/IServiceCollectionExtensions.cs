@@ -54,7 +54,7 @@ namespace Hyperbar.Windows
 
                 }).Build();
 
-            services.AddTransient<IWidgetContext>(provider => new WidgetContext(host.Services));
+            services.AddTransient(provider => new WidgetContext(host.Services));
 
             host.Start();
             return services;
