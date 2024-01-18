@@ -59,13 +59,5 @@ public class PrimaryWidgetConfigurationHandler(IMediator mediator,
                 }
             }
         }
-
-        //foreach (KeyValuePair<Guid, IWidgetComponentViewModel> item in cache
-        //    .Where(x => !items.Any(k => x.Key == k.Id)))
-        //{
-        //    await mediator.PublishAsync(new Removed<IWidgetComponentViewModel>(item.Value),
-        //        nameof(PrimaryWidgetViewModel),
-        //            cancellationToken);
-        //}
     }
 }

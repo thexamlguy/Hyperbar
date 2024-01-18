@@ -10,15 +10,3 @@ public interface IFactory<TService>
 {
     TService? Create();
 }
-
-
-public interface IProvider<TParameter, TService>
-{
-    TService? Get(TParameter value);
-}
-
-
-public interface IProvider<TService>
-{
-    TService? Get();
-}
