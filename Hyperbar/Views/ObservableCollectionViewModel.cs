@@ -12,6 +12,7 @@ public partial class ObservableCollectionViewModel<TItem> :
     INotificationHandler<Removed<TItem>>,
     INotificationHandler<Created<TItem>>,
     INotificationHandler<Inserted<TItem>>,
+    INotificationHandler<Moved<TItem>>,
     IDisposable
     where TItem :
     IDisposable
@@ -248,8 +249,19 @@ public partial class ObservableCollectionViewModel<TItem> :
         return Task.CompletedTask;
     }
 
+    public Task Handle(Moved<TItem> notification,
+        CancellationToken cancellationToken)
+    {
+        if (notification.Value is TItem item)
+        {
+            Move(notification.Index, item);
+        }
+
+        return Task.CompletedTask;
+    }
+
     public int IndexOf(TItem item) =>
-            collection.IndexOf(item);
+        collection.IndexOf(item);
 
     int IList.IndexOf(object? value) => 
         IsCompatibleObject(value) ? 
@@ -267,10 +279,27 @@ public partial class ObservableCollectionViewModel<TItem> :
         }
     }
 
+    public bool Move(int index, TItem item)
+    {
+        int oldIndex = collection.IndexOf(item);
+        if (oldIndex < 0)
+        {
+            return false;
+        }
+
+        RemoveItem(oldIndex);
+        Insert(index, item);
+
+        return true;
+    }
+
     public bool Remove(TItem item)
     {
         int index = collection.IndexOf(item);
-        if (index < 0) return false;
+        if (index < 0)
+        {
+            return false;
+        }
 
         Disposer.Remove(this, item);
         RemoveItem(index);

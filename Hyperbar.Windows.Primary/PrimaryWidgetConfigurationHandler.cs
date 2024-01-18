@@ -28,6 +28,29 @@ public class PrimaryWidgetConfigurationHandler(IMediator mediator,
             }
         }
 
+        foreach (KeyValuePair<(Guid ParentId, Guid Id), PrimaryCommandConfiguration> moved in
+            items.ExceptBy(cache.Select(x => new { x.Value.Order, x.Value.Id }), x => new { x.Value.Order, x.Value.Id }))
+        {
+            if (moved.Value is PrimaryCommandConfiguration configuration)
+            {
+                if (provider.Get(configuration) is IWidgetComponentViewModel viewModel)
+                {
+                    await mediator.PublishAsync(new Moved<IWidgetComponentViewModel>(configuration.Order, viewModel),
+                       moved.Key.ParentId == Guid.Empty ? nameof(PrimaryWidgetViewModel) : moved.Key.ParentId,
+                            cancellationToken);
+
+                    cache.Remove(moved.Key);
+                    cache.Add(moved.Key, moved.Value);
+                }
+            }
+
+     
+
+
+            //   // cache.Add(added.Key, added.Value);
+            //}
+        }
+
         foreach (KeyValuePair<(Guid ParentId, Guid Id), PrimaryCommandConfiguration> added in
             items.ExceptBy(cache.Select(x => x.Key.Id), x => x.Key.Id))
         {
