@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-namespace Hyperbar;
+﻿namespace Hyperbar;
 
 public interface ICache<TValue> :
     IEnumerable<TValue>
@@ -14,7 +12,10 @@ public interface ICache<TValue> :
 
 public interface ICache<TKey, TValue> :
     IEnumerable<KeyValuePair<TKey, TValue>>
-    where TKey : notnull
+    where TKey :
+    notnull
+    where TValue : 
+    notnull
 {
     void Add(TKey key, 
         TValue value);

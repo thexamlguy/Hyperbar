@@ -1,62 +1,71 @@
-﻿
-namespace Hyperbar.Windows.Primary;
+﻿namespace Hyperbar.Windows.Primary;
 
 public class PrimaryWidgetConfigurationHandler(IMediator mediator,
     PrimaryWidgetConfiguration configuration,
     IFactory<PrimaryCommandConfiguration, IWidgetComponentViewModel?> factory,
-    ICache<Guid, IWidgetComponentViewModel> cache) :
+    IProvider<PrimaryCommandConfiguration, IWidgetComponentViewModel?> provider,
+    ICache<(Guid ParentId, Guid Id), PrimaryCommandConfiguration> cache) :
     INotificationHandler<ConfigurationChanged<PrimaryWidgetConfiguration>>
 {
     public async Task Handle(ConfigurationChanged<PrimaryWidgetConfiguration> notification,
         CancellationToken cancellationToken)
     {
-        List<(Guid ParentId, Guid Id, PrimaryCommandConfiguration Configuration)> items = [];
+        List<KeyValuePair<(Guid ParentId, Guid Id), PrimaryCommandConfiguration>> items = [];
 
-        void AddToItems(Guid parentId, Guid id, List<PrimaryCommandConfiguration> configurations)
+        Stack<(Guid, List<PrimaryCommandConfiguration>)> stack = new();
+        stack.Push((Guid.Empty, configuration.Commands));
+
+        while (stack.Count > 0)
         {
-            if (configurations is null)
+            (Guid currentParentId, List<PrimaryCommandConfiguration> currentConfigurations) = stack.Pop();
+            foreach (PrimaryCommandConfiguration configuration in currentConfigurations)
             {
-                return;
-            }
-
-            Stack<(Guid, List<PrimaryCommandConfiguration>)> stack = new();
-            stack.Push((parentId, configurations));
-
-            while (stack.Count > 0)
-            {
-                (Guid currentParentId, List<PrimaryCommandConfiguration> currentConfigurations) = stack.Pop();
-                foreach (PrimaryCommandConfiguration configuration in currentConfigurations)
+                items.Add(new KeyValuePair<(Guid ParentId, Guid Id), PrimaryCommandConfiguration>((currentParentId, configuration.Id), configuration));
+                if (configuration.Commands is not null && configuration.Commands.Count > 0)
                 {
-                    items.Add((currentParentId, configuration.Id, configuration));
-                    if (configuration.Commands is not null && configuration.Commands.Count > 0)
-                    {
-                        stack.Push((configuration.Id, configuration.Commands));
-                    }
+                    stack.Push((configuration.Id, configuration.Commands));
                 }
             }
         }
 
-        AddToItems(Guid.Empty, Guid.Empty, configuration.Commands);
-
-        foreach (KeyValuePair<Guid, IWidgetComponentViewModel> item in cache
-            .Where(x => !items.Any(k => x.Key == k.Id)))
+        foreach (KeyValuePair<(Guid ParentId, Guid Id), PrimaryCommandConfiguration> added in
+            items.ExceptBy(cache.Select(x => x.Key.Id), x => x.Key.Id))
         {
-            await mediator.PublishAsync(new Removed<IWidgetComponentViewModel>(item.Value),
-                nameof(PrimaryWidgetViewModel),
-                    cancellationToken);
-
-            cache.Remove(item.Key);
-        }
-
-        foreach ((Guid ParentId, Guid Id, PrimaryCommandConfiguration Configuration) item in 
-            items.Where(x => !cache.Any(k => x.Id == k.Key)))
-        {
-            if (factory.Create(item.Configuration) is IWidgetComponentViewModel viewModel)
+            if (added.Value is PrimaryCommandConfiguration configuration)
             {
-                await mediator.PublishAsync(new Inserted<IWidgetComponentViewModel>(item.Configuration.Order, viewModel),
-                    nameof(PrimaryWidgetViewModel),
-                        cancellationToken);
+                if (factory.Create(configuration) is IWidgetComponentViewModel viewModel)
+                {
+                    await mediator.PublishAsync(new Inserted<IWidgetComponentViewModel>(configuration.Order, viewModel),
+                       added.Key.ParentId == Guid.Empty ? nameof(PrimaryWidgetViewModel) : added.Key.ParentId,
+                            cancellationToken);
+                }
+
+                cache.Add(added.Key, added.Value);
             }
         }
+
+        foreach (KeyValuePair<(Guid ParentId, Guid Id), PrimaryCommandConfiguration> removed in
+            cache.ExceptBy(items.Select(x => x.Key.Id), x => x.Key.Id))
+        {
+            if (removed.Value is PrimaryCommandConfiguration configuration)
+            {
+                if (provider.Get(configuration) is IWidgetComponentViewModel viewModel)
+                {
+                    await mediator.PublishAsync(new Removed<IWidgetComponentViewModel>(viewModel),
+                        removed.Key.ParentId == Guid.Empty ? nameof(PrimaryWidgetViewModel) : removed.Key.ParentId,
+                            cancellationToken);
+
+                    cache.Remove(removed.Key);
+                }
+            }
+        }
+
+        //foreach (KeyValuePair<Guid, IWidgetComponentViewModel> item in cache
+        //    .Where(x => !items.Any(k => x.Key == k.Id)))
+        //{
+        //    await mediator.PublishAsync(new Removed<IWidgetComponentViewModel>(item.Value),
+        //        nameof(PrimaryWidgetViewModel),
+        //            cancellationToken);
+        //}
     }
 }

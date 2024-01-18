@@ -30,8 +30,10 @@ public class Cache<TValue>(IDisposer disposer) :
 
 public class Cache<TKey, TValue>(IDisposer disposer) :
     ICache<TKey, TValue>
-    where TKey : notnull
-    where TValue : notnull
+    where TKey :
+    notnull
+    where TValue :
+    notnull
 {
     private readonly ConcurrentDictionary<TKey, TValue> cache = new();
 
@@ -40,9 +42,13 @@ public class Cache<TKey, TValue>(IDisposer disposer) :
     {
         cache.TryAdd(key, value);
 
+        disposer.Add(value, Disposable.Create(() =>
+        {
+            Remove(key);
+        }));
+
         disposer.Add(key, Disposable.Create(() =>
         {
-            disposer.Dispose(value);
             Remove(key);
         }));
     }

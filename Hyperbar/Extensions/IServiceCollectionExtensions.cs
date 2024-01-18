@@ -12,6 +12,8 @@ public static class IServiceCollectionExtensions
     public static IServiceCollection AddCache<TKey, TValue>(this IServiceCollection services)
         where TKey :
         notnull
+        where TValue :
+        notnull
     {
         services.AddScoped<ICache<TKey, TValue>, Cache<TKey, TValue>>();
         services.AddTransient(provider => provider.GetService<ICache<TKey, TValue>>()!.Select(x => x.Value));
