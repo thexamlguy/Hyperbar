@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Concurrent;
+using System.Reflection;
 
 namespace Hyperbar;
 
@@ -7,18 +8,37 @@ public class Mediator(IServiceProvider provider,
     IDispatcher dispatcher) :
     IMediator
 {
-    private readonly ConcurrentDictionary<Type, List<dynamic>> subjects = [];
+    private readonly ConcurrentDictionary<object, List<dynamic>> subjects = [];
+
+    public Task PublishAsync<TNotification>(object key,
+        CancellationToken cancellationToken = default)
+        where TNotification :
+        INotification,
+        new() => PublishAsync(new TNotification(), args => dispatcher.InvokeAsync(async () => await args()),
+            key, cancellationToken);
 
     public Task PublishAsync<TNotification>(TNotification notification,
         CancellationToken cancellationToken = default)
         where TNotification :
         INotification
     {
-        return PublishAsync(notification, args => dispatcher.InvokeAsync(async () => await args()), cancellationToken);
+        return PublishAsync(notification, args => dispatcher.InvokeAsync(async () => await args()), 
+            null, cancellationToken);
+    }
+
+    public Task PublishAsync<TNotification>(TNotification notification,
+        object key,
+        CancellationToken cancellationToken = default)
+        where TNotification :
+        INotification
+    {
+        return PublishAsync(notification, args => dispatcher.InvokeAsync(async () => await args()),
+            key, cancellationToken);
     }
 
     public Task PublishAsync<TNotification>(TNotification notification,
         Func<Func<Task>, Task> marshal,
+        object? key = null,
         CancellationToken cancellationToken = default)
         where TNotification :
         INotification
@@ -26,14 +46,11 @@ public class Mediator(IServiceProvider provider,
         List<INotificationHandler<TNotification>> handlers =
             provider.GetServices<INotificationHandler<TNotification>>().ToList();
 
-        foreach (KeyValuePair<Type, List<dynamic>> handler in subjects)
+        foreach (KeyValuePair<object, List<dynamic>> handler in subjects)
         {
-            if (handler.Key == typeof(TNotification))
+            if (key is not null && handler.Key.Equals(key) || handler.Key.Equals(typeof(TNotification)))
             {
-                foreach (dynamic value in handler.Value)
-                {
-                    handlers.Add(value);
-                }
+                handlers.Add(handler.Value[0]);
             }
         }
 
@@ -48,7 +65,8 @@ public class Mediator(IServiceProvider provider,
     public Task PublishAsync<TNotification>(CancellationToken cancellationToken = default)
         where TNotification :
         INotification,
-        new() => PublishAsync(new TNotification(), null, cancellationToken);
+        new() => PublishAsync(new TNotification(), args => dispatcher.InvokeAsync(async () => await args()), 
+            null, cancellationToken);
 
     public Task<TResponse?> SendAsync<TResponse>(IRequest<TResponse> request,
         CancellationToken cancellationToken = default)
@@ -88,20 +106,36 @@ public class Mediator(IServiceProvider provider,
 
     public void Subscribe(object handler)
     {
-        Type[] interfaceTypes = handler.GetType().GetInterfaces();
-        foreach (Type interfaceType in interfaceTypes.Where(x => x.IsGenericType))
+        Type handlerType = handler.GetType();
+        object? key = null;
+
+        if (Attribute.GetCustomAttribute(handlerType, typeof(NotificationHandlerAttribute))
+            is NotificationHandlerAttribute attribute)
         {
-            if (interfaceType.GetGenericTypeDefinition() == typeof(INotificationHandler<>))
+            if (handlerType.GetProperty($"{attribute.Key}") is PropertyInfo property)
             {
-                if (interfaceType.GetGenericArguments() is { Length: 1 } arguments)
+                if (property.GetValue(handler, null) is { } value)
                 {
-                    Type notificationType = arguments[0];
-                    subjects.AddOrUpdate(notificationType, [handler], (value, collection) =>
-                    {
-                        collection.Add(handler);
-                        return collection;
-                    });
+                    key = value;
                 }
+            }
+            else
+            {
+                key = attribute.Key;
+            }
+        }
+
+        foreach (Type interfaceType in handlerType.GetInterfaces().Where(x => x.IsGenericType 
+            && x.GetGenericTypeDefinition() == typeof(INotificationHandler<>)))
+        {
+            if (interfaceType.GetGenericArguments() is { Length: 1 } arguments)
+            {
+                key ??= arguments[0];
+                subjects.AddOrUpdate(key, [handler], (value, collection) =>
+                {
+                    collection.Add(handler);
+                    return collection;
+                });
             }
         }
     }

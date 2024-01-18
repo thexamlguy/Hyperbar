@@ -7,6 +7,7 @@ namespace Hyperbar.Windows.Primary;
 public class PrimaryCommandConfiguration
 {
     public List<PrimaryCommandConfiguration> Commands { get; set; } = [];
+
     public required string Icon { get; set; }
 
     public required Guid Id { get; set; }

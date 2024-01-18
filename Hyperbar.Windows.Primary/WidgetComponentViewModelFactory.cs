@@ -49,7 +49,7 @@ public class WidgetComponentViewModelFactory(IServiceFactory service,
                     if (childViewModel is not null)
                     {
                         childViewModels.Add(childViewModel);
-                        cache.Add(childViewModel.Id, childViewModel);
+                        cache.Add(childCommandConfiguration.Id, childViewModel);
                     }
                 }
 
@@ -68,7 +68,7 @@ public class WidgetComponentViewModelFactory(IServiceFactory service,
 
         if (viewModel is not null)
         {
-            cache.Add(viewModel.Id, viewModel);
+            cache.Add(configuration.Id, viewModel);
         }
 
         return viewModel;

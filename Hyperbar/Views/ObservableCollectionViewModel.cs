@@ -229,12 +229,9 @@ public partial class ObservableCollectionViewModel<TItem> :
     public Task Handle(Created<TItem> notification,
         CancellationToken cancellationToken)
     {
-        if (notification.Target.Equals(GetType().Name))
+        if (notification.Value is TItem item)
         {
-            if (notification.Value is TItem item)
-            {
-                Add(item);
-            }
+            Add(item);
         }
 
         return Task.CompletedTask;
@@ -243,12 +240,9 @@ public partial class ObservableCollectionViewModel<TItem> :
     public Task Handle(Inserted<TItem> notification,
         CancellationToken cancellationToken)
     {
-        if (notification.Target.Equals(GetType().Name))
+        if (notification.Value is TItem item)
         {
-            if (notification.Value is TItem item)
-            {
-                Insert(notification.Index, item);
-            }
+            Insert(notification.Index, item);
         }
 
         return Task.CompletedTask;
