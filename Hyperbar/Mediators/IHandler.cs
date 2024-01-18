@@ -7,13 +7,11 @@ public interface IHandler<in TRequest, TResponse> :
     where TRequest :
     IRequest<TResponse>
 {
-    ValueTask<TResponse> Handle(TRequest request,
+    Task<TResponse> Handle(TRequest request,
         CancellationToken cancellationToken);
 }
 
-public interface IRequestHandler<in TRequest> : 
+public interface IHandler<in TRequest> :
     IHandler<TRequest, Unit>
     where TRequest :
-    IRequest<Unit>
-{
-}
+    IRequest<Unit>;

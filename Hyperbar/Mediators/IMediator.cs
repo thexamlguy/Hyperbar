@@ -2,21 +2,27 @@
 
 public interface IMediator
 {
-    ValueTask PublishAsync<TNotification>(TNotification notification,
+    Task PublishAsync<TNotification>(TNotification notification,
         CancellationToken cancellationToken = default)
         where TNotification :
         INotification;
 
-    ValueTask PublishAsync<TNotification>(CancellationToken cancellationToken = default)
+    Task PublishAsync<TNotification>(TNotification notification,
+        Func<Func<Task>, Task> marshal,
+        CancellationToken cancellationToken = default)
+        where TNotification :
+        INotification;
+
+    Task PublishAsync<TNotification>(CancellationToken cancellationToken = default)
         where TNotification :
         INotification,
         new();
 
-    ValueTask<TResponse> SendAsync<TResponse>(IRequest<TResponse> request,
+    Task<TResponse?> SendAsync<TResponse>(IRequest<TResponse> request,
         CancellationToken cancellationToken = default);
 
-    ValueTask<object?> SendAsync(object message, CancellationToken
+    Task<object?> SendAsync(object message, CancellationToken
         cancellationToken = default);
-
-    void Subscribe(object subscriber);
+    
+    void Subscribe(object handler);
 }

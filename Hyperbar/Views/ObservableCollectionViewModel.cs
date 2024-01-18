@@ -206,7 +206,7 @@ public partial class ObservableCollectionViewModel<TItem> :
     IEnumerator IEnumerable.GetEnumerator() => 
         ((IEnumerable)collection).GetEnumerator();
 
-    public ValueTask Handle(Removed<TItem> notification,
+    public Task Handle(Removed<TItem> notification,
         CancellationToken cancellationToken)
     {
         foreach (TItem item in this.ToList())
@@ -223,10 +223,10 @@ public partial class ObservableCollectionViewModel<TItem> :
             }
         }
 
-        return ValueTask.CompletedTask;
+        return Task.CompletedTask;
     }
 
-    public ValueTask Handle(Created<TItem> notification,
+    public Task Handle(Created<TItem> notification,
         CancellationToken cancellationToken)
     {
         if (notification.Target.Equals(GetType().Name))
@@ -237,10 +237,10 @@ public partial class ObservableCollectionViewModel<TItem> :
             }
         }
 
-        return ValueTask.CompletedTask;
+        return Task.CompletedTask;
     }
 
-    public ValueTask Handle(Inserted<TItem> notification,
+    public Task Handle(Inserted<TItem> notification,
         CancellationToken cancellationToken)
     {
         if (notification.Target.Equals(GetType().Name))
@@ -251,7 +251,7 @@ public partial class ObservableCollectionViewModel<TItem> :
             }
         }
 
-        return ValueTask.CompletedTask;
+        return Task.CompletedTask;
     }
 
     public int IndexOf(TItem item) =>

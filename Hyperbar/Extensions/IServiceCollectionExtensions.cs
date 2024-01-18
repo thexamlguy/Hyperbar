@@ -138,9 +138,8 @@ public static class IServiceCollectionExtensions
                     {
                         Type notificationType = arguments[0];
 
-                        services.TryAdd(new ServiceDescriptor(typeof(THandler), typeof(THandler), lifetime));
-                        services.Add(new ServiceDescriptor(typeof(INotificationHandler<>).MakeGenericType(notificationType),
-                            provider => provider.GetRequiredService<THandler>(), lifetime));
+                        //services.TryAdd(new ServiceDescriptor(typeof(THandler), typeof(THandler), lifetime));
+                        services.Add(new ServiceDescriptor(typeof(INotificationHandler<>).MakeGenericType(notificationType), typeof(THandler), lifetime));
                     }
                 }
 
@@ -151,7 +150,7 @@ public static class IServiceCollectionExtensions
                         Type requestType = arguments[0];
                         Type responseType = arguments[1];
 
-                        Type wrapperType = typeof(RequestClassHandlerWrapper<,>).MakeGenericType(requestType, responseType);
+                        Type wrapperType = typeof(HandlerWrapper<,>).MakeGenericType(requestType, responseType);
 
                         services.TryAdd(new ServiceDescriptor(typeof(THandler), typeof(THandler), lifetime));
                         services.Add(new ServiceDescriptor(wrapperType,
@@ -169,14 +168,15 @@ public static class IServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddNotificationPipeline<TFromNotification, TToNotification>(this IServiceCollection services)
-                        where TFromNotification :
-        INotification
-        where TToNotification :
-        INotification, new()
-    {
-        return services.AddHandler<NotficationPipelineHandler<TFromNotification, TToNotification>>();
-    }
+    //public static IServiceCollection AddNotificationPipeline<TFromNotification, TToNotification>(this IServiceCollection services)
+    //                    where TFromNotification :
+    //    INotification
+    //    where TToNotification :
+    //    INotification, new()
+    //{
+    //    return services.AddHandler<NotficationPipelineHandler<TFromNotification, TToNotification>>();
+    //}
+
     public static IServiceCollection AddWidgetTemplate<TWidgetContent>(this IServiceCollection services)
         where TWidgetContent :
         IWidgetViewModel

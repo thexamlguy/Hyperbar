@@ -5,7 +5,7 @@ public interface IPipelineBehavior<TMessage, TResponse>
     notnull,
     IMessage
 {
-    ValueTask<TResponse> Handle(TMessage message,
-        MessageHandlerDelegate<TMessage, TResponse> next,
+    Task<TResponse> Handle(TMessage message,
+        HandlerDelegate<TMessage, TResponse> next,
         CancellationToken cancellationToken = default);
 }

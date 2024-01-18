@@ -3,12 +3,12 @@
 namespace Hyperbar.Windows;
 
 public class KeyAcceleratorHandler(IVirtualKeyboard virtualKeyboard) :
-    IRequestHandler<KeyAccelerator>
+    IHandler<KeyAccelerator>
 {
-    public ValueTask<Unit> Handle(KeyAccelerator request,
+    public Task<Unit> Handle(KeyAccelerator request,
         CancellationToken cancellationToken)
     {
         virtualKeyboard.Send((int)request.Key, request.Modifiers?.Select(modifier => (int)modifier).ToArray() ?? []);
-        return default;
+        return Task.FromResult<Unit>(default);
     }
 }

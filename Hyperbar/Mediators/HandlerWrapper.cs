@@ -1,19 +1,19 @@
 ﻿namespace Hyperbar;
 
-public class RequestClassHandlerWrapper<TRequest, TResponse>
+public class HandlerWrapper<TRequest, TResponse>
     where TRequest :
     class,
     IRequest<TResponse>
 {
-    private readonly MessageHandlerDelegate<TRequest, TResponse> handler;
+    private readonly HandlerDelegate<TRequest, TResponse> handler;
 
-    public RequestClassHandlerWrapper(IHandler<TRequest, TResponse> concreteHandler,
+    public HandlerWrapper(IHandler<TRequest, TResponse> concreteHandler,
         IEnumerable<IPipelineBehavior<TRequest, TResponse>> pipelineBehaviours)
     {
-        MessageHandlerDelegate<TRequest, TResponse> handler = concreteHandler.Handle;
+        HandlerDelegate<TRequest, TResponse> handler = concreteHandler.Handle;
         foreach (IPipelineBehavior<TRequest, TResponse>? pipeline in pipelineBehaviours.Reverse())
         {
-            MessageHandlerDelegate<TRequest, TResponse> handlerCopy = handler;
+            HandlerDelegate<TRequest, TResponse> handlerCopy = handler;
             IPipelineBehavior<TRequest, TResponse> pipelineCopy = pipeline;
 
             handler = (TRequest message, CancellationToken cancellationToken) =>
@@ -23,5 +23,5 @@ public class RequestClassHandlerWrapper<TRequest, TResponse>
         this.handler = handler;
     }
 
-    public ValueTask<TResponse> Handle(TRequest request, CancellationToken cancellationToken) => handler(request, cancellationToken);
+    public Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken) => handler(request, cancellationToken);
 }

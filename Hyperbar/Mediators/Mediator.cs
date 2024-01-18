@@ -7,11 +7,18 @@ public class Mediator(IServiceProvider provider,
     IDispatcher dispatcher) :
     IMediator
 {
-    private readonly SynchronizationContext? context = SynchronizationContext.Current;
-
     private readonly ConcurrentDictionary<Type, List<dynamic>> subjects = [];
 
-    public async ValueTask PublishAsync<TNotification>(TNotification notification,
+    public Task PublishAsync<TNotification>(TNotification notification,
+        CancellationToken cancellationToken = default)
+        where TNotification :
+        INotification
+    {
+        return PublishAsync(notification, args => dispatcher.InvokeAsync(async () => await args()), cancellationToken);
+    }
+
+    public Task PublishAsync<TNotification>(TNotification notification,
+        Func<Func<Task>, Task> marshal,
         CancellationToken cancellationToken = default)
         where TNotification :
         INotification
@@ -32,19 +39,21 @@ public class Mediator(IServiceProvider provider,
 
         foreach (INotificationHandler<TNotification> handler in handlers)
         {
-            await dispatcher.InvokeAsync(async () => await handler.Handle(notification, cancellationToken));
+            marshal(() => handler.Handle(notification, cancellationToken));
         }
+
+        return Task.CompletedTask;
     }
 
-    public ValueTask PublishAsync<TNotification>(CancellationToken cancellationToken = default)
+    public Task PublishAsync<TNotification>(CancellationToken cancellationToken = default)
         where TNotification :
         INotification,
-        new() => PublishAsync(new TNotification(), cancellationToken);
+        new() => PublishAsync(new TNotification(), null, cancellationToken);
 
-    public ValueTask<TResponse> SendAsync<TResponse>(IRequest<TResponse> request,
+    public Task<TResponse?> SendAsync<TResponse>(IRequest<TResponse> request,
         CancellationToken cancellationToken = default)
     {
-        dynamic? handler = provider.GetService(typeof(RequestClassHandlerWrapper<,>)
+        dynamic? handler = provider.GetService(typeof(HandlerWrapper<,>)
             .MakeGenericType(request.GetType(), typeof(TResponse)));
 
         if (handler is not null)
@@ -52,10 +61,10 @@ public class Mediator(IServiceProvider provider,
             return handler.Handle((dynamic)request, cancellationToken);
         }
 
-        return default;
+        return Task.FromResult<TResponse?>(default);
     }
 
-    public ValueTask<object?> SendAsync(object message,
+    public Task<object?> SendAsync(object message,
         CancellationToken cancellationToken = default)
     {
         if (message.GetType().GetInterface(typeof(IRequest<>).Name) is { } requestType)
@@ -64,7 +73,7 @@ public class Mediator(IServiceProvider provider,
             {
                 Type responseType = arguments[0];
 
-                dynamic? handler = provider.GetService(typeof(RequestClassHandlerWrapper<,>)
+                dynamic? handler = provider.GetService(typeof(HandlerWrapper<,>)
                     .MakeGenericType(message.GetType(), responseType));
 
                 if (handler is not null)
@@ -74,12 +83,12 @@ public class Mediator(IServiceProvider provider,
             }
         }
 
-        return default;
+        return Task.FromResult<object?>(default);
     }
 
-    public void Subscribe(object subject)
+    public void Subscribe(object handler)
     {
-        Type[] interfaceTypes = subject.GetType().GetInterfaces();
+        Type[] interfaceTypes = handler.GetType().GetInterfaces();
         foreach (Type interfaceType in interfaceTypes.Where(x => x.IsGenericType))
         {
             if (interfaceType.GetGenericTypeDefinition() == typeof(INotificationHandler<>))
@@ -87,10 +96,10 @@ public class Mediator(IServiceProvider provider,
                 if (interfaceType.GetGenericArguments() is { Length: 1 } arguments)
                 {
                     Type notificationType = arguments[0];
-                    subjects.AddOrUpdate(notificationType, [subject], (value, collection) => 
+                    subjects.AddOrUpdate(notificationType, [handler], (value, collection) =>
                     {
-                        collection.Add(subject);
-                        return collection; 
+                        collection.Add(handler);
+                        return collection;
                     });
                 }
             }

@@ -34,21 +34,21 @@ public class MediaController :
         disposer.Dispose(this);
     }
 
-    public async ValueTask Handle(Play notification, 
+    public async Task Handle(Play notification, 
         CancellationToken cancellationToken) =>
         await session.TryPlayAsync();
 
-    public async ValueTask Handle(Pause notification, 
+    public async Task Handle(Pause notification, 
         CancellationToken cancellationToken) =>
         await session.TryPauseAsync();
 
-    public async ValueTask Handle(Request<Playback> notification, 
+    public async Task Handle(Request<Playback> notification, 
         CancellationToken cancellationToken)
     {
         await mediator.PublishAsync(new Changed<Playback>(), cancellationToken);
     }
 
-    public async ValueTask Handle(Request<MediaInformation> _,
+    public async Task Handle(Request<MediaInformation> _,
         CancellationToken cancellationToken)
     {
         using (await asyncLock)

@@ -21,7 +21,7 @@ public partial class MediaInformationViewModel(IServiceFactory serviceFactory,
     public ICommand Initialize => 
         new AsyncRelayCommand(InitializeAsync);
 
-    public ValueTask Handle(Changed<MediaInformation> notification, 
+    public Task Handle(Changed<MediaInformation> notification, 
         CancellationToken cancellationToken)
     {
         if (notification.Value is MediaInformation value)
@@ -30,7 +30,7 @@ public partial class MediaInformationViewModel(IServiceFactory serviceFactory,
             Description = value.Description;
         }
 
-        return ValueTask.CompletedTask;
+        return Task.CompletedTask;
     }
 
     public async Task InitializeAsync() => 

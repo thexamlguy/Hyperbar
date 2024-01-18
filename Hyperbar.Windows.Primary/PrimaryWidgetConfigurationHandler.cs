@@ -6,7 +6,7 @@ public class PrimaryWidgetConfigurationHandler(IMediator mediator,
     ICache<Guid, IWidgetComponentViewModel> cache) :
     INotificationHandler<ConfigurationChanged<PrimaryWidgetConfiguration>>
 {
-    public async ValueTask Handle(ConfigurationChanged<PrimaryWidgetConfiguration> notification,
+    public async Task Handle(ConfigurationChanged<PrimaryWidgetConfiguration> notification,
         CancellationToken cancellationToken)
     {
         HashSet<Guid> configurationIds = new(configuration.SelectMany(item => new[] { item }
@@ -23,10 +23,10 @@ public class PrimaryWidgetConfigurationHandler(IMediator mediator,
         {
             if (!cache.ContainsKey(item.Id))
             {
-                if (factory.Create(item) is IWidgetComponentViewModel value)
+                if (factory.Create(item) is IWidgetComponentViewModel viewModel)
                 {
                     await mediator.PublishAsync(Inserted<IWidgetComponentViewModel>
-                            .For<PrimaryWidgetViewModel>(item.Order, value),
+                            .For<PrimaryWidgetViewModel>(item.Order, viewModel),
                                 cancellationToken);
                 }
             }

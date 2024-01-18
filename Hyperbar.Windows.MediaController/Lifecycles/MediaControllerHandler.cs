@@ -4,16 +4,16 @@ namespace Hyperbar.Windows.MediaController;
 
 public class MediaControllerHandler(IMediator mediator,
     IServiceScopeProvider<MediaController> scopeProvider,
-    ICache<MediaController, MediaControllerViewModel> cache) : 
+    ICache<MediaController, MediaControllerViewModel> cache) :
     INotificationHandler<Created<MediaController>>
 {
-    public async ValueTask Handle(Created<MediaController> notification, 
+    public async Task Handle(Created<MediaController> notification,
         CancellationToken cancellationToken)
     {
         if (notification.Value is MediaController mediaController)
         {
             if (scopeProvider.TryGet(mediaController, out IServiceScope? serviceScope))
-            {
+
                 if (serviceScope is not null)
                 {
                     if (serviceScope.ServiceProvider.GetService<IFactory<MediaController, MediaControllerViewModel?>>()
@@ -27,8 +27,6 @@ public class MediaControllerHandler(IMediator mediator,
                         }
                     }
                 }
-            }
         }
-
     }
 }
