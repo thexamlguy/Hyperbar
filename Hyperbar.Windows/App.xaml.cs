@@ -52,8 +52,8 @@ public partial class App :
 
                 services.AddHandler<AppConfigurationChangedHandler>();
 
-                services.AddWidgetProvider<MediaControllerWidgetProvider>();
-                services.AddWidgetProvider<PrimaryWidgetProvider>();
+                services.AddWidget<MediaControllerWidgetBuilder>();
+                services.AddWidget<PrimaryWidgetConfigurationBuilder>();
 
                 services.AddTransient(provider =>
                 {

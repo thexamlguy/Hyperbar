@@ -8,12 +8,16 @@ public partial class WidgetContainerViewModel(ITemplateFactory templateFactory,
     IMediator mediator,
     IDisposer disposer,
     IEnumerable<IWidgetViewModel> items,
+    Guid id,
     bool alternate) :
     ObservableCollectionViewModel<IWidgetViewModel>(serviceFactory, mediator, disposer, items),
     ITemplatedViewModel
 {
     [ObservableProperty]
     private bool alternate = alternate;
+
+    [ObservableProperty]
+    private Guid id = id;
 
     public ITemplateFactory TemplateFactory => templateFactory;
 }

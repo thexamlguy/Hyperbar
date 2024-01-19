@@ -1,6 +1,13 @@
-﻿namespace Hyperbar;
+﻿
+namespace Hyperbar;
 
-public sealed class WidgetContext(IServiceProvider serviceProvider) 
+public class WidgetContext(IServiceProvider serviceProvider) : 
+    IInitializer
 {
     public IServiceProvider ServiceProvider => serviceProvider;
+
+    public Task InitializeAsync()
+    {
+        throw new NotImplementedException();
+    }
 }

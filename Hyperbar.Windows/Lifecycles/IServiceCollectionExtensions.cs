@@ -9,14 +9,13 @@ namespace Hyperbar.Windows
 {
     public static class IServiceCollectionExtensions
     {
-        public static IServiceCollection AddWidgetProvider<TWidgetProvider>(this IServiceCollection services)
-            where TWidgetProvider :
-            IWidgetProvider, new()
+        public static IServiceCollection AddWidget<TWidgetBuilder>(this IServiceCollection services)
+            where TWidgetBuilder :
+            IWidgetBuilder, new()
         {
             DispatcherQueueSynchronizationContext context = new(DispatcherQueue.GetForCurrentThread());
             SynchronizationContext.SetSynchronizationContext(context);
 
-            TWidgetProvider builder = new();
             IHost? host = new HostBuilder()
                 .UseContentRoot(AppContext.BaseDirectory)
                 .ConfigureAppConfiguration(config =>
@@ -32,7 +31,6 @@ namespace Hyperbar.Windows
                         new ServiceFactory((type, parameters) => ActivatorUtilities.CreateInstance(provider, type, parameters!)));
 
                     isolatedServices.AddHostedService<WidgetService>();
-
                     isolatedServices.AddTransient<ITemplateFactory, TemplateFactory>();
 
                     isolatedServices.AddScoped<IMediator, Mediator>();
@@ -50,7 +48,8 @@ namespace Hyperbar.Windows
                     isolatedServices.AddContentTemplate<WidgetButtonViewModel, WidgetButtonView>();
                     isolatedServices.AddContentTemplate<WidgetSplitButtonViewModel, WidgetSplitButtonView>();
 
-                    builder.Create(context, isolatedServices);
+                    TWidgetBuilder builder = new();
+                    builder.Create(isolatedServices);
 
                 }).Build();
 

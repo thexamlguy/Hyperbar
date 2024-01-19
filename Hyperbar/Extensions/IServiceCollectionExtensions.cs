@@ -30,10 +30,22 @@ public static class IServiceCollectionExtensions
     }
 
     public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services)
-            where TConfiguration :
+        where TConfiguration :
         class, new()
     {
         return services.AddConfiguration<TConfiguration>(typeof(TConfiguration).Name, "Settings.json", null);
+    }
+
+    public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services, 
+        Action<TConfiguration> configurationDelegate)
+        where TConfiguration :
+        class, new()
+    {
+        TConfiguration configuration = new();
+        configurationDelegate.Invoke(configuration);
+
+        return services.AddConfiguration<TConfiguration>(typeof(TConfiguration).Name, "Settings.json",
+            configuration);
     }
 
     public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services,
