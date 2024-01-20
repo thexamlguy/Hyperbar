@@ -21,7 +21,7 @@ public class Cache<TValue>(IDisposer disposer) :
 
     public void Clear() => cache.Clear();
 
-    public IEnumerator<TValue> GetEnumerator() => cache.GetEnumerator();
+    public System.Collections.Generic.IEnumerator<TValue> GetEnumerator() => cache.GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
@@ -57,7 +57,7 @@ public class Cache<TKey, TValue>(IDisposer disposer) :
 
     public bool ContainsKey(TKey key) => cache.ContainsKey(key);
 
-    public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => cache.GetEnumerator();
+    public System.Collections.Generic.IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => cache.GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 

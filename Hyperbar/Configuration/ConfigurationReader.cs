@@ -1,30 +1,14 @@
-﻿using System.Text.Encodings.Web;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+﻿namespace Hyperbar;
 
-namespace Hyperbar;
-
-public class ConfigurationReader<TConfiguration>(IConfigurationSource<TConfiguration> source,
-    JsonSerializerOptions? serializerOptions = null) :
+public class ConfigurationReader<TConfiguration>(IConfigurationSource<TConfiguration> source) :
     IConfigurationReader<TConfiguration>
     where TConfiguration :
     class, new()
 {
-    private static readonly Func<JsonSerializerOptions> defaultSerializerOptions = new(() =>
-    {
-        return new JsonSerializerOptions
-        {
-            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-            Converters = 
-            { 
-                new JsonStringEnumConverter() 
-            }
-        };
-    });
-
     public TConfiguration Read()
     {
-        if ((TryGet(out TConfiguration? value) ? value : new TConfiguration()) is TConfiguration configuration)
+        if ((source.TryGet(out TConfiguration? value) ? value :
+            new TConfiguration()) is TConfiguration configuration)
         {
             return configuration;
         }
@@ -32,21 +16,15 @@ public class ConfigurationReader<TConfiguration>(IConfigurationSource<TConfigura
         return new TConfiguration();
     }
 
-    private bool TryGet(out TConfiguration? value)
+    public bool TryRead(out TConfiguration? configuration)
     {
-        if (File.Exists(source.Path))
+        if (source.TryGet(out TConfiguration? value) && value is not null)
         {
-            byte[] jsonContent = File.ReadAllBytes(source.Path);
-
-           using JsonDocument jsonDocument = JsonDocument.Parse(jsonContent);
-            if (jsonDocument.RootElement.TryGetProperty(source.Section, out JsonElement sectionValue))
-            {
-                value = JsonSerializer.Deserialize<TConfiguration>(sectionValue.ToString(), serializerOptions ?? defaultSerializerOptions());
-                return true;
-            }
+            configuration = value;
+            return true;
         }
 
-        value = default;
+        configuration = default;
         return false;
     }
 }

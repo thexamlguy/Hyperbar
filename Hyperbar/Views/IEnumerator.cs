@@ -1,6 +1,6 @@
 ﻿namespace Hyperbar;
 
-public interface IViewModelEnumerator<TItem>
+public interface IEnumerator<TItem>
 {
     IEnumerable<TItem?> Next();
 }

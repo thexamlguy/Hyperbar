@@ -8,8 +8,8 @@ public partial class MediaInformationViewModel(IServiceFactory serviceFactory,
     IMediator mediator,
     IDisposer disposer,
     ITemplateFactory templateFactory) :
-    WidgetComponentViewModel(serviceFactory, mediator, disposer, templateFactory),   
-    IViewModelInitialization,
+    WidgetComponentViewModel(serviceFactory, mediator, disposer, templateFactory),
+    IInitialization,
     INotificationHandler<Changed<MediaInformation>>
 {
     [ObservableProperty]

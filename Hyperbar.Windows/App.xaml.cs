@@ -1,12 +1,11 @@
 ﻿using Hyperbar.Windows.Controls;
-using Hyperbar.Windows.MediaController;
-using Hyperbar.Windows.Primary;
 using Hyperbar.Windows.UI;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
+using System.Reflection;
 
 namespace Hyperbar.Windows;
 
@@ -19,17 +18,12 @@ public partial class App :
     {        
         base.OnLaunched(args);
 
-        DispatcherQueueSynchronizationContext context = new(DispatcherQueue.GetForCurrentThread());
-        SynchronizationContext.SetSynchronizationContext(context);
-
-        IHost? host = Host.CreateDefaultBuilder()
-            .UseContentRoot(AppContext.BaseDirectory)
+        IHost? host = new HostBuilder()
+            .UseContentRoot(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), 
+                Assembly.GetEntryAssembly()?.GetName().Name!), true)
             .ConfigureAppConfiguration(config =>
             {
-                config.SetBasePath(AppContext.BaseDirectory);
                 config.AddJsonFile("Settings.json", true, true);
-
-                config.Build();
             })
             .ConfigureServices((context, services) =>
             {
@@ -41,7 +35,7 @@ public partial class App :
                 services.AddSingleton<IDispatcher, Dispatcher>();
 
                 services.AddHostedService<AppService>();
-                services.AddConfiguration<AppConfiguration>();
+                services.AddConfiguration<AppConfiguration>(args => { args.Placement = DesktopBarPlacemenet.Top; });
 
                 services.AddTransient<IInitializer, AppInitializer>();
                 services.AddTransient<ITemplateFactory, TemplateFactory>();
@@ -52,31 +46,36 @@ public partial class App :
 
                 services.AddHandler<AppConfigurationChangedHandler>();
 
-                services.AddWidget<MediaControllerWidgetBuilder>();
-                services.AddWidget<PrimaryWidgetConfigurationBuilder>();
+                //services.AddWidget<MediaControllerWidgetBuilder>();
+                //services.AddWidget<PrimaryWidget>();
 
-                services.AddTransient(provider =>
-                {
-                    static IEnumerable<WidgetContainerViewModel> Resolve(IServiceProvider services)
-                    {
-                        int index = 0;
-                        foreach (WidgetContext widgetContext in services.GetServices<WidgetContext>())
-                        {
-                            if (widgetContext.ServiceProvider.GetServices<IWidgetViewModel>() is
-                                IEnumerable<IWidgetViewModel> viewModels)
-                            {
-                                yield return (WidgetContainerViewModel)ActivatorUtilities.CreateInstance(widgetContext.ServiceProvider,
-                                    typeof(WidgetContainerViewModel), viewModels, index % 2 == 1);
+                //services.AddTransient(provider =>
+                //{
+                //    static IEnumerable<WidgetContainerViewModel> Resolve(IServiceProvider services)
+                //    {
+                //        int index = 0;
+                //        foreach (WidgetContext widgetContext in services.GetServices<WidgetContext>())
+                //        {
+                //            if (widgetContext.ServiceProvider.GetService<IWidget>() is IWidget widget)
+                //            {
+                //                if (widgetContext.ServiceProvider.GetServices<IWidgetViewModel>() is 
+                //                    IEnumerable<IWidgetViewModel> viewModels)
+                //                {
+                //                    yield return (WidgetContainerViewModel)ActivatorUtilities.CreateInstance(widgetContext.ServiceProvider,
+                //                        typeof(WidgetContainerViewModel), viewModels, index % 2 == 1, widget.Id);
 
-                                index++;
-                            }
-                        }
-                    }
+                //                    index++;
+                //                }
+                //            }
+                //        }
+                //    }
 
-                    return Resolve(provider);
-                });
+                //    return Resolve(provider);
+                //});
             })
-            .Build();
+        .Build();
+
+        var d = host.Services.GetService<JsonConfigurationProvider>();
 
         await host.RunAsync();
     }

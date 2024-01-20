@@ -12,7 +12,7 @@ public class MediaButtonViewModel(IServiceFactory serviceFactory,
     string? icon = null,
     RelayCommand? command = null) :
     WidgetButtonViewModel(serviceFactory, mediator, disposer, templateFactory, guid, text, icon, command),
-    IViewModelInitialization
+    IInitialization
 {
     public ICommand Initialize => new AsyncRelayCommand(InitializeAsync);
 

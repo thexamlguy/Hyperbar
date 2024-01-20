@@ -1,6 +1,6 @@
 ﻿namespace Hyperbar.Windows.Primary;
 
-public class WidgetComponentViewModelProvider(ICache<Guid, IWidgetComponentViewModel> cache) :
+public class WidgetComponentProvider(ICache<Guid, IWidgetComponentViewModel> cache) :
     IProvider<PrimaryCommandConfiguration, IWidgetComponentViewModel?>
 {
     public IWidgetComponentViewModel? Get(PrimaryCommandConfiguration value)

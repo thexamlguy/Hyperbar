@@ -2,7 +2,7 @@
 
 namespace Hyperbar;
 
-public interface IViewModelInitialization
+public interface IInitialization
 {
     ICommand Initialize { get; }
 

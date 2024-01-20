@@ -1,6 +1,7 @@
 ﻿namespace Hyperbar;
 
 public class ConfigurationInitializer<TConfiguration>(DefaultConfiguration<TConfiguration> defaults,
+    IConfigurationReader<TConfiguration> reader,
     IConfigurationWriter<TConfiguration> writer) :
     IInitializer
     where TConfiguration :
@@ -9,9 +10,12 @@ public class ConfigurationInitializer<TConfiguration>(DefaultConfiguration<TConf
 {
     public Task InitializeAsync()
     {
-        if (defaults.Configuration is not null)
+        if (!reader.TryRead(out TConfiguration? _))
         {
-            writer.Write(defaults.Configuration);
+            if (defaults.Configuration is not null)
+            {
+                writer.Write(defaults.Configuration);
+            }
         }
 
         return Task.CompletedTask;

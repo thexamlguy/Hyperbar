@@ -1,6 +1,6 @@
 ﻿namespace Hyperbar;
 
-public class ConfigurationMonitor<TConfiguration>(IConfigurationSource<TConfiguration> source,
+public class ConfigurationMonitor<TConfiguration>(IConfigurationFile<TConfiguration> configurationFile,
     IConfigurationReader<TConfiguration> reader,
     IMediator mediator) : IInitializer
     where TConfiguration :
@@ -19,16 +19,21 @@ public class ConfigurationMonitor<TConfiguration>(IConfigurationSource<TConfigur
             }
         }
 
-        string fileName = Path.GetFileName(source.Path);
-
-        watcher = new FileSystemWatcher
+        if (configurationFile.FileInfo.PhysicalPath is { } path)
         {
-            NotifyFilter = NotifyFilters.LastWrite,
-            Path = source.Path.Replace(fileName, ""),
-            Filter = fileName,
-            EnableRaisingEvents = true
-        };
-        watcher.Changed += ChangedHandler;
+            string fileName = Path.GetFileName(path);
+
+            watcher = new FileSystemWatcher
+            {
+                NotifyFilter = NotifyFilters.LastWrite,
+                Path = path.Replace(fileName, ""),
+                Filter = fileName,
+                EnableRaisingEvents = true
+            };
+
+            watcher.Changed += ChangedHandler;
+        }
+
         return Task.CompletedTask;
     }
 }

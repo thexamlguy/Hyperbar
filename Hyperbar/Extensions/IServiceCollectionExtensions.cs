@@ -1,11 +1,26 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.FileProviders.Physical;
 using Microsoft.Extensions.Hosting;
 using System.Text.Json;
 
 namespace Hyperbar;
+
+public interface IConfigurationFile<TConfiguration>
+    where TConfiguration :
+    class
+{
+    IFileInfo FileInfo { get; }
+}
+
+public class ConfigurationFile<TConfiguration>(IFileInfo fileInfo) : 
+    IConfigurationFile<TConfiguration>
+    where TConfiguration :
+    class
+{
+    public IFileInfo FileInfo => fileInfo;
+}
 
 public static class IServiceCollectionExtensions
 {
@@ -36,7 +51,7 @@ public static class IServiceCollectionExtensions
         return services.AddConfiguration<TConfiguration>(typeof(TConfiguration).Name, "Settings.json", null);
     }
 
-    public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services, 
+    public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services,
         Action<TConfiguration> configurationDelegate)
         where TConfiguration :
         class, new()
@@ -66,46 +81,33 @@ public static class IServiceCollectionExtensions
     {
         services.AddSingleton<IConfigurationSource<TConfiguration>>(provider =>
         {
-            string? jsonFilePath = null;
+            JsonSerializerOptions? defaultSerializer = null;
+            if (serializerDelegate is not null)
+            {
+                defaultSerializer = new JsonSerializerOptions();
+                serializerDelegate.Invoke(defaultSerializer);
+            }
+
+            return new ConfigurationSource<TConfiguration>(provider.GetRequiredService<IConfigurationFile<TConfiguration>>(), section, defaultSerializer);
+        });
+
+        services.AddSingleton<IConfigurationFile<TConfiguration>>(provider =>
+        {
+            IFileInfo? fileInfo = null;
             if (provider.GetService<IHostEnvironment>() is IHostEnvironment hostEnvironment)
             {
                 IFileProvider fileProvider = hostEnvironment.ContentRootFileProvider;
-                IFileInfo fileInfo = fileProvider.GetFileInfo(path);
-
-                jsonFilePath = fileInfo.PhysicalPath;
+                fileInfo = fileProvider.GetFileInfo(path);
             }
 
-            jsonFilePath ??= Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
-            return new ConfigurationSource<TConfiguration>(jsonFilePath, section);
-        });
-
-        services.AddSingleton<IConfigurationReader<TConfiguration>>(provider =>
-        {
-            JsonSerializerOptions? defaultSerializer = null;
-            if (serializerDelegate is not null)
-            {
-                defaultSerializer = new JsonSerializerOptions();
-                serializerDelegate.Invoke(defaultSerializer);
-            }
-
-            return new ConfigurationReader<TConfiguration>(provider.GetRequiredService<IConfigurationSource<TConfiguration>>(),
-                defaultSerializer);
-        });
-
-        services.AddSingleton<IConfigurationWriter<TConfiguration>>(provider =>
-        {
-            JsonSerializerOptions? defaultSerializer = null;
-            if (serializerDelegate is not null)
-            {
-                defaultSerializer = new JsonSerializerOptions();
-                serializerDelegate.Invoke(defaultSerializer);
-            }
-
-            return new ConfigurationWriter<TConfiguration>(provider.GetRequiredService<IConfigurationSource<TConfiguration>>(),
-                defaultSerializer);
+            fileInfo ??= new PhysicalFileInfo(new FileInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path)));
+            return new ConfigurationFile<TConfiguration>(fileInfo);
         });
 
         services.AddSingleton<IInitializer, ConfigurationMonitor<TConfiguration>>();
+
+        services.AddSingleton<IConfigurationReader<TConfiguration>, ConfigurationReader<TConfiguration>>();
+        services.AddSingleton<IConfigurationWriter<TConfiguration>, ConfigurationWriter<TConfiguration>>();
 
         services.AddTransient(provider => new DefaultConfiguration<TConfiguration>(defaults));
         services.AddTransient<IInitializer, ConfigurationInitializer<TConfiguration>>();
@@ -151,8 +153,6 @@ public static class IServiceCollectionExtensions
                     if (contract.GetGenericArguments() is { Length: 1 } arguments)
                     {
                         Type notificationType = arguments[0];
-
-                        //services.TryAdd(new ServiceDescriptor(typeof(THandler), typeof(THandler), lifetime));
                         services.Add(new ServiceDescriptor(typeof(INotificationHandler<>).MakeGenericType(notificationType), typeof(THandler), lifetime));
                     }
                 }
@@ -182,14 +182,16 @@ public static class IServiceCollectionExtensions
         return services;
     }
 
-    //public static IServiceCollection AddNotificationPipeline<TFromNotification, TToNotification>(this IServiceCollection services)
-    //                    where TFromNotification :
-    //    INotification
-    //    where TToNotification :
-    //    INotification, new()
-    //{
-    //    return services.AddHandler<NotficationPipelineHandler<TFromNotification, TToNotification>>();
-    //}
+    public static IServiceCollection AddRange(this IServiceCollection services,
+        IServiceCollection fromServices)
+    {
+        foreach (ServiceDescriptor service in fromServices)
+        {
+            services.Add(service);
+        }
+
+        return services;
+    }
 
     public static IServiceCollection AddWidgetTemplate<TWidgetContent>(this IServiceCollection services)
         where TWidgetContent :

@@ -1,5 +1,6 @@
 ﻿namespace Hyperbar.Widget.Contextual;
 
-public class ContextualWidgetConfiguration
+public class ContextualWidgetConfiguration : 
+    WidgetConfiguration
 {
 }

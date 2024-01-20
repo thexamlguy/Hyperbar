@@ -1,15 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿namespace Hyperbar;
 
-namespace Hyperbar;
-
-public class WidgetBuilder
+public abstract class WidgetConfiguration 
 {
-    public static void Config(IServiceCollection services, 
-        Action<IWidget> widgetDelegate)
-    {
-        Widget widget = new();
-        widgetDelegate(widget);
+    public Guid Id { get; set; } = Guid.NewGuid();
 
-        services.AddSingleton(widget);
-    }
+    public string? Name { get; set; }
+
+    public string? Description { get; set; }
 }

@@ -2,7 +2,7 @@
 
 namespace Hyperbar.Windows.Primary;
 
-public class WidgetComponentViewModelFactory(IServiceFactory service,
+public class WidgetComponentFactory(IServiceFactory service,
     IMediator mediator,
     ICache<Guid, IWidgetComponentViewModel> cache) :
     IFactory<PrimaryCommandConfiguration, IWidgetComponentViewModel?>

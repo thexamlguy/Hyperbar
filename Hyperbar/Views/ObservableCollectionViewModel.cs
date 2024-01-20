@@ -18,7 +18,7 @@ public partial class ObservableCollectionViewModel<TItem> :
     IDisposable
 {
     public ObservableCollection<TItem> collection = [];
-    private readonly IViewModelEnumerator<TItem>? enumerator;
+    private readonly IEnumerator<TItem>? enumerator;
 
     public ObservableCollectionViewModel(IServiceFactory serviceFactory,
         IMediator mediator,
@@ -36,7 +36,7 @@ public partial class ObservableCollectionViewModel<TItem> :
     public ObservableCollectionViewModel(IServiceFactory serviceFactory,
         IMediator mediator,
         IDisposer disposer,
-        IViewModelEnumerator<TItem> enumerator)
+        IEnumerator<TItem> enumerator)
     {
         ServiceFactory = serviceFactory;
         Mediator = mediator;
@@ -201,7 +201,7 @@ public partial class ObservableCollectionViewModel<TItem> :
 
     public void Dispose() => Disposer.Dispose(this);
 
-    public IEnumerator<TItem> GetEnumerator() =>
+    public System.Collections.Generic.IEnumerator<TItem> GetEnumerator() =>
         collection.GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator() => 

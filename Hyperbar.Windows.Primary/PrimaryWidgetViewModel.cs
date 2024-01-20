@@ -5,7 +5,7 @@ public class PrimaryWidgetViewModel(ITemplateFactory templateFactory,
     IServiceFactory serviceFactory,
     IMediator mediator,
     IDisposer disposer,
-    IViewModelEnumerator<IWidgetComponentViewModel> enumerator) :
+    IEnumerator<IWidgetComponentViewModel> enumerator) :
     ObservableCollectionViewModel<IWidgetComponentViewModel>(serviceFactory, mediator, disposer, enumerator),
     IWidgetViewModel,
     ITemplatedViewModel

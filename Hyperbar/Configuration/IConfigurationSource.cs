@@ -1,10 +1,12 @@
-﻿namespace Hyperbar;
+﻿using Microsoft.Extensions.FileProviders;
+
+namespace Hyperbar;
 
 public interface IConfigurationSource<TConfiguration>
     where TConfiguration :
     class
 {
-    string Path { get; }
+    bool TryGet(out TConfiguration? value);
 
-    string Section { get; }
+    void Set(TConfiguration value);
 }

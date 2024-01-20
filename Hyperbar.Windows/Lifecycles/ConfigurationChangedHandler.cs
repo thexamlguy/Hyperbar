@@ -1,6 +1,6 @@
 ﻿using Hyperbar.Windows.Controls;
 
-namespace Hyperbar.Windows.Primary;
+namespace Hyperbar.Windows;
 
 public class AppConfigurationChangedHandler(DesktopBar desktopFlyout,
     AppConfiguration configuration) :
