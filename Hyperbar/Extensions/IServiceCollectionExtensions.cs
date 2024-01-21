@@ -62,7 +62,7 @@ public static class IServiceCollectionExtensions
         TConfiguration configuration = new();
         configurationDelegate.Invoke(configuration);
 
-        return services.AddConfiguration<TConfiguration>(typeof(TConfiguration).Name, 
+        return services.AddConfiguration(typeof(TConfiguration).Name, 
             "Settings.json", 
             configuration);
     }
@@ -70,21 +70,21 @@ public static class IServiceCollectionExtensions
     public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services,
         TConfiguration configuration)
         where TConfiguration :
-        class => services.AddConfiguration<TConfiguration>(configuration.GetType().Name,
+        class => services.AddConfiguration(configuration.GetType().Name,
             "Settings.json", 
             configuration);
 
     public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services,
         object configuration)
         where TConfiguration :
-        class => services.AddConfiguration<TConfiguration>(configuration.GetType().Name, 
+        class => services.AddConfiguration(configuration.GetType().Name, 
             "Settings.json",
             (TConfiguration?)configuration);
 
     public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services,
         string section,
         string path = "Settings.json",
-        object? configuration = null,
+        TConfiguration? configuration = null,
         Action<JsonSerializerOptions>? serializerDelegate = null)
         where TConfiguration :
         class
@@ -119,18 +119,11 @@ public static class IServiceCollectionExtensions
         services.AddSingleton<IConfigurationReader<TConfiguration>, ConfigurationReader<TConfiguration>>();
         services.AddSingleton<IConfigurationWriter<TConfiguration>, ConfigurationWriter<TConfiguration>>();
 
-        if (configuration is not null)
-        {
-            services.AddTransient(typeof(TConfiguration), provider => configuration);
-        }
+        services.AddTransient<IConfigurationFactory<TConfiguration>>(provider => new ConfigurationFactory<TConfiguration>(() => 
+            (TConfiguration)(configuration ?? provider.GetRequiredService<TConfiguration>())));
 
-        services.AddTransient<IConfigurationFactory<TConfiguration>>(provider => new ConfigurationFactory<TConfiguration>(() =>
-        {
-            var fo = configuration ?? provider.GetRequiredService<TConfiguration>();
-
-            return (TConfiguration)fo;
-        }));
         services.AddTransient<IInitializer, ConfigurationInitializer<TConfiguration>>();
+        services.AddTransient<IConfigurationInitializer<TConfiguration>, ConfigurationInitializer<TConfiguration>>();
 
         services.AddTransient<IWritableConfiguration<TConfiguration>, WritableConfiguration<TConfiguration>>();
 

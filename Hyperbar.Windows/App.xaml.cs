@@ -35,13 +35,14 @@ public partial class App :
 
                 services.AddSingleton<IDispatcher, Dispatcher>();
                 services.AddTransient<ITemplateFactory, TemplateFactory>();
-                services.AddTransient<IInitializer, AppInitializer>();
 
                 services.AddHandler<AppConfigurationChangedHandler>();
                 services.AddConfiguration<AppConfiguration>(args =>
                 {
                     args.Placement = DesktopBarPlacemenet.Top;
                 });
+
+                services.AddTransient<IInitializer, AppInitializer>();
 
                 services.AddSingleton<DesktopBar>();
                 services.AddContentTemplate<WidgetBarViewModel, WidgetBarView>();

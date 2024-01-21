@@ -3,15 +3,18 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Reflection;
 
-namespace Hyperbar;
+namespace Hyperbar.Widgets;
 
-public class WidgetBuilder : 
-    IWidgetBuilder,
+public class WidgetBuilder<TConfiguration> :
+    IWidgetBuilder<TConfiguration>,
     IWidgetServiceBuilder
+    where TConfiguration :
+    WidgetConfiguration,
+    new()
 {
     private readonly IHostBuilder hostBuilder;
 
-    public WidgetBuilder(IWidgetConfiguration configuration)
+    public WidgetBuilder(TConfiguration configuration)
     {
         hostBuilder = new HostBuilder()
             .UseContentRoot(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
@@ -30,24 +33,30 @@ public class WidgetBuilder :
 
                 services.AddScoped<IMediator, Mediator>();
                 services.AddScoped<IDisposer, Disposer>();
-                services.AddConfiguration<IWidgetConfiguration>(configuration);
+                services.AddConfiguration<TConfiguration>(configuration);
             });
     }
 
-    public static IWidgetBuilder Configure<TWidgetConfiguration>(Action<TWidgetConfiguration> configurationDelegate)
-        where TWidgetConfiguration :
-        IWidgetConfiguration,
-        new()
+    public static IWidgetBuilder Configure(Action<TConfiguration> configurationDelegate)
     {
-        TWidgetConfiguration configuration = new();
+        TConfiguration configuration = new();
         configurationDelegate(configuration);
 
-        return new WidgetBuilder(configuration);
+        return new WidgetBuilder<TConfiguration>(configuration);
     }
 
     public IWidgetHost Build()
     {
         IHost host = hostBuilder.Build();
+
+        if (host.Services.GetRequiredService<IConfigurationInitializer<TConfiguration>>()
+            is IConfigurationInitializer<TConfiguration> configurationInitializer)
+        {
+            configurationInitializer.InitializeAsync()
+                .GetAwaiter()
+                .GetResult();
+        }
+
         return new WidgetHost(host);
     }
 
@@ -57,6 +66,8 @@ public class WidgetBuilder :
         return this;
     }
 
-    public void ConfigureWidgetServices(IWidgetServiceCollection widgetServices) =>
+    public void ConfigureWidgetServices(IWidgetServiceCollection widgetServices)
+    {
         hostBuilder.ConfigureServices(services => services.AddRange(widgetServices.Services));
+    }
 }

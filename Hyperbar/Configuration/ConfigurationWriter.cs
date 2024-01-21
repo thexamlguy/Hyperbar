@@ -1,15 +1,13 @@
 ﻿namespace Hyperbar;
 
-public class ConfigurationWriter<TConfiguration>(IConfigurationSource<TConfiguration> source,
-    IConfigurationFactory<TConfiguration> factory) :
+public class ConfigurationWriter<TConfiguration>(IConfigurationSource<TConfiguration> source) :
     IConfigurationWriter<TConfiguration>
     where TConfiguration :
     class
 {
     public void Write(Action<TConfiguration> updateDelegate)
     {
-        if ((source.TryGet(out TConfiguration? value) ? value : 
-            factory.Create()) is TConfiguration updatedValue)
+        if (source.TryGet(out TConfiguration? value) is TConfiguration updatedValue)
         {
             updateDelegate?.Invoke(updatedValue);
             Write(updatedValue);

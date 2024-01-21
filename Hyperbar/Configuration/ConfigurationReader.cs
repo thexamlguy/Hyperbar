@@ -8,9 +8,12 @@ public class ConfigurationReader<TConfiguration>(IConfigurationSource<TConfigura
 {
     public TConfiguration Read()
     {
-        if ((source.TryGet(out TConfiguration? value) ? value : factory.Create()) is TConfiguration configuration)
+        if (source.TryGet(out TConfiguration? value))
         {
-            return configuration;
+            if (value is TConfiguration configuration)
+            {
+                return configuration;
+            }
         }
 
         return factory.Create();

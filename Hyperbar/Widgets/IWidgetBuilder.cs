@@ -8,3 +8,12 @@ public interface IWidgetBuilder
 
     IWidgetHost Build();
 }
+
+public interface IWidgetBuilder<TConfiguration> : 
+    IWidgetBuilder
+    where TConfiguration :
+    WidgetConfiguration,
+    new()
+{
+
+}
