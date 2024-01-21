@@ -50,7 +50,7 @@ public partial class ObservableCollectionViewModel<TItem> :
 
         if (enumerator is not null)
         {
-            foreach (TItem? item in enumerator.Next())
+            foreach (TItem? item in enumerator.Get())
             {
                 if (item is not null)
                 {

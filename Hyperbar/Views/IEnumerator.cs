@@ -2,5 +2,5 @@
 
 public interface IEnumerator<TItem>
 {
-    IEnumerable<TItem?> Next();
+    IEnumerable<TItem?> Get();
 }

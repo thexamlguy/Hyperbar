@@ -4,7 +4,7 @@ public class ConfigurationMonitor<TConfiguration>(IConfigurationFile<TConfigurat
     IConfigurationReader<TConfiguration> reader,
     IMediator mediator) : IInitializer
     where TConfiguration :
-    class, new()
+    class
 {
     private FileSystemWatcher? watcher;
 

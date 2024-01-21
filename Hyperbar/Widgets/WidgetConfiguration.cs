@@ -1,6 +1,16 @@
 ﻿namespace Hyperbar;
 
-public abstract class WidgetConfiguration 
+public interface IWidgetConfiguration
+{
+    Guid Id { get; set; }
+
+    string? Name { get; set; }
+    
+    string? Description { get; set; }
+}
+
+public abstract class WidgetConfiguration :
+    IWidgetConfiguration
 {
     public Guid Id { get; set; } = Guid.NewGuid();
 

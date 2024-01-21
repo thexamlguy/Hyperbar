@@ -1,30 +1,21 @@
-﻿namespace Hyperbar;
+﻿using Microsoft.Extensions.Hosting;
 
-public class WidgetContext(IServiceProvider serviceProvider) : 
-    IInitializer
+namespace Hyperbar;
+public class WidgetHost :
+    IWidgetHost
 {
-    public IServiceProvider ServiceProvider => serviceProvider;
-
-    public Task InitializeAsync()
+    public WidgetHost(IHost host)
     {
-        throw new NotImplementedException();
+
     }
-}
 
-public class WidgetMonitor :
-    IInitializer
-{
-    public Task InitializeAsync()
+    public void Start()
     {
-        throw new NotImplementedException();
+
     }
-}
 
-public class WidgetManager :
-    IInitializer
-{
-    public Task InitializeAsync()
+    public void Stop()
     {
-        throw new NotImplementedException();
+
     }
 }

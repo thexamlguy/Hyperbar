@@ -1,11 +1,11 @@
 ﻿namespace Hyperbar.Windows.Primary;
 
-public class WidgetComponentEnumerator(PrimaryWidgetConfiguration configuration,
+public class WidgetComponentEnumerationHandler(PrimaryWidgetConfiguration configuration,
     IFactory<PrimaryCommandConfiguration, IWidgetComponentViewModel?> factory,
     ICache<(Guid ParentId, Guid Id), PrimaryCommandConfiguration> cache) :
     IEnumerator<IWidgetComponentViewModel>
 {
-    public IEnumerable<IWidgetComponentViewModel?> Next()
+    public IEnumerable<IWidgetComponentViewModel?> Get()
     {
         Stack<(Guid, List<PrimaryCommandConfiguration>)> stack = new();
         stack.Push((Guid.Empty, configuration.Commands));

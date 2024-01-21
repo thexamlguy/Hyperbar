@@ -2,7 +2,7 @@
 
 public interface IConfiguration<out TConfiguration>
     where TConfiguration :
-    class, new()
+    class
 {
     TConfiguration Value { get; }
 }

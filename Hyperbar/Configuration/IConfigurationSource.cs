@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.FileProviders;
-
-namespace Hyperbar;
+﻿namespace Hyperbar;
 
 public interface IConfigurationSource<TConfiguration>
     where TConfiguration :

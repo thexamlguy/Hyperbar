@@ -10,14 +10,13 @@ public class PrimaryWidget :
         {
             args.Id = Guid.Parse("cfdfe07c-d9d6-4174-ae41-988ca24d2e10");
             args.Name = "Primary commands";
-
-        }).ConfigureServices(args =>
+        }).ConfigureServices(services =>
         {
-            args.AddCache<(Guid ParentId, Guid Id), PrimaryCommandConfiguration>()
+            services.AddCache<(Guid ParentId, Guid Id), PrimaryCommandConfiguration>()
                 .AddCache<Guid, IWidgetComponentViewModel>()
                 .AddTransient<IProvider<PrimaryCommandConfiguration, IWidgetComponentViewModel?>, WidgetComponentProvider>()
                 .AddTransient<IFactory<PrimaryCommandConfiguration, IWidgetComponentViewModel?>, WidgetComponentFactory>()
-                .AddTransient<IEnumerator<IWidgetComponentViewModel>, WidgetComponentEnumerator>()
+                .AddTransient<IEnumerator<IWidgetComponentViewModel>, WidgetComponentEnumerationHandler>()
                 .AddWidgetTemplate<PrimaryWidgetViewModel>()
                 .AddHandler<PrimaryWidgetConfigurationHandler>();
         });

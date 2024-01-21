@@ -1,23 +1,13 @@
 ﻿namespace Hyperbar;
 
-public class ConfigurationInitializer<TConfiguration>(DefaultConfiguration<TConfiguration> defaults,
-    IConfigurationReader<TConfiguration> reader,
-    IConfigurationWriter<TConfiguration> writer) :
+public class ConfigurationInitializer<TConfiguration>(IConfigurationReader<TConfiguration> reader) :
     IInitializer
     where TConfiguration :
-    class,
-    new()
+    class
 {
     public Task InitializeAsync()
     {
-        if (!reader.TryRead(out TConfiguration? _))
-        {
-            if (defaults.Configuration is not null)
-            {
-                writer.Write(defaults.Configuration);
-            }
-        }
-
+        reader.Read();
         return Task.CompletedTask;
     }
 }

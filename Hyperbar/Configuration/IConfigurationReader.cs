@@ -2,7 +2,7 @@
 
 public interface IConfigurationReader<TConfiguration>
     where TConfiguration :
-    class, new()
+    class
 {
     bool TryRead(out TConfiguration? configuration);
 

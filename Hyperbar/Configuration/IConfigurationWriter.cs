@@ -2,7 +2,7 @@
 
 public interface IConfigurationWriter<TConfiguration>
     where TConfiguration :
-    class, new()
+    class
 {
     void Write(Action<TConfiguration> updateDelegate);
 

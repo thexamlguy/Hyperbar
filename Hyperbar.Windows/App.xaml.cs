@@ -1,10 +1,12 @@
 ﻿using Hyperbar.Windows.Controls;
+using Hyperbar.Windows.Interop;
 using Hyperbar.Windows.UI;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
+using System;
 using System.Reflection;
 
 namespace Hyperbar.Windows;
@@ -27,24 +29,40 @@ public partial class App :
             })
             .ConfigureServices((context, services) =>
             {
-                services.AddSingleton<IServiceFactory>(provider =>
-                    new ServiceFactory((type, parameters) => ActivatorUtilities.CreateInstance(provider, type, parameters!)));
-
-                services.AddSingleton<IMediator, Mediator>();
-                services.AddSingleton<IDisposer, Disposer>();
-                services.AddSingleton<IDispatcher, Dispatcher>();
+                services.AddDefault();
 
                 services.AddHostedService<AppService>();
-                services.AddConfiguration<AppConfiguration>(args => { args.Placement = DesktopBarPlacemenet.Top; });
 
-                services.AddTransient<IInitializer, AppInitializer>();
+                services.AddSingleton<IDispatcher, Dispatcher>();
                 services.AddTransient<ITemplateFactory, TemplateFactory>();
-
-                services.AddSingleton<DesktopBar>();
-
-                services.AddContentTemplate<WidgetBarViewModel, WidgetBarView>();
+                services.AddTransient<IInitializer, AppInitializer>();
 
                 services.AddHandler<AppConfigurationChangedHandler>();
+                services.AddConfiguration<AppConfiguration>(args =>
+                {
+                    args.Placement = DesktopBarPlacemenet.Top;
+                });
+
+                services.AddSingleton<DesktopBar>();
+                services.AddContentTemplate<WidgetBarViewModel, WidgetBarView>();
+
+                services.AddTransient<IWidgetServiceCollection>(provider =>
+                    new WidgetServiceCollection(services =>
+                    {
+                        services.AddSingleton<IDispatcher, Dispatcher>();
+                        services.AddTransient<ITemplateFactory, TemplateFactory>();
+
+                        services.AddScoped<IVirtualKeyboard, VirtualKeyboard>();
+
+                        services.AddHandler<KeyAcceleratorHandler>();
+                        services.AddHandler<StartProcessHandler>();
+
+                        services.AddTransient<IWidgetView, WidgetView>();
+
+                        services.AddContentTemplate<WidgetContainerViewModel, WidgetContainerView>();
+                        services.AddContentTemplate<WidgetButtonViewModel, WidgetButtonView>();
+                        services.AddContentTemplate<WidgetSplitButtonViewModel, WidgetSplitButtonView>();
+                    }));
 
                 //services.AddWidget<MediaControllerWidgetBuilder>();
                 //services.AddWidget<PrimaryWidget>();

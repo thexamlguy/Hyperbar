@@ -7,23 +7,26 @@ using System.Text.Json;
 
 namespace Hyperbar;
 
-public interface IConfigurationFile<TConfiguration>
-    where TConfiguration :
-    class
-{
-    IFileInfo FileInfo { get; }
-}
-
-public class ConfigurationFile<TConfiguration>(IFileInfo fileInfo) : 
-    IConfigurationFile<TConfiguration>
-    where TConfiguration :
-    class
-{
-    public IFileInfo FileInfo => fileInfo;
-}
-
 public static class IServiceCollectionExtensions
 {
+    public static IServiceCollection AddDefault(this IServiceCollection services)
+    {
+        services.AddSingleton<IServiceFactory>(provider =>
+        new ServiceFactory((type, parameters) => ActivatorUtilities.CreateInstance(provider, type, parameters!)));
+
+        services.AddSingleton<IMediator, Mediator>();
+        services.AddSingleton<IDisposer, Disposer>();
+
+        services.AddTransient<IInitializer, WidgetInitializer>();
+        services.AddTransient<IFactory<Type, IWidget>, WidgetFactory>();
+
+        services.AddHandler<WidgetEnumerationHandler>();
+        services.AddHandler<WidgetAssemblyHandler>();
+        services.AddHandler<WidgetHandler>();
+
+        return services;
+    }
+
     public static IServiceCollection AddCache<TKey, TValue>(this IServiceCollection services)
         where TKey :
         notnull
@@ -46,38 +49,45 @@ public static class IServiceCollectionExtensions
 
     public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services)
         where TConfiguration :
-        class, new()
-    {
-        return services.AddConfiguration<TConfiguration>(typeof(TConfiguration).Name, "Settings.json", null);
-    }
+        class => services.AddConfiguration<TConfiguration>(typeof(TConfiguration).Name, 
+            "Settings.json", 
+            null);
 
     public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services,
         Action<TConfiguration> configurationDelegate)
         where TConfiguration :
-        class, new()
+        class, 
+        new()
     {
         TConfiguration configuration = new();
         configurationDelegate.Invoke(configuration);
 
-        return services.AddConfiguration<TConfiguration>(typeof(TConfiguration).Name, "Settings.json",
+        return services.AddConfiguration<TConfiguration>(typeof(TConfiguration).Name, 
+            "Settings.json", 
             configuration);
     }
 
     public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services,
-        TConfiguration? defaults = null)
+        TConfiguration configuration)
         where TConfiguration :
-        class, new()
-    {
-        return services.AddConfiguration(typeof(TConfiguration).Name, "Settings.json", defaults);
-    }
+        class => services.AddConfiguration<TConfiguration>(configuration.GetType().Name,
+            "Settings.json", 
+            configuration);
+
+    public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services,
+        object configuration)
+        where TConfiguration :
+        class => services.AddConfiguration<TConfiguration>(configuration.GetType().Name, 
+            "Settings.json",
+            (TConfiguration?)configuration);
 
     public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services,
         string section,
         string path = "Settings.json",
-        TConfiguration? defaults = null,
+        object? configuration = null,
         Action<JsonSerializerOptions>? serializerDelegate = null)
         where TConfiguration :
-        class, new()
+        class
     {
         services.AddSingleton<IConfigurationSource<TConfiguration>>(provider =>
         {
@@ -109,7 +119,17 @@ public static class IServiceCollectionExtensions
         services.AddSingleton<IConfigurationReader<TConfiguration>, ConfigurationReader<TConfiguration>>();
         services.AddSingleton<IConfigurationWriter<TConfiguration>, ConfigurationWriter<TConfiguration>>();
 
-        services.AddTransient(provider => new DefaultConfiguration<TConfiguration>(defaults));
+        if (configuration is not null)
+        {
+            services.AddTransient(typeof(TConfiguration), provider => configuration);
+        }
+
+        services.AddTransient<IConfigurationFactory<TConfiguration>>(provider => new ConfigurationFactory<TConfiguration>(() =>
+        {
+            var fo = configuration ?? provider.GetRequiredService<TConfiguration>();
+
+            return (TConfiguration)fo;
+        }));
         services.AddTransient<IInitializer, ConfigurationInitializer<TConfiguration>>();
 
         services.AddTransient<IWritableConfiguration<TConfiguration>, WritableConfiguration<TConfiguration>>();
@@ -134,7 +154,12 @@ public static class IServiceCollectionExtensions
         services.AddKeyedTransient(contentType, key);
         services.AddKeyedTransient(templateType, key);
 
-        services.AddTransient<IContentTemplateDescriptor>(provider => new ContentTemplateDescriptor { ContentType = contentType, TemplateType = templateType, Key = key });
+        services.AddTransient<IContentTemplateDescriptor>(provider => new ContentTemplateDescriptor
+        {
+            ContentType = contentType,
+            TemplateType = templateType,
+            Key = key
+        });
 
         return services;
     }
