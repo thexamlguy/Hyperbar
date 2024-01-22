@@ -4,9 +4,9 @@ namespace Hyperbar;
 
 public interface IWidgetBuilder
 {
-    IWidgetBuilder ConfigureServices(Action<IServiceCollection> configureDelegate);
-
     IWidgetHost Build();
+
+    IWidgetBuilder ConfigureServices(Action<IServiceCollection> configureDelegate);
 }
 
 public interface IWidgetBuilder<TConfiguration> : 

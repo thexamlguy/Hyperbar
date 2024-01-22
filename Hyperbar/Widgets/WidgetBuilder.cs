@@ -5,37 +5,32 @@ using System.Reflection;
 
 namespace Hyperbar.Widgets;
 
-public class WidgetBuilder<TConfiguration> :
-    IWidgetBuilder<TConfiguration>,
-    IWidgetServiceBuilder
+public class WidgetBuilder<TConfiguration>(TConfiguration configuration) :
+    IWidgetBuilder<TConfiguration>
     where TConfiguration :
     WidgetConfiguration,
     new()
 {
-    private readonly IHostBuilder hostBuilder;
-
-    public WidgetBuilder(TConfiguration configuration)
-    {
-        hostBuilder = new HostBuilder()
-            .UseContentRoot(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+    private readonly IHostBuilder hostBuilder = new HostBuilder()
+        .UseContentRoot(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 Assembly.GetEntryAssembly()?.GetName().Name!), true)
-            .ConfigureAppConfiguration(config =>
-            {
-                config.AddJsonFile("Settings.json", true, true);
-            })
-            .ConfigureServices((context, services) =>
-            {
-                services.AddScoped<IServiceFactory>(provider =>
-                    new ServiceFactory((type, parameters) =>
-                        ActivatorUtilities.CreateInstance(provider, type, parameters!)));
+        .ConfigureAppConfiguration(config =>
+        {
+            config.AddJsonFile("Settings.json", true, true);
+        })
+        .ConfigureServices((context, services) =>
+        {
+            services.AddScoped<IServiceFactory>(provider =>
+                new ServiceFactory((type, parameters) =>
+                    ActivatorUtilities.CreateInstance(provider, type, parameters!)));
 
-                services.AddHostedService<WidgetService>();
+            services.AddHostedService<WidgetService>();
 
-                services.AddScoped<IMediator, Mediator>();
-                services.AddScoped<IDisposer, Disposer>();
-                services.AddConfiguration<TConfiguration>(configuration);
-            });
-    }
+            services.AddScoped<IMediator, Mediator>();
+            services.AddScoped<IDisposer, Disposer>();
+
+            services.AddConfiguration(configuration);
+        });
 
     public static IWidgetBuilder Configure(Action<TConfiguration> configurationDelegate)
     {
@@ -57,17 +52,13 @@ public class WidgetBuilder<TConfiguration> :
                 .GetResult();
         }
 
-        return new WidgetHost(host);
+        return (IWidgetHost)ActivatorUtilities.CreateInstance(host.Services,
+            typeof(WidgetHost), host);
     }
 
     public IWidgetBuilder ConfigureServices(Action<IServiceCollection> configureDelegate)
     {
         hostBuilder.ConfigureServices(configureDelegate.Invoke);
         return this;
-    }
-
-    public void ConfigureWidgetServices(IWidgetServiceCollection widgetServices)
-    {
-        hostBuilder.ConfigureServices(services => services.AddRange(widgetServices.Services));
     }
 }

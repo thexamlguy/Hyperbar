@@ -1,23 +1,30 @@
-﻿namespace Hyperbar;
+﻿using Microsoft.Extensions.DependencyInjection;
 
-public class WidgetHandler(IWidgetServiceCollection serviceCollection,
+namespace Hyperbar;
+
+public class WidgetHandler(IProxyServiceCollection<IWidgetBuilder> typedServices,
+    IServiceProvider provider,
     IMediator mediator) :
     INotificationHandler<Created<IWidget>>
 {
-    public Task Handle(Created<IWidget> notification,
+    public async Task Handle(Created<IWidget> notification,
         CancellationToken cancellationToken)
     {
         if(notification.Value is IWidget widget)
         {
-            IWidgetBuilder widgetBuilder =  widget.Create();
-            if  (widgetBuilder is IWidgetServiceBuilder serviceBuilder)
+            IWidgetBuilder builder =  widget.Create();
+
+            builder.ConfigureServices(args =>
             {
-                serviceBuilder.ConfigureWidgetServices(serviceCollection);
-            }
+                args.AddTransient(_ => provider.GetRequiredService<IProxyService<IMediator>>());
+                args.AddRange(typedServices.Services);
+            });
 
-            widgetBuilder.Build();
+            IWidgetHost host = builder.Build();
+
+            await host.StartAsync();
+            await mediator.PublishAsync(new Created<IWidgetHost>(host), 
+                cancellationToken);
         }
-
-        return Task.CompletedTask;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Hyperbar;
 
-public interface IWidgetServiceCollection
+public interface IProxyServiceCollection<T>
 {
     IServiceCollection Services { get; }
 }

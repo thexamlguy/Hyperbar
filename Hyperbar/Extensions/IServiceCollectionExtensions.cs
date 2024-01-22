@@ -12,9 +12,12 @@ public static class IServiceCollectionExtensions
     public static IServiceCollection AddDefault(this IServiceCollection services)
     {
         services.AddSingleton<IServiceFactory>(provider =>
-        new ServiceFactory((type, parameters) => ActivatorUtilities.CreateInstance(provider, type, parameters!)));
+            new ServiceFactory((type, parameters) => ActivatorUtilities.CreateInstance(provider, type, parameters!)));
 
         services.AddSingleton<IMediator, Mediator>();
+        services.AddSingleton<IProxyService<IMediator>>(provider =>
+            new ProxyService<IMediator>(provider.GetRequiredService<IMediator>()));
+
         services.AddSingleton<IDisposer, Disposer>();
 
         services.AddTransient<IInitializer, WidgetInitializer>();
@@ -23,6 +26,7 @@ public static class IServiceCollectionExtensions
         services.AddHandler<WidgetEnumerationHandler>();
         services.AddHandler<WidgetAssemblyHandler>();
         services.AddHandler<WidgetHandler>();
+        services.AddHandler<WidgetHostHander>();
 
         return services;
     }

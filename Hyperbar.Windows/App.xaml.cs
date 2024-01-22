@@ -47,12 +47,11 @@ public partial class App :
                 services.AddSingleton<DesktopBar>();
                 services.AddContentTemplate<WidgetBarViewModel, WidgetBarView>();
 
-                services.AddTransient<IWidgetServiceCollection>(provider =>
-                    new WidgetServiceCollection(services =>
+                services.AddTransient<IProxyServiceCollection<IWidgetBuilder>>(provider =>
+                    new ProxyServiceCollection<IWidgetBuilder>(services =>
                     {
                         services.AddSingleton<IDispatcher, Dispatcher>();
                         services.AddTransient<ITemplateFactory, TemplateFactory>();
-
                         services.AddScoped<IVirtualKeyboard, VirtualKeyboard>();
 
                         services.AddHandler<KeyAcceleratorHandler>();
