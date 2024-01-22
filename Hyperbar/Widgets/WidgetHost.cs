@@ -2,24 +2,22 @@
 
 namespace Hyperbar;
 public class WidgetHost(IHost host,
+    IEnumerable<IInitializer> initializers,
     IProxyService<IMediator> proxyMediator) :
     IWidgetHost
 {
     public IServiceProvider Services => host.Services;
 
-    public async Task StartAsync()
+    public async Task InitializeAsync()
     {
-        if (proxyMediator.Proxy is IMediator mediator)
+        foreach (IInitializer initializer in initializers)
         {
-            await mediator.PublishAsync(new Started<IWidgetHost>(this));
+            await initializer.InitializeAsync();
         }
-    }
 
-    public async Task StopAsync()
-    {
-        if (proxyMediator.Proxy is IMediator mediator)
-        {
-            await mediator.SendAsync(new Started<IWidgetHost>(this));
-        }
+        //if (proxyMediator.Proxy is IMediator mediator)
+        //{
+        //    await mediator.PublishAsync(new Started<IWidgetHost>(this));
+        //}
     }
 }

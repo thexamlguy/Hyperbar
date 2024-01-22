@@ -21,8 +21,8 @@ public class WidgetHandler(IProxyServiceCollection<IWidgetBuilder> typedServices
             });
 
             IWidgetHost host = builder.Build();
+            await host.InitializeAsync();
 
-            await host.StartAsync();
             await mediator.PublishAsync(new Created<IWidgetHost>(host), 
                 cancellationToken);
         }

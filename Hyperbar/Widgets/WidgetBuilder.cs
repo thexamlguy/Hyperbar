@@ -28,8 +28,11 @@ public class WidgetBuilder<TConfiguration>(TConfiguration configuration) :
 
             services.AddScoped<IMediator, Mediator>();
             services.AddScoped<IDisposer, Disposer>();
+            services.AddHandler<WidgetConfigurationHandler>();
 
-            services.AddConfiguration(configuration);
+            //services.AddConfiguration(configuration);
+            services.AddConfiguration<WidgetConfiguration>(section: configuration.GetType().Name, 
+                configuration: configuration);
         });
 
     public static IWidgetBuilder Configure(Action<TConfiguration> configurationDelegate)
@@ -44,13 +47,13 @@ public class WidgetBuilder<TConfiguration>(TConfiguration configuration) :
     {
         IHost host = hostBuilder.Build();
 
-        if (host.Services.GetRequiredService<IConfigurationInitializer<TConfiguration>>()
-            is IConfigurationInitializer<TConfiguration> configurationInitializer)
-        {
-            configurationInitializer.InitializeAsync()
-                .GetAwaiter()
-                .GetResult();
-        }
+        //if (host.Services.GetRequiredService<IConfigurationInitializer<TConfiguration>>()
+        //    is IConfigurationInitializer<TConfiguration> configurationInitializer)
+        //{
+        //    configurationInitializer.InitializeAsync()
+        //        .GetAwaiter()
+        //        .GetResult();
+        //}
 
         return (IWidgetHost)ActivatorUtilities.CreateInstance(host.Services,
             typeof(WidgetHost), host);

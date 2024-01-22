@@ -1,19 +1,16 @@
-﻿namespace Hyperbar;
+﻿using System.Text.Json.Serialization;
 
-//public interface IWidgetConfiguration
-//{
-//    Guid Id { get; set; }
+namespace Hyperbar;
 
-//    string? Name { get; set; }
-    
-//    string? Description { get; set; }
-//}
-
-public abstract class WidgetConfiguration 
+public class WidgetConfiguration 
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public string? Description { get; set; }
+
+    [JsonInclude]
+    internal Guid Id { get; set; } = Guid.NewGuid();
 
     public string? Name { get; set; }
 
-    public string? Description { get; set; }
+    [JsonInclude]
+    internal bool IsAvailable { get; set; }
 }

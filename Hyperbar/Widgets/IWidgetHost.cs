@@ -1,10 +1,7 @@
 ﻿namespace Hyperbar;
 
-public interface IWidgetHost
+public interface IWidgetHost : 
+    IInitializer
 {
     IServiceProvider Services { get; }
-
-    Task StartAsync();
-
-    Task StopAsync();
 }

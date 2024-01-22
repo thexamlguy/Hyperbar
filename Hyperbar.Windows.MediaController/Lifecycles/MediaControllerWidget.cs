@@ -10,7 +10,6 @@ public class MediaControllerWidget :
     public IWidgetBuilder Create() =>
         WidgetBuilder<MediaControllerWidgetConfiguration>.Configure(args =>
         {
-            args.Id = Guid.Parse("1667a800-ec5a-4d39-aa75-4f5ee95bb9f1");
             args.Name = "Media controller";
         }).ConfigureServices(args =>
         {

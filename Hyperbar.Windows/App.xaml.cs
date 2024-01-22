@@ -64,9 +64,6 @@ public partial class App :
                         services.AddContentTemplate<WidgetSplitButtonViewModel, WidgetSplitButtonView>();
                     }));
 
-                //services.AddWidget<MediaControllerWidgetBuilder>();
-                //services.AddWidget<PrimaryWidget>();
-
                 //services.AddTransient(provider =>
                 //{
                 //    static IEnumerable<WidgetContainerViewModel> Resolve(IServiceProvider services)

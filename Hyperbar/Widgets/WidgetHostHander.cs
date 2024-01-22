@@ -7,7 +7,9 @@ public class WidgetHostHander :
     public Task Handle(Started<IWidgetHost> notification,
         CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+       // throw new NotImplementedException();
+
+        return Task.CompletedTask;
     }
 
     public Task Handle(Stopped<IWidgetHost> notification,

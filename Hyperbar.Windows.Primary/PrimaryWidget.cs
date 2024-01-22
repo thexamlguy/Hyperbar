@@ -9,7 +9,6 @@ public class PrimaryWidget :
     public IWidgetBuilder Create() =>
         WidgetBuilder<PrimaryWidgetConfiguration>.Configure(args =>
         {
-            args.Id = Guid.Parse("cfdfe07c-d9d6-4174-ae41-988ca24d2e10");
             args.Name = "Primary commands";
         }).ConfigureServices(services =>
         {
