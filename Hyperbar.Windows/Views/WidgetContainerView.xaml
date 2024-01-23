@@ -10,10 +10,10 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Rectangle
-            Width="1"
+            Width="10"
+            Height="40"
             Margin="6,2,6,2"
-            Fill="{ThemeResource DividerStrokeColorDefaultBrush}"
-            Visibility="{Binding Alternate}" />
+            Fill="Red" />
         <ItemsControl
             Grid.Column="1"
             ItemTemplateSelector="{Binding Converter={ui:DataTemplateConverter}}"

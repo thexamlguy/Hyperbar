@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
 using System;
 using System.Reflection;
+using Windows.Media.Control;
 
 namespace Hyperbar.Windows;
 
@@ -46,6 +47,7 @@ public partial class App :
 
                 services.AddSingleton<DesktopBar>();
                 services.AddContentTemplate<WidgetBarViewModel, WidgetBarView>();
+                services.AddContentTemplate<WidgetContainerViewModel, WidgetContainerView>();
 
                 services.AddTransient<IProxyServiceCollection<IWidgetBuilder>>(provider =>
                     new ProxyServiceCollection<IWidgetBuilder>(services =>
@@ -59,7 +61,6 @@ public partial class App :
 
                         services.AddTransient<IWidgetView, WidgetView>();
 
-                        services.AddContentTemplate<WidgetContainerViewModel, WidgetContainerView>();
                         services.AddContentTemplate<WidgetButtonViewModel, WidgetButtonView>();
                         services.AddContentTemplate<WidgetSplitButtonViewModel, WidgetSplitButtonView>();
                     }));

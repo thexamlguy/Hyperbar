@@ -2,7 +2,7 @@
 
 namespace Hyperbar.Windows.Primary;
 
-public class WidgetComponentFactory(IServiceFactory service,
+public class WidgetComponentFactory(IServiceFactory factory,
     IMediator mediator,
     ICache<Guid, IWidgetComponentViewModel> cache) :
     IFactory<PrimaryCommandConfiguration, IWidgetComponentViewModel?>
@@ -13,7 +13,7 @@ public class WidgetComponentFactory(IServiceFactory service,
 
         if (configuration is KeyAcceleratorCommandConfiguration keyAcceleratorCommandConfiguration)
         {
-            viewModel = service.Create<WidgetButtonViewModel>(keyAcceleratorCommandConfiguration.Id,
+            viewModel = factory.Create<WidgetButtonViewModel>(keyAcceleratorCommandConfiguration.Id,
                 keyAcceleratorCommandConfiguration.Text, keyAcceleratorCommandConfiguration.Icon,
                 new RelayCommand(async () => await mediator.SendAsync(new KeyAccelerator((VirtualKey)
                     keyAcceleratorCommandConfiguration.Key, keyAcceleratorCommandConfiguration.Modifiers?
@@ -32,14 +32,14 @@ public class WidgetComponentFactory(IServiceFactory service,
 
                     if (childCommandConfiguration is ProcessCommandConfiguration childProcessCommandConfiguration)
                     {
-                        childViewModel = service.Create<WidgetMenuViewModel>(childProcessCommandConfiguration.Id,
+                        childViewModel = factory.Create<WidgetMenuViewModel>(childProcessCommandConfiguration.Id,
                               childProcessCommandConfiguration.Icon, childProcessCommandConfiguration.Text,
                               new RelayCommand(async () => await mediator.SendAsync(new StartProcess(childProcessCommandConfiguration.Path))));
                     }
 
                     if (childCommandConfiguration is KeyAcceleratorCommandConfiguration childKeyAcceleratorCommandConfiguration)
                     {
-                        childViewModel = service.Create<WidgetMenuViewModel>(childKeyAcceleratorCommandConfiguration.Id,
+                        childViewModel = factory.Create<WidgetMenuViewModel>(childKeyAcceleratorCommandConfiguration.Id,
                             childKeyAcceleratorCommandConfiguration.Text, childKeyAcceleratorCommandConfiguration.Icon, 
                             new RelayCommand(async () => 
                                 await mediator.SendAsync(new KeyAccelerator((VirtualKey)childKeyAcceleratorCommandConfiguration.Key,
@@ -53,14 +53,14 @@ public class WidgetComponentFactory(IServiceFactory service,
                     }
                 }
 
-                viewModel = service.Create<WidgetSplitButtonViewModel>(childViewModels, 
+                viewModel = factory.Create<WidgetSplitButtonViewModel>(childViewModels, 
                     processCommandConfiguration.Id, processCommandConfiguration.Text, 
                     processCommandConfiguration.Icon, new RelayCommand(async () =>
                         await mediator.SendAsync(new StartProcess(processCommandConfiguration.Path))));
             }
             else
             {
-                viewModel = service.Create<WidgetButtonViewModel>(processCommandConfiguration.Id,
+                viewModel = factory.Create<WidgetButtonViewModel>(processCommandConfiguration.Id,
                     processCommandConfiguration.Text, processCommandConfiguration.Icon, new RelayCommand(async () =>
                         await mediator.SendAsync(new StartProcess(processCommandConfiguration.Path))));
             }

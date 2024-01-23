@@ -50,15 +50,6 @@ public class WidgetBuilder<TConfiguration>(TConfiguration configuration) :
     public IWidgetHost Build()
     {
         IHost host = hostBuilder.Build();
-
-        //if (host.Services.GetRequiredService<IConfigurationInitializer<TConfiguration>>()
-        //    is IConfigurationInitializer<TConfiguration> configurationInitializer)
-        //{
-        //    configurationInitializer.InitializeAsync()
-        //        .GetAwaiter()
-        //        .GetResult();
-        //}
-
         return (IWidgetHost)ActivatorUtilities.CreateInstance(host.Services,
             typeof(WidgetHost), host);
     }

@@ -155,7 +155,9 @@ public static class IServiceCollectionExtensions
         services.AddHandler<WidgetEnumerationHandler>();
         services.AddHandler<WidgetAssemblyHandler>();
         services.AddHandler<WidgetHandler>();
-        services.AddHandler<WidgetHostHander>();
+        services.AddHandler<WidgetHostHandler>();
+
+        services.AddTransient<IFactory<IWidgetHost, WidgetContainerViewModel?>, WidgetContainerFactory>();
 
         return services;
     }

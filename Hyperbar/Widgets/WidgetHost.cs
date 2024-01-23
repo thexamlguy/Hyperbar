@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Hyperbar;
 
@@ -27,6 +28,8 @@ public class WidgetHost :
         mediator.Subscribe(this);
     }
 
+    public WidgetConfiguration Configuration => host.Services.GetRequiredService<WidgetConfiguration>();
+   
     public IServiceProvider Services => host.Services;
 
     public async Task Handle(Changed<WidgetAvailability> notification,
@@ -45,15 +48,14 @@ public class WidgetHost :
 
     private async Task StartAsync()
     {
+        if (proxyMediator.Proxy is IMediator mediator)
+        {
+            await mediator.PublishAsync(new Started<IWidgetHost>(this));
+        }
+
         foreach (IInitializer initializer in initializers)
         {
             await initializer.InitializeAsync();
         }
-
-
-        //if (proxyMediator.Proxy is IMediator mediator)
-        //{
-        //    await mediator.PublishAsync(new Started<IWidgetHost>(this));
-        //}
     }
 }
