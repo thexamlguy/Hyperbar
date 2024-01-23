@@ -1,6 +1,7 @@
 ﻿namespace Hyperbar;
 
-public class ConfigurationInitializer<TConfiguration>(IConfigurationReader<TConfiguration> reader, 
+public class ConfigurationInitializer<TConfiguration>(IConfigurationMonitor<TConfiguration> monitor,
+    IConfigurationReader<TConfiguration> reader, 
     IConfigurationWriter<TConfiguration> writer,
     IConfigurationFactory<TConfiguration> factory) :
     IConfigurationInitializer<TConfiguration>,
@@ -8,7 +9,7 @@ public class ConfigurationInitializer<TConfiguration>(IConfigurationReader<TConf
     where TConfiguration :
     class
 {
-    public Task InitializeAsync()
+    public async Task InitializeAsync()
     {
         if (!reader.TryRead(out TConfiguration? _))
         {
@@ -18,6 +19,6 @@ public class ConfigurationInitializer<TConfiguration>(IConfigurationReader<TConf
             }
         }
 
-        return Task.CompletedTask;
+        await monitor.InitializeAsync();
     }
 }

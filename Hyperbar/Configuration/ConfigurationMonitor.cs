@@ -2,7 +2,8 @@
 
 public class ConfigurationMonitor<TConfiguration>(IConfigurationFile<TConfiguration> configurationFile,
     IConfigurationReader<TConfiguration> reader,
-    IMediator mediator) : IInitializer
+    IMediator mediator) :
+    IConfigurationMonitor<TConfiguration>
     where TConfiguration :
     class
 {

@@ -1,11 +1,14 @@
 ﻿namespace Hyperbar;
 
-public class WidgetConfigurationHandler :
+public class WidgetConfigurationHandler(IValue<WidgetAvailability> widgetAvailability) :
     INotificationHandler<ConfigurationChanged<WidgetConfiguration>> 
 {
-    public Task Handle(ConfigurationChanged<WidgetConfiguration> notification, 
+    public async Task Handle(ConfigurationChanged<WidgetConfiguration> notification,
         CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        if (notification.Configuration is WidgetConfiguration configuration)
+        {
+            await widgetAvailability.SetAsync(args => args with { Value = configuration.IsAvailable });
+        }
     }
 }

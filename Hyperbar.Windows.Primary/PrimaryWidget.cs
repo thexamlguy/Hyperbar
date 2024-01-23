@@ -1,4 +1,3 @@
-using Hyperbar.Widgets;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Hyperbar.Windows.Primary;

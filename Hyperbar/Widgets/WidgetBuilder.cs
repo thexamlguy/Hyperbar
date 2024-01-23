@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Reflection;
 
-namespace Hyperbar.Widgets;
+namespace Hyperbar;
 
 public class WidgetBuilder<TConfiguration>(TConfiguration configuration) :
     IWidgetBuilder<TConfiguration>
@@ -29,6 +29,8 @@ public class WidgetBuilder<TConfiguration>(TConfiguration configuration) :
             services.AddScoped<IMediator, Mediator>();
             services.AddScoped<IDisposer, Disposer>();
             services.AddHandler<WidgetConfigurationHandler>();
+
+            services.AddSingleton<IValue<WidgetAvailability>, Value<WidgetAvailability>>(); 
 
             //services.AddConfiguration(configuration);
             services.AddConfiguration<WidgetConfiguration>(section: configuration.GetType().Name, 

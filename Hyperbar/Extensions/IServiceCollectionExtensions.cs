@@ -118,13 +118,12 @@ public static class IServiceCollectionExtensions
             return new ConfigurationFile<TConfiguration>(fileInfo);
         });
 
-        services.AddSingleton<IInitializer, ConfigurationMonitor<TConfiguration>>();
-
+        services.AddSingleton<IConfigurationMonitor<TConfiguration>, ConfigurationMonitor<TConfiguration>>();
         services.AddSingleton<IConfigurationReader<TConfiguration>, ConfigurationReader<TConfiguration>>();
         services.AddSingleton<IConfigurationWriter<TConfiguration>, ConfigurationWriter<TConfiguration>>();
 
-        services.AddTransient<IConfigurationFactory<TConfiguration>>(provider => new ConfigurationFactory<TConfiguration>(() => 
-            (TConfiguration)(configuration ?? provider.GetRequiredService<TConfiguration>())));
+        services.AddTransient<IConfigurationFactory<TConfiguration>>(provider => new ConfigurationFactory<TConfiguration>(() =>
+            configuration ?? provider.GetRequiredService<TConfiguration>()));
 
         services.AddTransient<IInitializer, ConfigurationInitializer<TConfiguration>>();
         services.AddTransient<IConfigurationInitializer<TConfiguration>, ConfigurationInitializer<TConfiguration>>();

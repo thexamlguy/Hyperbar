@@ -1,5 +1,3 @@
-using Hyperbar.Widgets;
-
 namespace Hyperbar.Widget.Contextual;
 
 public class ContextualWidget :

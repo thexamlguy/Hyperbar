@@ -42,11 +42,9 @@ public class PrimaryWidgetConfigurationHandler(IMediator mediator,
             if (moved.Value is PrimaryCommandConfiguration configuration &&
                 provider.Get(configuration) is IWidgetComponentViewModel viewModel)
             {
-                await mediator.PublishAsync(
-                    new Moved<IWidgetComponentViewModel>(configuration.Order, viewModel),
+                await mediator.PublishAsync(new Moved<IWidgetComponentViewModel>(configuration.Order, viewModel),
                     moved.Key.ParentId == Guid.Empty ? nameof(PrimaryWidgetViewModel) : moved.Key.ParentId,
-                    cancellationToken
-                );
+                        cancellationToken);
 
                 cache.Remove(moved.Key);
                 cache.Add(moved.Key, moved.Value);
