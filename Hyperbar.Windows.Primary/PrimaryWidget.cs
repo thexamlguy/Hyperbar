@@ -9,6 +9,17 @@ public class PrimaryWidget :
         WidgetBuilder<PrimaryWidgetConfiguration>.Configure(args =>
         {
             args.Name = "Primary commands";
+            args.Commands =
+            [
+                new KeyAcceleratorCommandConfiguration
+                {
+                    Id = Guid.NewGuid(),
+                    Order = 0,
+                    Text = "Test",
+                    Icon = "dd",
+                    Key = 1
+                }
+            ];
         }).ConfigureServices(services =>
         {
             services.AddCache<(Guid ParentId, Guid Id), PrimaryCommandConfiguration>()

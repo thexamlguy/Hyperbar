@@ -5,5 +5,6 @@ public class ConfigurationFactory<TConfiguration>(Func<TConfiguration> factory) 
     where TConfiguration :
     class
 {
-    public TConfiguration Create() => factory.Invoke();
+    public object Create() => factory.Invoke();
+
 }

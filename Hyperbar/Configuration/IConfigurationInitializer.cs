@@ -1,10 +1,8 @@
-﻿
-namespace Hyperbar
+﻿namespace Hyperbar;
+
+public interface IConfigurationInitializer<TConfiguration> 
+    where TConfiguration :
+    class
 {
-    public interface IConfigurationInitializer<TConfiguration> 
-        where TConfiguration :
-        class
-    {
-        Task InitializeAsync();
-    }
+    Task InitializeAsync();
 }

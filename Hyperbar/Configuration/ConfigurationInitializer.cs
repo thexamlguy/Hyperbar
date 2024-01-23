@@ -9,13 +9,21 @@ public class ConfigurationInitializer<TConfiguration>(IConfigurationMonitor<TCon
     where TConfiguration :
     class
 {
+    public bool isInitilized;
+
     public async Task InitializeAsync()
     {
+        if (isInitilized)
+        {
+            return;
+        }
+
+        isInitilized = true;
         if (!reader.TryRead(out TConfiguration? _))
         {
-            if (factory.Create() is TConfiguration configuration)
+            if (factory.Create() is object defaultConfiguration)
             {
-                writer.Write(configuration);
+                writer.Write(defaultConfiguration);
             }
         }
 

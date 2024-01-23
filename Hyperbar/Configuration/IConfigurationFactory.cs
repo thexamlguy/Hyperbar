@@ -4,6 +4,6 @@
         where TConfiguration : 
         class
     {
-        TConfiguration Create();
+        object Create();
     }
 }

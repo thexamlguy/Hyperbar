@@ -28,13 +28,15 @@ public class WidgetBuilder<TConfiguration>(TConfiguration configuration) :
 
             services.AddScoped<IMediator, Mediator>();
             services.AddScoped<IDisposer, Disposer>();
+
+            services.AddSingleton<IValue<WidgetAvailability>, 
+                Value<WidgetAvailability>>();
+
             services.AddHandler<WidgetConfigurationHandler>();
 
-            services.AddSingleton<IValue<WidgetAvailability>, Value<WidgetAvailability>>(); 
-
-            //services.AddConfiguration(configuration);
-            services.AddConfiguration<WidgetConfiguration>(section: configuration.GetType().Name, 
+            services.AddConfiguration<WidgetConfiguration>(section: configuration.GetType().Name,
                 configuration: configuration);
+            services.AddConfiguration(configuration);
         });
 
     public static IWidgetBuilder Configure(Action<TConfiguration> configurationDelegate)

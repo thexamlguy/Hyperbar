@@ -27,7 +27,9 @@ public class ConfigurationSource<TConfiguration>(IConfigurationFile<TConfigurati
         };
     });
 
-    public void Set(TConfiguration value)
+    public void Set(TConfiguration value) => Set(value);
+
+    public void Set(object value)
     {
         lock (lockingObject)
         {

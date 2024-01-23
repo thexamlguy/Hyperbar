@@ -14,8 +14,7 @@ public class ConfigurationWriter<TConfiguration>(IConfigurationSource<TConfigura
         }
     }
 
-    public void Write(TConfiguration value)
-    {
-        source.Set(value);
-    }
+    public void Write(object value) => source.Set(value);
+
+    public void Write(TConfiguration value) => source.Set(value);
 }

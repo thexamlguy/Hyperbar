@@ -6,5 +6,7 @@ public interface IConfigurationWriter<TConfiguration>
 {
     void Write(Action<TConfiguration> updateDelegate);
 
+    void Write(object value);
+
     void Write(TConfiguration value);
 }

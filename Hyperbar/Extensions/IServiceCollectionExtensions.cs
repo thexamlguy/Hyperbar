@@ -9,28 +9,6 @@ namespace Hyperbar;
 
 public static class IServiceCollectionExtensions
 {
-    public static IServiceCollection AddDefault(this IServiceCollection services)
-    {
-        services.AddSingleton<IServiceFactory>(provider =>
-            new ServiceFactory((type, parameters) => ActivatorUtilities.CreateInstance(provider, type, parameters!)));
-
-        services.AddSingleton<IMediator, Mediator>();
-        services.AddSingleton<IProxyService<IMediator>>(provider =>
-            new ProxyService<IMediator>(provider.GetRequiredService<IMediator>()));
-
-        services.AddSingleton<IDisposer, Disposer>();
-
-        services.AddTransient<IInitializer, WidgetInitializer>();
-        services.AddTransient<IFactory<Type, IWidget>, WidgetFactory>();
-
-        services.AddHandler<WidgetEnumerationHandler>();
-        services.AddHandler<WidgetAssemblyHandler>();
-        services.AddHandler<WidgetHandler>();
-        services.AddHandler<WidgetHostHander>();
-
-        return services;
-    }
-
     public static IServiceCollection AddCache<TKey, TValue>(this IServiceCollection services)
         where TKey :
         notnull
@@ -53,21 +31,21 @@ public static class IServiceCollectionExtensions
 
     public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services)
         where TConfiguration :
-        class => services.AddConfiguration<TConfiguration>(typeof(TConfiguration).Name, 
-            "Settings.json", 
+        class => services.AddConfiguration<TConfiguration>(typeof(TConfiguration).Name,
+            "Settings.json",
             null);
 
     public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services,
         Action<TConfiguration> configurationDelegate)
         where TConfiguration :
-        class, 
+        class,
         new()
     {
         TConfiguration configuration = new();
         configurationDelegate.Invoke(configuration);
 
-        return services.AddConfiguration(typeof(TConfiguration).Name, 
-            "Settings.json", 
+        return services.AddConfiguration(typeof(TConfiguration).Name,
+            "Settings.json",
             configuration);
     }
 
@@ -75,13 +53,13 @@ public static class IServiceCollectionExtensions
         TConfiguration configuration)
         where TConfiguration :
         class => services.AddConfiguration(configuration.GetType().Name,
-            "Settings.json", 
+            "Settings.json",
             configuration);
 
     public static IServiceCollection AddConfiguration<TConfiguration>(this IServiceCollection services,
         object configuration)
         where TConfiguration :
-        class => services.AddConfiguration(configuration.GetType().Name, 
+        class => services.AddConfiguration(configuration.GetType().Name,
             "Settings.json",
             (TConfiguration?)configuration);
 
@@ -160,6 +138,27 @@ public static class IServiceCollectionExtensions
         return services;
     }
 
+    public static IServiceCollection AddDefault(this IServiceCollection services)
+    {
+        services.AddSingleton<IServiceFactory>(provider =>
+            new ServiceFactory((type, parameters) => ActivatorUtilities.CreateInstance(provider, type, parameters!)));
+
+        services.AddSingleton<IMediator, Mediator>();
+        services.AddSingleton<IProxyService<IMediator>>(provider =>
+            new ProxyService<IMediator>(provider.GetRequiredService<IMediator>()));
+
+        services.AddSingleton<IDisposer, Disposer>();
+
+        services.AddTransient<IInitializer, WidgetInitializer>();
+        services.AddTransient<IFactory<Type, IWidget>, WidgetFactory>();
+
+        services.AddHandler<WidgetEnumerationHandler>();
+        services.AddHandler<WidgetAssemblyHandler>();
+        services.AddHandler<WidgetHandler>();
+        services.AddHandler<WidgetHostHander>();
+
+        return services;
+    }
     public static IServiceCollection AddHandler<THandler>(this IServiceCollection services,
         ServiceLifetime lifetime = ServiceLifetime.Transient)
         where THandler :
@@ -203,8 +202,19 @@ public static class IServiceCollectionExtensions
         return services;
     }
 
+    public static IServiceCollection AddNotificationRelay<TFromNotification,
+        TToNotification>(this IServiceCollection services)
+        where TFromNotification :
+        INotification
+        where TToNotification :
+        INotification, new()
+    {
+        return services.AddHandler<NotficationRelayHandler<TFromNotification,
+            TToNotification>>();
+    }
+
     public static IServiceCollection AddRange(this IServiceCollection services,
-        IServiceCollection fromServices)
+            IServiceCollection fromServices)
     {
         foreach (ServiceDescriptor service in fromServices)
         {

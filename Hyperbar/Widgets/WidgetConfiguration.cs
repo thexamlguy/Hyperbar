@@ -1,7 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
 namespace Hyperbar;
-
 public class WidgetConfiguration 
 {
     public string? Description { get; set; }
@@ -14,3 +13,5 @@ public class WidgetConfiguration
     [JsonInclude]
     internal bool IsAvailable { get; set; }
 }
+
+public class WidgetConfiguration<TConfiguration>;

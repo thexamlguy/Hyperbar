@@ -7,4 +7,6 @@ public interface IConfigurationSource<TConfiguration>
     bool TryGet(out TConfiguration? value);
 
     void Set(TConfiguration value);
+
+    void Set(object value);
 }

@@ -1,15 +1,16 @@
 ﻿using Microsoft.Extensions.Hosting;
 
 namespace Hyperbar;
+
 public class WidgetHost :
     INotificationHandler<Changed<WidgetAvailability>>,
     IWidgetHost
 {
-    private readonly IHost host;
-    private readonly IMediator mediator;
-    private readonly IEnumerable<IInitializer> initializers;
-    private readonly IProxyService<IMediator> proxyMediator;
     private readonly IConfigurationInitializer<WidgetConfiguration> configurationInitializer;
+    private readonly IHost host;
+    private readonly IEnumerable<IInitializer> initializers;
+    private readonly IMediator mediator;
+    private readonly IProxyService<IMediator> proxyMediator;
 
     public WidgetHost(IHost host,
         IMediator mediator,
@@ -28,19 +29,27 @@ public class WidgetHost :
 
     public IServiceProvider Services => host.Services;
 
-    public Task Handle(Changed<WidgetAvailability> notification,
+    public async Task Handle(Changed<WidgetAvailability> notification,
         CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        if (notification.Value is WidgetAvailability widgetAvailability)
+        {
+            if (widgetAvailability.Value)
+            {
+                await StartAsync();
+            }
+        }
     }
 
-    public async Task InitializeAsync()
+    public async Task InitializeAsync() => await configurationInitializer.InitializeAsync();
+
+    private async Task StartAsync()
     {
-        await configurationInitializer.InitializeAsync();
-        //foreach (IInitializer initializer in initializers)
-        //{
-        //    await initializer.InitializeAsync();
-        //}
+        foreach (IInitializer initializer in initializers)
+        {
+            await initializer.InitializeAsync();
+        }
+
 
         //if (proxyMediator.Proxy is IMediator mediator)
         //{

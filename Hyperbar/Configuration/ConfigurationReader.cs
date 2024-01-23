@@ -16,7 +16,7 @@ public class ConfigurationReader<TConfiguration>(IConfigurationSource<TConfigura
             }
         }
 
-        return factory.Create();
+        return (TConfiguration)factory.Create();
     }
 
     public bool TryRead(out TConfiguration? configuration)
