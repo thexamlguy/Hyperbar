@@ -10,6 +10,7 @@
 		<PackageReference Include="System.Runtime.Caching" Version="8.0.0" />
 	</ItemGroup>
 	<ItemGroup>
+		<ProjectReference Include="..\Hyperbar.Widget\Hyperbar.Widget.csproj" />
 		<ProjectReference Include="..\Hyperbar\Hyperbar.csproj" />
 	</ItemGroup>
 </Project>

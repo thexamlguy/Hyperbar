@@ -1,3 +1,4 @@
+using Hyperbar.Widget;
 using Microsoft.Extensions.DependencyInjection;
 using Windows.Media.Control;
 

@@ -1,3 +1,4 @@
+using Hyperbar.Widget;
 using Microsoft.UI.Xaml.Controls;
 
 namespace Hyperbar.Windows;

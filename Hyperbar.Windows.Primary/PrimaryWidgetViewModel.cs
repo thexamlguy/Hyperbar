@@ -1,4 +1,6 @@
-﻿namespace Hyperbar.Windows.Primary;
+﻿using Hyperbar.Widget;
+
+namespace Hyperbar.Windows.Primary;
 
 [NotificationHandler(nameof(PrimaryWidgetViewModel))]
 public class PrimaryWidgetViewModel(ITemplateFactory templateFactory,

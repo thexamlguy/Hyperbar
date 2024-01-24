@@ -1,4 +1,6 @@
-﻿namespace Hyperbar.Windows.Primary;
+﻿using Hyperbar.Widget;
+
+namespace Hyperbar.Windows.Primary;
 
 public class PrimaryWidgetConfigurationHandler(IMediator mediator,
     PrimaryWidgetConfiguration configuration,

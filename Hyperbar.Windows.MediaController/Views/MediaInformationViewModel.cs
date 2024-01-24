@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Hyperbar.Widget;
 using System.Windows.Input;
 
 namespace Hyperbar.Windows.MediaController;

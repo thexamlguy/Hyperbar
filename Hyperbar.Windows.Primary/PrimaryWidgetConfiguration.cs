@@ -1,6 +1,9 @@
-﻿namespace Hyperbar.Windows.Primary;
+﻿using Hyperbar.Widget;
 
-public class PrimaryWidgetConfiguration : WidgetConfiguration
+namespace Hyperbar.Windows.Primary;
+
+public class PrimaryWidgetConfiguration : 
+    WidgetConfiguration
 {
     public List<PrimaryCommandConfiguration> Commands { get; set; } = [];
 }

@@ -1,4 +1,5 @@
-﻿using Hyperbar.Windows.Controls;
+﻿using Hyperbar.Widget;
+using Hyperbar.Windows.Controls;
 using Hyperbar.Windows.Interop;
 using Hyperbar.Windows.UI;
 using Microsoft.Extensions.Configuration;
