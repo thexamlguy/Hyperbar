@@ -1,7 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using Hyperbar.Widget;
-using System.Windows.Input;
 
 namespace Hyperbar.Windows.MediaController;
 
@@ -19,9 +17,6 @@ public partial class MediaInformationViewModel(IServiceFactory serviceFactory,
     [ObservableProperty]
     private string? title;
 
-    public ICommand Initialize => 
-        new AsyncRelayCommand(InitializeAsync);
-
     public Task Handle(Changed<MediaInformation> notification, 
         CancellationToken cancellationToken)
     {
@@ -34,6 +29,6 @@ public partial class MediaInformationViewModel(IServiceFactory serviceFactory,
         return Task.CompletedTask;
     }
 
-    public async Task InitializeAsync() => 
+    public override async Task InitializeAsync() =>
         await Mediator.PublishAsync<Request<MediaInformation>>();
 }

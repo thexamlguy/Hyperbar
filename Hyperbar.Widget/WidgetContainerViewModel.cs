@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Hyperbar.Widget;
 
+[NotificationHandler(nameof(WidgetContainerViewModel))]
 public partial class WidgetContainerViewModel(ITemplateFactory templateFactory,
     IServiceFactory serviceFactory,
     IMediator mediator,

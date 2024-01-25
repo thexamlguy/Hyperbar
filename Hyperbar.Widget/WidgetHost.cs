@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace Hyperbar.Widget;
 
@@ -8,18 +7,18 @@ public class WidgetHost :
     IWidgetHost
 {
     private readonly IConfigurationInitializer<WidgetConfiguration> configurationInitializer;
-    private readonly IHost host;
+    private readonly IServiceProvider services;
     private readonly IEnumerable<IInitializer> initializers;
     private readonly IMediator mediator;
     private readonly IProxyService<IMediator> proxyMediator;
 
-    public WidgetHost(IHost host,
+    public WidgetHost(IServiceProvider services,
         IMediator mediator,
         IEnumerable<IInitializer> initializers,
         IProxyService<IMediator> proxyMediator,
         IConfigurationInitializer<WidgetConfiguration> configurationInitializer)
     {
-        this.host = host;
+        this.services = services;
         this.mediator = mediator;
         this.initializers = initializers;
         this.proxyMediator = proxyMediator;
@@ -28,9 +27,9 @@ public class WidgetHost :
         mediator.Subscribe(this);
     }
 
-    public WidgetConfiguration Configuration => host.Services.GetRequiredService<WidgetConfiguration>();
+    public WidgetConfiguration Configuration => services.GetRequiredService<WidgetConfiguration>();
    
-    public IServiceProvider Services => host.Services;
+    public IServiceProvider Services => services;
 
     public async Task Handle(Changed<WidgetAvailability> notification,
         CancellationToken cancellationToken)

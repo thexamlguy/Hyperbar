@@ -36,7 +36,7 @@ public class Mediator(IServiceProvider provider,
             key, cancellationToken);
     }
 
-    public Task PublishAsync<TNotification>(TNotification notification,
+    public  Task PublishAsync<TNotification>(TNotification notification,
         Func<Func<Task>, Task> marshal,
         object? key = null,
         CancellationToken cancellationToken = default)

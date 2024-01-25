@@ -1,7 +1,8 @@
-﻿namespace Hyperbar.Widget;
+﻿using Microsoft.Extensions.DependencyInjection;
 
-public class WidgetHostHandler(IMediator mediator,
-    IFactory<IWidgetHost, WidgetContainerViewModel?> factory) :
+namespace Hyperbar.Widget;
+
+public class WidgetHostHandler(IMediator mediator) :
     INotificationHandler<Started<IWidgetHost>>,
     INotificationHandler<Stopped<IWidgetHost>>
 {
@@ -10,10 +11,13 @@ public class WidgetHostHandler(IMediator mediator,
     {
         if (notification.Value is IWidgetHost host)
         {
-            if (factory.Create(host) is WidgetContainerViewModel containerViewModel)
+            if (host.Services.GetRequiredService<IFactory<IWidgetHost, WidgetContainerViewModel?>>() is { } factory)
             {
-                await mediator.PublishAsync(new Created<WidgetContainerViewModel>(containerViewModel), 
-                    nameof(WidgetBarViewModel), cancellationToken);
+                if (factory.Create(host) is WidgetContainerViewModel containerViewModel)
+                {
+                    await mediator.PublishAsync(new Created<WidgetContainerViewModel>(containerViewModel),
+                        nameof(WidgetBarViewModel), cancellationToken);
+                }
             }
         }
     }

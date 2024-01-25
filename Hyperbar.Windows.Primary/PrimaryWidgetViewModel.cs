@@ -6,9 +6,8 @@ namespace Hyperbar.Windows.Primary;
 public class PrimaryWidgetViewModel(ITemplateFactory templateFactory,
     IServiceFactory serviceFactory,
     IMediator mediator,
-    IDisposer disposer,
-    IEnumerator<IWidgetComponentViewModel> enumerator) :
-    ObservableCollectionViewModel<IWidgetComponentViewModel>(serviceFactory, mediator, disposer, enumerator),
+    IDisposer disposer) :
+    ObservableCollectionViewModel<IWidgetComponentViewModel>(serviceFactory, mediator, disposer),
     IWidgetViewModel,
     ITemplatedViewModel
 {

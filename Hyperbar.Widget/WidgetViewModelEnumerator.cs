@@ -1,11 +1,21 @@
-﻿namespace Hyperbar.Widget;
+﻿using Microsoft.Extensions.DependencyInjection;
 
-public class WidgetViewModelEnumerator :
+namespace Hyperbar.Widget;
+
+public class WidgetViewModelEnumerator(IWidgetHost host, 
+    IMediator mediator) :
     INotificationHandler<Enumerate<IWidgetViewModel>>
 {
-    public Task Handle(Enumerate<IWidgetViewModel> notification,
+    public async Task Handle(Enumerate<IWidgetViewModel> notification,
         CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
-    }
+        if (host.Services.GetServices<IWidgetViewModel>() is IEnumerable<IWidgetViewModel> viewModels)
+        {
+            foreach (IWidgetViewModel viewModel in viewModels)
+            {
+                await mediator.PublishAsync(new Created<IWidgetViewModel>(viewModel),
+                    nameof(WidgetContainerViewModel), cancellationToken);
+            }
+        }
+    }   
 }

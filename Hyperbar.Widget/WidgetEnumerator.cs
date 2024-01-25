@@ -4,7 +4,7 @@ using System.Runtime.Loader;
 
 namespace Hyperbar.Widget;
 
-public class WidgetEnumeratorHandler(IHostEnvironment hostEnvironment, 
+public class WidgetEnumerator(IHostEnvironment hostEnvironment, 
     IMediator mediator) :
     INotificationHandler<Enumerate<IWidget>>
 {

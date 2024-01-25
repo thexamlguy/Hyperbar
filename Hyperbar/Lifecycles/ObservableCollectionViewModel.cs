@@ -1,8 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Reactive.Disposables;
+using System.Windows.Input;
 
 namespace Hyperbar;
 
@@ -17,8 +19,7 @@ public partial class ObservableCollectionViewModel<TItem> :
     where TItem :
     IDisposable
 {
-    public ObservableCollection<TItem> collection = [];
-    private readonly IEnumerator<TItem>? enumerator;
+    private readonly ObservableCollection<TItem> collection = new();
 
     public ObservableCollectionViewModel(IServiceFactory serviceFactory,
         IMediator mediator,
@@ -31,33 +32,6 @@ public partial class ObservableCollectionViewModel<TItem> :
         mediator.Subscribe(this);
 
         collection.CollectionChanged += OnCollectionChanged;
-    }
-
-    public ObservableCollectionViewModel(IServiceFactory serviceFactory,
-        IMediator mediator,
-        IDisposer disposer,
-        IEnumerator<TItem> enumerator)
-    {
-        ServiceFactory = serviceFactory;
-        Mediator = mediator;
-        Disposer = disposer;
-
-        this.enumerator = enumerator;
-
-        mediator.Subscribe(this);
-
-        collection.CollectionChanged += OnCollectionChanged;
-
-        if (enumerator is not null)
-        {
-            foreach (TItem? item in enumerator.Get())
-            {
-                if (item is not null)
-                {
-                    Add(item);
-                }
-            }
-        }
     }
 
     public ObservableCollectionViewModel(IServiceFactory serviceFactory,
@@ -80,6 +54,9 @@ public partial class ObservableCollectionViewModel<TItem> :
 
     public int Count => collection.Count;
 
+    public ICommand Initialize =>
+        new AsyncRelayCommand(InitializeAsync);
+
     bool IList.IsFixedSize => false;
 
     bool ICollection<TItem>.IsReadOnly => false;
@@ -101,10 +78,7 @@ public partial class ObservableCollectionViewModel<TItem> :
     public TItem this[int index]
     {
         get => collection[index];
-        set
-        {
-            SetItem(index, value);
-        }
+        set => SetItem(index, value);
     }
 
     object? IList.this[int index]
@@ -187,24 +161,25 @@ public partial class ObservableCollectionViewModel<TItem> :
 
     public void Clear() => ClearItems();
 
-    public bool Contains(TItem item) => 
+    public bool Contains(TItem item) =>
         collection.Contains(item);
 
     bool IList.Contains(object? value) =>
         IsCompatibleObject(value) && Contains((TItem)value!);
 
-    public void CopyTo(TItem[] array, int index) => 
+    public void CopyTo(TItem[] array, int index) =>
         collection.CopyTo(array, index);
 
     void ICollection.CopyTo(Array array, int index) =>
         collection.CopyTo((TItem[])array, index);
 
-    public void Dispose() => Disposer.Dispose(this);
+    public void Dispose() =>
+        Disposer.Dispose(this);
 
     public System.Collections.Generic.IEnumerator<TItem> GetEnumerator() =>
         collection.GetEnumerator();
 
-    IEnumerator IEnumerable.GetEnumerator() => 
+    IEnumerator IEnumerable.GetEnumerator() =>
         ((IEnumerable)collection).GetEnumerator();
 
     public Task Handle(Removed<TItem> notification,
@@ -263,9 +238,12 @@ public partial class ObservableCollectionViewModel<TItem> :
     public int IndexOf(TItem item) =>
         collection.IndexOf(item);
 
-    int IList.IndexOf(object? value) => 
-        IsCompatibleObject(value) ? 
+    int IList.IndexOf(object? value) =>
+        IsCompatibleObject(value) ?
         IndexOf((TItem)value!) : -1;
+
+    public virtual async Task InitializeAsync() =>
+        await Mediator.PublishAsync<Enumerate<TItem>>();
 
     public void Insert(int index, TItem item) => 
         InsertItem(index, item);

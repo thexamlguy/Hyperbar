@@ -10,12 +10,10 @@ public static class IServiceCollectionExtensions
         services.AddTransient<IInitializer, WidgetInitializer>();
         services.AddTransient<IFactory<Type, IWidget>, WidgetFactory>();
 
-        services.AddHandler<WidgetEnumeratorHandler>();
+        services.AddHandler<WidgetEnumerator>();
         services.AddHandler<WidgetAssemblyHandler>();
         services.AddHandler<WidgetHandler>();
         services.AddHandler<WidgetHostHandler>();
-
-        services.AddTransient<IFactory<IWidgetHost, WidgetContainerViewModel?>, WidgetContainerFactory>();
 
         return services;
     }

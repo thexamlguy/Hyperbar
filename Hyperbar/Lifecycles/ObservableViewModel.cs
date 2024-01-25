@@ -2,9 +2,7 @@
 
 namespace Hyperbar;
 
-public class ObservableViewModel(IServiceFactory serviceFactory,
-    IMediator mediator,
-    IDisposer disposer) : 
+public class ObservableViewModel(IDisposer disposer) : 
     ObservableObject,
     IDisposable
 {

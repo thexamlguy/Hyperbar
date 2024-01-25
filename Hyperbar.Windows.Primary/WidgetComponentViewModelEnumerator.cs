@@ -2,12 +2,13 @@
 
 namespace Hyperbar.Windows.Primary;
 
-public class WidgetComponentEnumerationHandler(PrimaryWidgetConfiguration configuration,
+public class WidgetComponentViewModelEnumerator(PrimaryWidgetConfiguration configuration,
+    IMediator mediator,
     IFactory<PrimaryCommandConfiguration, IWidgetComponentViewModel?> factory,
     ICache<(Guid ParentId, Guid Id), PrimaryCommandConfiguration> cache) :
-    IEnumerator<IWidgetComponentViewModel>
+    INotificationHandler<Enumerate<IWidgetComponentViewModel>>
 {
-    public IEnumerable<IWidgetComponentViewModel?> Get()
+    public async Task Handle(Enumerate<IWidgetComponentViewModel> notification, CancellationToken cancellationToken)
     {
         Stack<(Guid, List<PrimaryCommandConfiguration>)> stack = new();
         stack.Push((Guid.Empty, configuration.Commands));
@@ -27,7 +28,11 @@ public class WidgetComponentEnumerationHandler(PrimaryWidgetConfiguration config
 
         foreach (PrimaryCommandConfiguration item in configuration.Commands.OrderBy(x => x.Order))
         {
-            yield return factory.Create(item);
+            if (factory.Create(item) is IWidgetComponentViewModel viewModel)
+            {
+                await mediator.PublishAsync(new Created<IWidgetComponentViewModel>(viewModel), nameof(PrimaryWidgetViewModel), 
+                    cancellationToken);
+            }
         }
     }
 }

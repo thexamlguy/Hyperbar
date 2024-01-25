@@ -20,6 +20,8 @@ public class WidgetBuilder<TConfiguration>(TConfiguration configuration) :
         })
         .ConfigureServices((context, services) =>
         {
+            services.AddSingleton<IWidgetHost, WidgetHost>();
+
             services.AddScoped<IServiceFactory>(provider =>
                 new ServiceFactory((type, parameters) =>
                     ActivatorUtilities.CreateInstance(provider, type, parameters!)));
@@ -50,8 +52,7 @@ public class WidgetBuilder<TConfiguration>(TConfiguration configuration) :
     public IWidgetHost Build()
     {
         IHost host = hostBuilder.Build();
-        return (IWidgetHost)ActivatorUtilities.CreateInstance(host.Services,
-            typeof(WidgetHost), host);
+        return host.Services.GetRequiredService<IWidgetHost>();
     }
 
     public IWidgetBuilder ConfigureServices(Action<IServiceCollection> configureDelegate)

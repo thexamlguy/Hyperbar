@@ -27,8 +27,8 @@ public class PrimaryWidget :
                 .AddCache<Guid, IWidgetComponentViewModel>()
                 .AddTransient<IProvider<PrimaryCommandConfiguration, IWidgetComponentViewModel?>, WidgetComponentProvider>()
                 .AddTransient<IFactory<PrimaryCommandConfiguration, IWidgetComponentViewModel?>, WidgetComponentFactory>()
-                .AddTransient<IEnumerator<IWidgetComponentViewModel>, WidgetComponentEnumerationHandler>()
                 .AddWidgetTemplate<PrimaryWidgetViewModel>()
+                .AddHandler<WidgetComponentViewModelEnumerator>()
                 .AddHandler<PrimaryWidgetConfigurationHandler>();
         });
 }

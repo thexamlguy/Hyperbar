@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
 using System;
 using System.Reflection;
@@ -21,7 +22,6 @@ public partial class App :
     protected override async void OnLaunched(LaunchActivatedEventArgs args)
     {        
         base.OnLaunched(args);
-
         IHost? host = new HostBuilder()
             .UseContentRoot(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), 
                 Assembly.GetEntryAssembly()?.GetName().Name!), true)
@@ -32,10 +32,10 @@ public partial class App :
             .ConfigureServices((context, services) =>
             {
                 services.AddDefault();
-
+                services.AddWidget();
                 services.AddHostedService<AppService>();
 
-                services.AddSingleton<IDispatcher, Dispatcher>();
+                services.AddSingleton<IDispatcher>(new Dispatcher(DispatcherQueue.GetForCurrentThread()));
                 services.AddTransient<ITemplateFactory, TemplateFactory>();
 
                 services.AddHandler<AppConfigurationChangedHandler>();
@@ -48,20 +48,26 @@ public partial class App :
 
                 services.AddSingleton<DesktopBar>();
                 services.AddContentTemplate<WidgetBarViewModel, WidgetBarView>();
-                services.AddContentTemplate<WidgetContainerViewModel, WidgetContainerView>();
 
                 services.AddTransient<IProxyServiceCollection<IWidgetBuilder>>(provider =>
                     new ProxyServiceCollection<IWidgetBuilder>(services =>
                     {
-                        services.AddSingleton<IDispatcher, Dispatcher>();
-                        services.AddTransient<ITemplateFactory, TemplateFactory>();
-                        services.AddScoped<IVirtualKeyboard, VirtualKeyboard>();
+                        services.AddSingleton<IDispatcher>(new Dispatcher(DispatcherQueue.GetForCurrentThread()));
 
+                        services.AddTransient<IFactory<IWidgetHost, WidgetContainerViewModel?>, 
+                            WidgetContainerFactory>();
+
+                        services.AddTransient<ITemplateFactory, TemplateFactory>();
+
+                        services.AddScoped<IVirtualKeyboard, VirtualKeyboard>();
                         services.AddHandler<KeyAcceleratorHandler>();
                         services.AddHandler<StartProcessHandler>();
 
+                        services.AddHandler<WidgetViewModelEnumerator>();
+
                         services.AddTransient<IWidgetView, WidgetView>();
 
+                        services.AddContentTemplate<WidgetContainerViewModel, WidgetContainerView>();
                         services.AddContentTemplate<WidgetButtonViewModel, WidgetButtonView>();
                         services.AddContentTemplate<WidgetSplitButtonViewModel, WidgetSplitButtonView>();
                     }));
