@@ -3,8 +3,7 @@
 namespace Hyperbar.Widget;
 
 public class WidgetExtensionHandler(IProxyServiceCollection<IWidgetBuilder> typedServices,
-    IServiceProvider provider,
-    IMediator mediator) :
+    IServiceProvider provider) :
     INotificationHandler<Created<WidgetExtension>>
 {
     public async Task Handle(Created<WidgetExtension> notification,
@@ -18,14 +17,12 @@ public class WidgetExtensionHandler(IProxyServiceCollection<IWidgetBuilder> type
             {
                 args.AddSingleton(widgetExtension.Assembly);
                 args.AddTransient(_ => provider.GetRequiredService<IProxyService<IMediator>>());
+
                 args.AddRange(typedServices.Services);
             });
 
             IWidgetHost host = builder.Build();
             await host.InitializeAsync();
-
-            await mediator.PublishAsync(new Created<IWidgetHost>(host), 
-                cancellationToken);
         }
     }
 }

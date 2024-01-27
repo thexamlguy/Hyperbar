@@ -6,28 +6,26 @@ public class WidgetHost :
     INotificationHandler<Changed<WidgetAvailability>>,
     IWidgetHost
 {
-    private readonly IConfigurationInitializer<WidgetConfiguration> configurationInitializer;
-    private readonly IServiceProvider services;
     private readonly IEnumerable<IInitializer> initializers;
     private readonly IMediator mediator;
     private readonly IProxyService<IMediator> proxyMediator;
+    private readonly IServiceProvider services;
 
     public WidgetHost(IServiceProvider services,
         IMediator mediator,
         IEnumerable<IInitializer> initializers,
-        IProxyService<IMediator> proxyMediator,
-        IConfigurationInitializer<WidgetConfiguration> configurationInitializer)
+        IProxyService<IMediator> proxyMediator)
     {
         this.services = services;
         this.mediator = mediator;
         this.initializers = initializers;
         this.proxyMediator = proxyMediator;
-        this.configurationInitializer = configurationInitializer;
 
         mediator.Subscribe(this);
     }
 
-    public WidgetConfiguration Configuration => services.GetRequiredService<WidgetConfiguration>();
+    public WidgetConfiguration Configuration => 
+        services.GetRequiredService<WidgetConfiguration>();
    
     public IServiceProvider Services => services;
 
@@ -43,18 +41,19 @@ public class WidgetHost :
         }
     }
 
-    public async Task InitializeAsync() => await configurationInitializer.InitializeAsync();
+    public async Task InitializeAsync()
+    {
+        foreach (IInitializer initializer in initializers)
+        {
+            await initializer.InitializeAsync();
+        }
+    }
 
     private async Task StartAsync()
     {
         if (proxyMediator.Proxy is IMediator mediator)
         {
             await mediator.PublishAsync(new Started<IWidgetHost>(this));
-        }
-
-        foreach (IInitializer initializer in initializers)
-        {
-            await initializer.InitializeAsync();
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using Hyperbar.Interop.Windows;
 
-namespace Hyperbar.Windows;
+namespace Hyperbar.Widget.Windows;
 
-public class KeyAcceleratorHandler(IVirtualKeyboard virtualKeyboard) :
+internal class KeyAcceleratorHandler(IVirtualKeyboard virtualKeyboard) :
     IHandler<KeyAccelerator>
 {
     public Task<Unit> Handle(KeyAccelerator request,

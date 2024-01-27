@@ -10,7 +10,7 @@ public class TemplateGenerator : DataTemplateSelector
     {
         string xamlString = @"
                 <DataTemplate xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation'
-                                xmlns:ui='using:Hyperbar.Windows.UI'>
+                                xmlns:ui='using:Hyperbar.UI.Windows'>
                     <ui:TemplateGeneratorControl />
                 </DataTemplate>";
 
@@ -21,7 +21,7 @@ public class TemplateGenerator : DataTemplateSelector
     {
         string xamlString = @"
                 <DataTemplate xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation'
-                                xmlns:ui='using:Hyperbar.Windows.UI'>
+                                xmlns:ui='using:Hyperbar.UI.Windows'>
                     <ui:TemplateGeneratorControl />
                 </DataTemplate>";
 

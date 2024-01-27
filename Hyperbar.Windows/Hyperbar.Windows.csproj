@@ -14,11 +14,6 @@
 		<UseRidGraph>true</UseRidGraph>
 	</PropertyGroup>
 	<ItemGroup>
-	  <None Remove="Views\WidgetButtonView.xaml" />
-	  <None Remove="Views\WidgetContainerView.xaml" />
-	  <None Remove="Views\WidgetSplitButtonView.xaml" />
-	</ItemGroup>
-	<ItemGroup>
 		<Content Include="Assets\SplashScreen.scale-200.png" />
 		<Content Include="Assets\LockScreenLogo.scale-200.png" />
 		<Content Include="Assets\Square150x150Logo.scale-200.png" />
@@ -49,6 +44,7 @@
 		<ProjectReference Include="..\Hyperbar.Controls.Windows\Hyperbar.Controls.Windows.csproj" />
 		<ProjectReference Include="..\Hyperbar.Interop.Windows\Hyperbar.Interop.Windows.csproj" />
 		<ProjectReference Include="..\Hyperbar.UI.Windows\Hyperbar.UI.Windows.csproj" />
+		<ProjectReference Include="..\Hyperbar.Widget.Windows\Hyperbar.Widget.Windows.csproj" />
 		<ProjectReference Include="..\Hyperbar.Widget\Hyperbar.Widget.csproj" />
 		<ProjectReference Include="..\Hyperbar\Hyperbar.csproj" />
 	</ItemGroup>

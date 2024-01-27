@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
 
-namespace Hyperbar.Windows;
+namespace Hyperbar.Widget.Windows;
 
-public class StartProcessHandler :
+internal class StartProcessHandler :
     IHandler<StartProcess>
 {
     public Task<Unit> Handle(StartProcess request,

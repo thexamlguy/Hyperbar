@@ -1,7 +1,7 @@
 using Hyperbar.Widget;
 using Microsoft.UI.Xaml.Controls;
 
-namespace Hyperbar.Windows;
+namespace Hyperbar.Widget.Windows;
 
 public sealed partial class WidgetView :
     UserControl,
