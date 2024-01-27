@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+		<TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+		<RuntimeIdentifiers>win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
+		<UseWinUI>true</UseWinUI>
+		<UseRidGraph>true</UseRidGraph>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<EnableMsixTooling>true</EnableMsixTooling>
+	</PropertyGroup>
+	<ItemGroup Condition="$(TargetFramework.EndsWith('-windows10.0.19041.0'))">
+		<None Include="bin/$(Configuration)/$(TargetFramework)/$(AssemblyName).pri" Pack="true" PackagePath="lib/$(TargetFramework.TrimEnd('.0'))/" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Remove="bin/Debug/net8.0-windows10.0.19041.0/Hyperbar.Controls.Windows.pri" />
+	  <None Remove="bin/Debug/net8.0-windows10.0.19041.0/Hyperbar.Windows.Controls.pri" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.231202003-experimental1" />
+		<PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26031-preview" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Hyperbar.Interop.Windows\Hyperbar.Interop.Windows.csproj" />
+	  <ProjectReference Include="..\Hyperbar.UI.Windows\Hyperbar.UI.Windows.csproj" />
+	</ItemGroup>
+</Project>

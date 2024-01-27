@@ -1,5 +1,5 @@
-﻿using Hyperbar.Widget;
-using Hyperbar.Windows.Controls;
+﻿using Hyperbar.Controls.Windows;
+using Hyperbar.Widget;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Hyperbar.Windows;

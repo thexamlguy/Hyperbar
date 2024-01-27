@@ -32,10 +32,12 @@
 		<PackageReference Include="CommunityToolkit.WinUI" Version="7.1.2" />
 		<PackageReference Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
 		<PackageReference Include="CommunityToolkit.WinUI.UI.Controls.Primitives" Version="7.1.2" />
+		<PackageReference Include="CustomExtensions.WinUI" Version="0.1.10-beta" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
 		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.231202003-experimental1" />
-		<PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.25936-preview" />
-		<PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.9" />		<Manifest Include="$(ApplicationManifest)" />
+		<PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26031-preview" />
+		<PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.9" />		
+		<Manifest Include="$(ApplicationManifest)" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
 		<ProjectCapability Include="Msix" />
@@ -44,10 +46,10 @@
 		<HasPackageAndPublishMenu>true</HasPackageAndPublishMenu>
 	</PropertyGroup>
 	<ItemGroup>
+		<ProjectReference Include="..\Hyperbar.Controls.Windows\Hyperbar.Controls.Windows.csproj" />
+		<ProjectReference Include="..\Hyperbar.Interop.Windows\Hyperbar.Interop.Windows.csproj" />
+		<ProjectReference Include="..\Hyperbar.UI.Windows\Hyperbar.UI.Windows.csproj" />
 		<ProjectReference Include="..\Hyperbar.Widget\Hyperbar.Widget.csproj" />
-		<ProjectReference Include="..\Hyperbar.Windows.Controls\Hyperbar.Windows.Controls.csproj" />
-		<ProjectReference Include="..\Hyperbar.Windows.Interop\Hyperbar.Windows.Interop.csproj" />
-		<ProjectReference Include="..\Hyperbar.Windows.UI\Hyperbar.Windows.UI.csproj" />
 		<ProjectReference Include="..\Hyperbar\Hyperbar.csproj" />
 	</ItemGroup>
 </Project>

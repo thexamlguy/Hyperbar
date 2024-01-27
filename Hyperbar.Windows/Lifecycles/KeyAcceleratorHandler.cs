@@ -1,4 +1,4 @@
-﻿using Hyperbar.Windows.Interop;
+﻿using Hyperbar.Interop.Windows;
 
 namespace Hyperbar.Windows;
 
