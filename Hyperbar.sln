@@ -15,11 +15,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hyperbar.Interop.Windows", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hyperbar.UI.Windows", "Hyperbar.UI.Windows\Hyperbar.UI.Windows.csproj", "{97077400-7513-451E-83CB-C876D6C4E40E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hyperbar.Widget.Contextual", "Hyperbar.Widget.Contextual.Windows\Hyperbar.Widget.Contextual.csproj", "{FF57BDC8-6E6D-478A-8312-D946D7ED4BAB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hyperbar.Widget.Contextual.Windows", "Hyperbar.Widget.Contextual.Windows\Hyperbar.Widget.Contextual.Windows.csproj", "{FF57BDC8-6E6D-478A-8312-D946D7ED4BAB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hyperbar.Widget.Primary", "Hyperbar.Widget.Primary.Windows\Hyperbar.Widget.Primary.csproj", "{4F2A7DDC-C841-45B8-A324-8A9BD949FBDF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hyperbar.Widget.Primary.Windows", "Hyperbar.Widget.Primary.Windows\Hyperbar.Widget.Primary.Windows.csproj", "{4F2A7DDC-C841-45B8-A324-8A9BD949FBDF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hyperbar.Widget.MediaController.Windows", "Hyperbar.Widget.MediaController.Windows\Hyperbar.Widget.MediaController.Windows.csproj", "{ACBB1C58-1DB6-40E1-ABF1-71F2D2F0EC73}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hyperbar.Widget.Windows", "Hyperbar.Widget.Windows\Hyperbar.Widget.Windows.csproj", "{E7322176-B67F-4A22-AFDB-7430A6AD44B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -185,6 +187,22 @@ Global
 		{ACBB1C58-1DB6-40E1-ABF1-71F2D2F0EC73}.Release|x64.Build.0 = Release|Any CPU
 		{ACBB1C58-1DB6-40E1-ABF1-71F2D2F0EC73}.Release|x86.ActiveCfg = Release|Any CPU
 		{ACBB1C58-1DB6-40E1-ABF1-71F2D2F0EC73}.Release|x86.Build.0 = Release|Any CPU
+		{E7322176-B67F-4A22-AFDB-7430A6AD44B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7322176-B67F-4A22-AFDB-7430A6AD44B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7322176-B67F-4A22-AFDB-7430A6AD44B6}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{E7322176-B67F-4A22-AFDB-7430A6AD44B6}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{E7322176-B67F-4A22-AFDB-7430A6AD44B6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E7322176-B67F-4A22-AFDB-7430A6AD44B6}.Debug|x64.Build.0 = Debug|Any CPU
+		{E7322176-B67F-4A22-AFDB-7430A6AD44B6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E7322176-B67F-4A22-AFDB-7430A6AD44B6}.Debug|x86.Build.0 = Debug|Any CPU
+		{E7322176-B67F-4A22-AFDB-7430A6AD44B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7322176-B67F-4A22-AFDB-7430A6AD44B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7322176-B67F-4A22-AFDB-7430A6AD44B6}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{E7322176-B67F-4A22-AFDB-7430A6AD44B6}.Release|ARM64.Build.0 = Release|Any CPU
+		{E7322176-B67F-4A22-AFDB-7430A6AD44B6}.Release|x64.ActiveCfg = Release|Any CPU
+		{E7322176-B67F-4A22-AFDB-7430A6AD44B6}.Release|x64.Build.0 = Release|Any CPU
+		{E7322176-B67F-4A22-AFDB-7430A6AD44B6}.Release|x86.ActiveCfg = Release|Any CPU
+		{E7322176-B67F-4A22-AFDB-7430A6AD44B6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

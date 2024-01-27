@@ -7,12 +7,12 @@ public static class IServiceCollectionExtensions
 { 
     public static IServiceCollection AddWidget(this IServiceCollection services)
     {
-        services.AddTransient<IInitializer, WidgetInitializer>();
+        services.AddTransient<IInitializer, WidgetExtensionInitializer>();
         services.AddTransient<IFactory<Type, IWidget>, WidgetFactory>();
 
-        services.AddHandler<WidgetEnumerator>();
-        services.AddHandler<WidgetAssemblyHandler>();
-        services.AddHandler<WidgetHandler>();
+        services.AddHandler<WidgetExtensionEnumerator>();
+        services.AddHandler<WidgetExtensionHandler>();
+        services.AddHandler<WidgetExtensionHandler>();
         services.AddHandler<WidgetHostHandler>();
 
         return services;

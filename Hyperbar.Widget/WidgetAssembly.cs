@@ -2,5 +2,4 @@
 
 namespace Hyperbar.Widget;
 
-public record WidgetAssembly(Assembly? Assembly = default) : 
-    INotification;
+public record WidgetAssembly(Assembly Assembly) : IWidgetAssembly;

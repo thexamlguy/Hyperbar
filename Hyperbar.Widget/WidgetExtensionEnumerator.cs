@@ -4,12 +4,12 @@ using System.Runtime.Loader;
 
 namespace Hyperbar.Widget;
 
-public class WidgetEnumerator(IFactory<Type, IWidget> factory,
+public class WidgetExtensionEnumerator(IFactory<Type, IWidget> factory,
     IHostEnvironment hostEnvironment, 
     IMediator mediator) :
-    INotificationHandler<Enumerate<IWidget>>
+    INotificationHandler<Enumerate<WidgetExtension>>
 {
-    public Task Handle(Enumerate<IWidget> notification, 
+    public Task Handle(Enumerate<WidgetExtension> notification, 
         CancellationToken cancellationToken)
     {
         string extensionsDirectory = Path.Combine(hostEnvironment.ContentRootPath, "Extensions");
@@ -25,12 +25,12 @@ public class WidgetEnumerator(IFactory<Type, IWidget> factory,
             Parallel.ForEach(assemblyPaths, async (string assemblyPath) =>
             {
                 Assembly assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(assemblyPath);
-                if (assembly.GetTypes().FirstOrDefault(x => typeof(IWidget).IsAssignableFrom(x)) is Type widgetType)
+                foreach (Type widgetType in assembly.GetTypes().Where(x => typeof(IWidget).IsAssignableFrom(x)))
                 {
                     if (factory.Create(widgetType) is IWidget widget)
                     {
-                       await mediator.PublishAsync(new Created<IWidget>(widget),
-                           cancellationToken);
+                        await mediator.PublishAsync(new Created<WidgetExtension>(new WidgetExtension(widget, 
+                            new WidgetAssembly(assembly))), cancellationToken);
                     }
                 }
             });
