@@ -25,9 +25,6 @@ public class WidgetBuilder<TConfiguration>(TConfiguration configuration) :
             services.AddScoped<IServiceFactory>(provider =>
                 new ServiceFactory((type, parameters) =>
                     ActivatorUtilities.CreateInstance(provider, type, parameters!)));
-
-            services.AddHostedService<WidgetService>();
-
             services.AddScoped<IMediator, Mediator>();
             services.AddScoped<IDisposer, Disposer>();
 

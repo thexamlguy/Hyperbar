@@ -6,5 +6,6 @@ namespace Hyperbar.Widget.MediaController.Windows;
 public sealed partial class MediaInformationView : 
     UserControl
 {
-    public MediaInformationView() => this.InitializeComponent(ref _contentLoaded);
+    public MediaInformationView() =>
+        this.InitializeComponent(ref _contentLoaded);
 }

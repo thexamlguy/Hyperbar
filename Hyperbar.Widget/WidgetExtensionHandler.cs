@@ -12,7 +12,6 @@ public class WidgetExtensionHandler(IProxyServiceCollection<IWidgetBuilder> type
         if(notification.Value is WidgetExtension widgetExtension)
         {
             IWidgetBuilder builder = widgetExtension.Widget.Create();
-
             builder.ConfigureServices(args =>
             {
                 args.AddSingleton(widgetExtension.Assembly);

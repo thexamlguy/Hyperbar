@@ -1,11 +1,5 @@
 ﻿namespace Hyperbar;
 
-[AttributeUsage(AttributeTargets.Class)]
-public class NotificationHandlerAttribute(object key) : Attribute
-{
-    public object Key { get; } = key;
-}
-
 public interface IMediator
 {
     Task PublishAsync<TNotification>(TNotification notification,

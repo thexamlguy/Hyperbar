@@ -8,13 +8,6 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 	<ItemGroup>
-		<None Remove="WidgetBarView.xaml" />
-		<None Remove="WidgetButtonView.xaml" />
-		<None Remove="WidgetContainerView.xaml" />
-		<None Remove="WidgetSplitButtonView.xaml" />
-		<None Remove="WidgetView.xaml" />
-	</ItemGroup>
-	<ItemGroup>
 		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.231202003-experimental1" />
 		<PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26031-preview" />
 		<PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.9" />
@@ -24,27 +17,5 @@
 		<ProjectReference Include="..\Hyperbar.UI.Windows\Hyperbar.UI.Windows.csproj" />
 		<ProjectReference Include="..\Hyperbar.Widget\Hyperbar.Widget.csproj" />
 		<ProjectReference Include="..\Hyperbar\Hyperbar.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-		<Page Update="WidgetBarView.xaml">
-			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-			<SubType>Designer</SubType>
-		</Page>
-		<Page Update="WidgetButtonView.xaml">
-			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-			<SubType>Designer</SubType>
-		</Page>
-		<Page Update="WidgetContainerView.xaml">
-			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-			<SubType>Designer</SubType>
-		</Page>
-		<Page Update="WidgetSplitButtonView.xaml">
-			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-			<SubType>Designer</SubType>
-		</Page>
-		<Page Update="WidgetView.xaml">
-			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-			<SubType>Designer</SubType>
-		</Page>
 	</ItemGroup>
 </Project>

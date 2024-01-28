@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using Windows.ApplicationModel.Resources.Core;
+﻿using Windows.ApplicationModel.Resources.Core;
 using Windows.Storage;
 
 namespace Hyperbar.Widget.Windows;
@@ -9,27 +8,23 @@ internal class WidgetResourceInitialization(IWidgetAssembly widgetAssembly) :
 {
     public async Task InitializeAsync()
     {
-        if (widgetAssembly.Assembly is Assembly assembly)
+        string assemblyDirectory = Path.GetDirectoryName(widgetAssembly.Assembly.Location) ?? string.Empty;
+        string[] possibleFileNames = ["resources.pri", $"{widgetAssembly.Assembly.GetName().Name}.pri"];
+
+        FileInfo? resourceFileInfo = null;
+        foreach (string fileName in possibleFileNames)
         {
-            if (Path.GetDirectoryName(assembly.Location) is string assemblyDirectory)
+            resourceFileInfo = new FileInfo(Path.Combine(assemblyDirectory, fileName));
+            if (resourceFileInfo.Exists)
             {
-                FileInfo resourceFileInfo = new(Path.Combine(assemblyDirectory, 
-                    "resources.pri"));
-
-                if (!resourceFileInfo.Exists)
-                {
-                    resourceFileInfo = new(Path.Combine(assemblyDirectory, 
-                        $"{assembly.GetName().Name}.pri"));
-                }
-
-                if (!resourceFileInfo.Exists)
-                {
-                    return;
-                }
-
-                StorageFile file = await StorageFile.GetFileFromPathAsync(resourceFileInfo.FullName);
-                ResourceManager.Current.LoadPriFiles(new[] { file });
+                break;
             }
+        }
+
+        if (resourceFileInfo?.Exists is true)
+        {
+            StorageFile file = await StorageFile.GetFileFromPathAsync(resourceFileInfo.FullName);
+            ResourceManager.Current.LoadPriFiles(new[] { file });
         }
     }
 }

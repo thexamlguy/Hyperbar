@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using Hyperbar.Widget;
 
 namespace Hyperbar.Widget.MediaController.Windows;
 
@@ -15,10 +14,24 @@ public class MediaControllerViewModel :
         TemplateFactory = templateFactory;
 
         Add<MediaInformationViewModel>();
-        Add<MediaButtonViewModel>("Backward", "\uEB9E");
-        Add<MediaButtonViewModel>("Play", "\uE768", new RelayCommand(async () => await mediator.PublishAsync<Play>()));
-        Add<MediaButtonViewModel>("Pause", "\uE769", new RelayCommand(async () => await mediator.PublishAsync<Pause>()));
-        Add<MediaButtonViewModel>("Forward", "\uEB9D");
+
+        Add<MediaButtonViewModel>(PlaybackButtonType.Previous, 
+            "Previous", "\uEB9E",
+                new RelayCommand(async () => await mediator.PublishAsync<Previous>()));
+
+        Add<MediaButtonViewModel>(PlaybackButtonType.Play, 
+            "Play", "\uE768", 
+                new RelayCommand(async () => await mediator.PublishAsync<Play>()));
+
+        Add<MediaButtonViewModel>(PlaybackButtonType.Pause,
+            "Pause", "\uE769", 
+                new RelayCommand(async () => await mediator.PublishAsync<Pause>()));
+
+        Add<MediaButtonViewModel>(PlaybackButtonType.Forward, 
+            "Forward", "\uEB9D",
+                new RelayCommand(async () => await mediator.PublishAsync<Forward>()));
+
+        mediator.Subscribe(this);
     }
 
     public ITemplateFactory TemplateFactory { get; set; }

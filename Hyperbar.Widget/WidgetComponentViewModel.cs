@@ -1,6 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-
-namespace Hyperbar.Widget;
+﻿namespace Hyperbar.Widget;
 
 public partial class WidgetComponentViewModel :
     ObservableCollectionViewModel<IWidgetComponentViewModel>,

@@ -17,6 +17,9 @@ public partial class WidgetButtonViewModel(IServiceFactory serviceFactory,
     private IRelayCommand? click = command;
 
     [ObservableProperty]
+    private bool enabled;
+
+    [ObservableProperty]
     private string? icon = icon;
 
     [ObservableProperty]
@@ -24,4 +27,7 @@ public partial class WidgetButtonViewModel(IServiceFactory serviceFactory,
 
     [ObservableProperty]
     private string? text = text;
+
+    [ObservableProperty]
+    private bool visible;
 }

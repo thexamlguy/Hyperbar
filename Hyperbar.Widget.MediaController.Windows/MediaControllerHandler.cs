@@ -22,8 +22,8 @@ public class MediaControllerHandler(IMediator mediator,
                         if (factory.Create(mediaController) is MediaControllerViewModel mediaControllerViewModel)
                         {
                             cache.Add(mediaController, mediaControllerViewModel);
-                            //await mediator.PublishAsync(new Created<MediaControllerViewModel>(mediaControllerViewModel),
-                            //    cancellationToken);
+                            await mediator.PublishAsync(new Created<MediaControllerViewModel>(mediaControllerViewModel),
+                                cancellationToken);
                         }
                     }
                 }

@@ -2,17 +2,17 @@
 
 namespace Hyperbar.Widget.MediaController.Windows;
 
-public class MediaController : 
+public class MediaController :
     INotificationHandler<Play>,
     INotificationHandler<Pause>,
-    INotificationHandler<Request<Playback>>,
+    INotificationHandler<Request<PlaybackInformation>>,
     INotificationHandler<Request<MediaInformation>>,
     IDisposable
 {
-    private readonly IMediator mediator;
-    private readonly IDisposer disposer;
-    private readonly GlobalSystemMediaTransportControlsSession session;
     private readonly AsyncLock asyncLock = new();
+    private readonly IDisposer disposer;
+    private readonly IMediator mediator;
+    private readonly GlobalSystemMediaTransportControlsSession session;
 
     public MediaController(IMediator mediator,
         IDisposer disposer,
@@ -31,51 +31,46 @@ public class MediaController :
 
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
         disposer.Dispose(this);
     }
 
-    public async Task Handle(Play notification, 
-        CancellationToken cancellationToken) =>
+    public async Task Handle(Play notification,
+        CancellationToken cancellationToken)
+    {
         await session.TryPlayAsync();
+        await UpdateMediaPlaybackPropertiesAsync();
+    }
 
-    public async Task Handle(Pause notification, 
-        CancellationToken cancellationToken) =>
+    public async Task Handle(Pause notification,
+        CancellationToken cancellationToken)
+    {
         await session.TryPauseAsync();
-
-    public async Task Handle(Request<Playback> notification, 
-        CancellationToken cancellationToken)
-    {
-        await mediator.PublishAsync(new Changed<Playback>(), cancellationToken);
+        await UpdateMediaPlaybackPropertiesAsync();
     }
 
-    public async Task Handle(Request<MediaInformation> _,
-        CancellationToken cancellationToken)
-    {
-        using (await asyncLock)
-        {
-            try
-            {
-                GlobalSystemMediaTransportControlsSessionMediaProperties mediaProperties = await session.TryGetMediaPropertiesAsync();
-                await mediator.PublishAsync(new Changed<MediaInformation>(new MediaInformation(mediaProperties.Title,
-                    mediaProperties.Subtitle)), cancellationToken);
-            }
-            catch
-            {
+    public async Task Handle(Request<PlaybackInformation> args,
+        CancellationToken cancellationToken) => await UpdateMediaPlaybackPropertiesAsync();
 
-            }
-        }
-    }
+    public async Task Handle(Request<MediaInformation> args,
+        CancellationToken cancellationToken) => await UpdateMediaPropertiesAsync();
 
     private async void OnMediaPropertiesChanged(GlobalSystemMediaTransportControlsSession sender,
-        MediaPropertiesChangedEventArgs args)
+        MediaPropertiesChangedEventArgs args) => await UpdateMediaPropertiesAsync();
+
+    private async void OnPlaybackInfoChanged(GlobalSystemMediaTransportControlsSession sender,
+        PlaybackInfoChangedEventArgs args) => await UpdateMediaPlaybackPropertiesAsync();
+
+    private async Task UpdateMediaPlaybackPropertiesAsync()
     {
         using (await asyncLock)
         {
             try
             {
-                GlobalSystemMediaTransportControlsSessionMediaProperties mediaProperties = await session.TryGetMediaPropertiesAsync();
-                await mediator.PublishAsync(new Changed<MediaInformation>(new MediaInformation(mediaProperties.Title,
-                    mediaProperties.Artist)));
+                GlobalSystemMediaTransportControlsSessionPlaybackInfo playbackInfo = session.GetPlaybackInfo();
+                await mediator.PublishAsync(new Changed<PlaybackInformation>(
+                    new PlaybackInformation((PlaybackStatus)playbackInfo.PlaybackStatus)));
+
             }
             catch
             {
@@ -84,9 +79,23 @@ public class MediaController :
         }
     }
 
-    private async void OnPlaybackInfoChanged(GlobalSystemMediaTransportControlsSession sender,
-        PlaybackInfoChangedEventArgs args)
+    private async Task UpdateMediaPropertiesAsync()
     {
-        await mediator.PublishAsync(new Changed<Playback>());
+        using (await asyncLock)
+        {
+            try
+            {
+                GlobalSystemMediaTransportControlsSessionMediaProperties mediaProperties =
+                     await session.TryGetMediaPropertiesAsync();
+
+                await mediator.PublishAsync(new Changed<MediaInformation>(new MediaInformation(mediaProperties.Title,
+                    mediaProperties.Artist)));
+
+            }
+            catch
+            {
+
+            }
+        }
     }
 }

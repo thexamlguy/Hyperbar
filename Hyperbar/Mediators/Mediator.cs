@@ -107,31 +107,18 @@ public class Mediator(IServiceProvider provider,
     public void Subscribe(object handler)
     {
         Type handlerType = handler.GetType();
-        object? key = null;
+        object? key = GetKeyFromHandler(handlerType, handler);
 
-        if (Attribute.GetCustomAttribute(handlerType, typeof(NotificationHandlerAttribute))
-            is NotificationHandlerAttribute attribute)
+        foreach (Type interfaceType in GetNotificationHandlerInterfaces(handlerType))
         {
-            if (handlerType.GetProperty($"{attribute.Key}") is PropertyInfo property)
+            if (interfaceType.GetGenericArguments().FirstOrDefault() 
+                is Type argumentType)
             {
-                if (property.GetValue(handler, null) is { } value)
+                if (object.Equals(key, default))
                 {
-                    key = value;
-                }
-            }
-            else
-            {
-                key = attribute.Key;
-            }
-        }
 
-        foreach (Type interfaceType in handlerType.GetInterfaces().Where(x => x.IsGenericType 
-            && x.GetGenericTypeDefinition() == typeof(INotificationHandler<>)))
-        {
-            if (interfaceType.GetGenericArguments() is { Length: 1 } arguments)
-            {
-                key ??= arguments[0];
-                subjects.AddOrUpdate(key, [handler], (value, collection) =>
+                }
+                subjects.AddOrUpdate(key ?? argumentType, new List<object> { handler }, (value, collection) =>
                 {
                     collection.Add(handler);
                     return collection;
@@ -139,4 +126,26 @@ public class Mediator(IServiceProvider provider,
             }
         }
     }
+
+    private object? GetKeyFromHandler(Type handlerType, object handler)
+    {
+        if (handlerType.GetCustomAttribute<NotificationHandlerAttribute>() is NotificationHandlerAttribute attribute)
+        {
+            if (handlerType.GetProperty($"{attribute.Key}") is PropertyInfo property
+                && property.GetValue(handler) is { } value)
+            {
+                return value;
+            }
+            else
+            {
+                return attribute.Key;
+            }
+        }
+
+        return null;
+    }
+
+    private IEnumerable<Type> GetNotificationHandlerInterfaces(Type handlerType) => handlerType.GetInterfaces()
+            .Where(interfaceType => interfaceType.IsGenericType && interfaceType
+            .GetGenericTypeDefinition() == typeof(INotificationHandler<>));
 }

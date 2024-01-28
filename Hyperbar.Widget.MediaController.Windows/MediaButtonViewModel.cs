@@ -1,21 +1,47 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using Hyperbar.Widget;
-using System.Windows.Input;
 
 namespace Hyperbar.Widget.MediaController.Windows;
 
-public class MediaButtonViewModel(IServiceFactory serviceFactory,
-    IMediator mediator,
-    IDisposer disposer,
-    ITemplateFactory templateFactory,
-    Guid guid = default,
-    string? text = null,
-    string? icon = null,
-    RelayCommand? command = null) :
-    WidgetButtonViewModel(serviceFactory, mediator, disposer, templateFactory, guid, text, icon, command),
-    IInitialization
+public class MediaButtonViewModel :
+    WidgetButtonViewModel,
+    IInitialization, 
+    INotificationHandler<Changed<PlaybackInformation>>
 {
-    public ICommand Initialize => new AsyncRelayCommand(InitializeAsync);
+    private readonly PlaybackButtonType buttonType;
 
-    public async Task InitializeAsync() => await Mediator.PublishAsync<Request<Playback>>();
+    public MediaButtonViewModel(IServiceFactory serviceFactory,
+        IMediator mediator,
+        IDisposer disposer,
+        ITemplateFactory templateFactory,
+        PlaybackButtonType buttonType,
+        Guid guid = default,
+        string? text = null,
+        string? icon = null,
+        RelayCommand? command = null) : base (serviceFactory, mediator, disposer, templateFactory, guid, text, icon, command)
+    {
+        this.buttonType = buttonType;
+        mediator.Subscribe(this);
+    }
+
+    public Task Handle(Changed<PlaybackInformation> notification, 
+        CancellationToken cancellationToken)
+    {
+        if (notification.Value is PlaybackInformation information)
+        {
+            switch (buttonType)
+            {
+                case PlaybackButtonType.Play:
+                    Visible = information.Status is PlaybackStatus.Playing;
+                break;
+                case PlaybackButtonType.Pause:
+                    Visible = information.Status is PlaybackStatus.Paused;
+                    break;
+            }
+        }
+
+        return Task.CompletedTask;
+    }
+
+    public override async Task InitializeAsync() => 
+        await Mediator.PublishAsync<Request<PlaybackInformation>>();
 }

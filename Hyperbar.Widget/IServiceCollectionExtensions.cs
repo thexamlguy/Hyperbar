@@ -12,7 +12,6 @@ public static class IServiceCollectionExtensions
 
         services.AddHandler<WidgetExtensionEnumerator>();
         services.AddHandler<WidgetExtensionHandler>();
-        services.AddHandler<WidgetExtensionHandler>();
         services.AddHandler<WidgetHostHandler>();
 
         return services;
