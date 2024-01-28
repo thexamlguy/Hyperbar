@@ -30,8 +30,6 @@ public class MediaControllerViewModel :
         Add<MediaButtonViewModel>(PlaybackButtonType.Forward, 
             "Forward", "\uEB9D",
                 new RelayCommand(async () => await mediator.PublishAsync<Forward>()));
-
-        mediator.Subscribe(this);
     }
 
     public ITemplateFactory TemplateFactory { get; set; }

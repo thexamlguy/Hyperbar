@@ -8,4 +8,6 @@ public sealed partial class MediaButtonView :
 {
     public MediaButtonView() =>
         this.InitializeComponent(ref _contentLoaded);
+
+    private MediaButtonViewModel ViewModel => (MediaButtonViewModel)DataContext;
 }

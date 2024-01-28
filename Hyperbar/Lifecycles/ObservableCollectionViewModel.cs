@@ -11,6 +11,10 @@ namespace Hyperbar;
 public partial class ObservableCollectionViewModel<TItem> :
     ObservableObject,
     IObservableCollectionViewModel<TItem>,
+    IList<TItem>,
+    IList,
+    IReadOnlyList<TItem>,
+    INotifyCollectionChanged,
     INotificationHandler<Removed<TItem>>,
     INotificationHandler<Created<TItem>>,
     INotificationHandler<Inserted<TItem>>,
@@ -134,6 +138,12 @@ public partial class ObservableCollectionViewModel<TItem> :
         InsertItem(index, item);
     }
 
+    public void Add(object item)
+    {
+        int index = collection.Count;
+        InsertItem(index, (TItem)item);
+    }
+
     int IList.Add(object? value)
     {
         TItem? item = default;
@@ -159,7 +169,15 @@ public partial class ObservableCollectionViewModel<TItem> :
         }
     }
 
-    public void Clear() => ClearItems();
+    public void Clear()
+    {
+        foreach (TItem item in collection)
+        {
+            Disposer.Dispose(item);
+        }
+
+        ClearItems();
+    }
 
     public bool Contains(TItem item) =>
         collection.Contains(item);
@@ -173,8 +191,11 @@ public partial class ObservableCollectionViewModel<TItem> :
     void ICollection.CopyTo(Array array, int index) =>
         collection.CopyTo((TItem[])array, index);
 
-    public void Dispose() =>
+    public virtual void Dispose()
+    {
+        GC.SuppressFinalize(this);
         Disposer.Dispose(this);
+    }
 
     public System.Collections.Generic.IEnumerator<TItem> GetEnumerator() =>
         collection.GetEnumerator();
@@ -187,15 +208,9 @@ public partial class ObservableCollectionViewModel<TItem> :
     {
         foreach (TItem item in this.ToList())
         {
-            if (notification.Value is not null)
+            if (notification.Value is not null && notification.Value.Equals(item))
             {
-                if (notification.Value.Equals(item))
-                {
-                    if (item is IDisposable disposable)
-                    {
-                        disposable.Dispose();
-                    }
-                }
+                Remove(item);
             }
         }
 
@@ -279,7 +294,7 @@ public partial class ObservableCollectionViewModel<TItem> :
             return false;
         }
 
-        Disposer.Remove(this, item);
+        Disposer.Dispose(item);
         RemoveItem(index);
 
         return true;
@@ -302,14 +317,13 @@ public partial class ObservableCollectionViewModel<TItem> :
     protected virtual void InsertItem(int index,
         TItem value)
     {
-        Disposer.Add(this, Disposable.Create(() =>
+        Disposer.Add(this, value);
+        Disposer.Add(value, value, Disposable.Create(() =>
         {
-            Remove(value);
-        }));
-
-        Disposer.Add(value, Disposable.Create(() =>
-        {
-            Remove(value);
+            if (value is IList collection)
+            {
+                collection.Clear();
+            }
         }));
 
         collection.Insert(index, value);

@@ -48,7 +48,7 @@ public class MediaControllerManager(IMediator mediator,
             {
                 if (!sessions.Any(x => x.SourceAppUserModelId == session.Key.SourceAppUserModelId))
                 {
-                    await dispatcher.InvokeAsync(() => disposer.Dispose(session.Value));
+                    await mediator.PublishAsync(new Removed<MediaController>(session.Value));
                     cache.Remove(session);
                 }
             }

@@ -5,28 +5,31 @@ namespace Hyperbar.Widget.MediaController.Windows;
 public class MediaControllerHandler(IMediator mediator,
     IServiceScopeProvider<MediaController> scopeProvider,
     ICache<MediaController, MediaControllerViewModel> cache) :
-    INotificationHandler<Created<MediaController>>
+    INotificationHandler<Created<MediaController>>,
+    INotificationHandler<Removed<MediaController>>
 {
     public async Task Handle(Created<MediaController> notification,
         CancellationToken cancellationToken)
     {
-        if (notification.Value is MediaController mediaController)
+        if (notification.Value is MediaController mediaController &&
+            scopeProvider.TryGet(mediaController, out IServiceScope? serviceScope) &&
+            serviceScope?.ServiceProvider.GetService<IFactory<MediaController, MediaControllerViewModel?>>() 
+                is IFactory<MediaController, MediaControllerViewModel?> factory &&
+            factory.Create(mediaController) is MediaControllerViewModel viewModel)
         {
-            if (scopeProvider.TryGet(mediaController, out IServiceScope? serviceScope))
+            cache.Add(mediaController, viewModel);
+            await mediator.PublishAsync(new Created<MediaControllerViewModel>(viewModel), cancellationToken);
+        }
+    }
 
-                if (serviceScope is not null)
-                {
-                    if (serviceScope.ServiceProvider.GetService<IFactory<MediaController, MediaControllerViewModel?>>()
-                        is IFactory<MediaController, MediaControllerViewModel?> factory)
-                    {
-                        if (factory.Create(mediaController) is MediaControllerViewModel mediaControllerViewModel)
-                        {
-                            cache.Add(mediaController, mediaControllerViewModel);
-                            await mediator.PublishAsync(new Created<MediaControllerViewModel>(mediaControllerViewModel),
-                                cancellationToken);
-                        }
-                    }
-                }
+    public async Task Handle(Removed<MediaController> notification, CancellationToken cancellationToken)
+    {
+        if (notification.Value is MediaController mediaController &&
+            cache.TryGetValue(mediaController, out MediaControllerViewModel? viewModel) &&
+            viewModel is not null)
+        {
+            await mediator.PublishAsync(new Removed<MediaControllerViewModel>(viewModel), cancellationToken);
+            cache.Remove(mediaController);
         }
     }
 }

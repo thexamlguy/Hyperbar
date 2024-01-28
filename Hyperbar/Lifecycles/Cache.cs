@@ -41,16 +41,6 @@ public class Cache<TKey, TValue>(IDisposer disposer) :
         TValue value)
     {
         cache.TryAdd(key, value);
-
-        disposer.Add(value, Disposable.Create(() =>
-        {
-            Remove(key);
-        }));
-
-        disposer.Add(key, Disposable.Create(() =>
-        {
-            Remove(key);
-        }));
     }
 
     public void Clear() => cache.Clear();

@@ -2,27 +2,19 @@
 
 namespace Hyperbar.Widget.MediaController.Windows;
 
-public class MediaButtonViewModel :
-    WidgetButtonViewModel,
+public class MediaButtonViewModel(IServiceFactory serviceFactory,
+    IMediator mediator,
+    IDisposer disposer,
+    ITemplateFactory templateFactory,
+    PlaybackButtonType buttonType,
+    Guid guid = default,
+    string? text = null,
+    string? icon = null,
+    RelayCommand? command = null) :
+    WidgetButtonViewModel(serviceFactory, mediator, disposer, templateFactory, guid, text, icon, command),
     IInitialization, 
     INotificationHandler<Changed<PlaybackInformation>>
 {
-    private readonly PlaybackButtonType buttonType;
-
-    public MediaButtonViewModel(IServiceFactory serviceFactory,
-        IMediator mediator,
-        IDisposer disposer,
-        ITemplateFactory templateFactory,
-        PlaybackButtonType buttonType,
-        Guid guid = default,
-        string? text = null,
-        string? icon = null,
-        RelayCommand? command = null) : base (serviceFactory, mediator, disposer, templateFactory, guid, text, icon, command)
-    {
-        this.buttonType = buttonType;
-        mediator.Subscribe(this);
-    }
-
     public Task Handle(Changed<PlaybackInformation> notification, 
         CancellationToken cancellationToken)
     {
@@ -31,10 +23,10 @@ public class MediaButtonViewModel :
             switch (buttonType)
             {
                 case PlaybackButtonType.Play:
-                    Visible = information.Status is PlaybackStatus.Playing;
+                    Visible = information.Status is PlaybackStatus.Paused;
                 break;
                 case PlaybackButtonType.Pause:
-                    Visible = information.Status is PlaybackStatus.Paused;
+                    Visible = information.Status is PlaybackStatus.Playing;
                     break;
             }
         }

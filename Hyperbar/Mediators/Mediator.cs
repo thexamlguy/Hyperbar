@@ -8,7 +8,7 @@ public class Mediator(IServiceProvider provider,
     IDispatcher dispatcher) :
     IMediator
 {
-    private readonly ConcurrentDictionary<object, List<dynamic>> subjects = [];
+    private readonly ConcurrentDictionary<object, List<dynamic>> subscriptions = [];
 
     public Task PublishAsync<TNotification>(object key,
         CancellationToken cancellationToken = default)
@@ -46,11 +46,14 @@ public class Mediator(IServiceProvider provider,
         List<INotificationHandler<TNotification>> handlers =
             provider.GetServices<INotificationHandler<TNotification>>().ToList();
 
-        foreach (KeyValuePair<object, List<dynamic>> handler in subjects)
+        foreach (KeyValuePair<object, List<dynamic>> subscriber in subscriptions)
         {
-            if (key is not null && handler.Key.Equals(key) || handler.Key.Equals(typeof(TNotification)))
+            if (subscriber.Key.Equals($"{(key is not null ? $"{key}:" : "")}{typeof(TNotification)}"))
             {
-                handlers.Add(handler.Value[0]);
+                foreach (dynamic handler in subscriber.Value)
+                {
+                    handlers.Add(handler);
+                }
             }
         }
 
@@ -111,14 +114,9 @@ public class Mediator(IServiceProvider provider,
 
         foreach (Type interfaceType in GetNotificationHandlerInterfaces(handlerType))
         {
-            if (interfaceType.GetGenericArguments().FirstOrDefault() 
-                is Type argumentType)
+            if (interfaceType.GetGenericArguments().FirstOrDefault() is Type argumentType)
             {
-                if (object.Equals(key, default))
-                {
-
-                }
-                subjects.AddOrUpdate(key ?? argumentType, new List<object> { handler }, (value, collection) =>
+                subscriptions.AddOrUpdate($"{(key is not null ? $"{key}:" : "")}{argumentType}", new List<object> { handler }, (value, collection) =>
                 {
                     collection.Add(handler);
                     return collection;

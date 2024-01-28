@@ -1,10 +1,3 @@
-﻿using System.Collections;
-using System.Collections.Specialized;
+﻿namespace Hyperbar;
 
-namespace Hyperbar;
-
-public interface IObservableCollectionViewModel<TItem> : 
-    IList<TItem>,
-    IList,
-    IReadOnlyList<TItem>,
-    INotifyCollectionChanged;
+public interface IObservableCollectionViewModel<TItem>;
