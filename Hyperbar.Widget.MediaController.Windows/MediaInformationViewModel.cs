@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Hyperbar.Widget;
+using Microsoft.UI.Xaml.Media;
 
 namespace Hyperbar.Widget.MediaController.Windows;
 
@@ -15,6 +15,9 @@ public partial class MediaInformationViewModel(IServiceFactory serviceFactory,
     private string? description;
 
     [ObservableProperty]
+    private Stream? thumbnailSource;
+
+    [ObservableProperty]
     private string? title;
 
     public Task Handle(Changed<MediaInformation> notification, 
@@ -24,6 +27,7 @@ public partial class MediaInformationViewModel(IServiceFactory serviceFactory,
         {
             Title = value.Title;
             Description = value.Description;
+            ThumbnailSource = value.ThumbnailSource;
         }
 
         return Task.CompletedTask;

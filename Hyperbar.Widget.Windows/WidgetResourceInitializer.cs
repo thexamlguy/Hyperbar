@@ -3,7 +3,7 @@ using Windows.Storage;
 
 namespace Hyperbar.Widget.Windows;
 
-internal class WidgetResourceInitialization(IWidgetAssembly widgetAssembly) :
+internal class WidgetResourceInitializer(IWidgetAssembly widgetAssembly) :
     IInitializer
 {
     public async Task InitializeAsync()

@@ -19,6 +19,7 @@ public partial class ObservableCollectionViewModel<TItem> :
     INotificationHandler<Created<TItem>>,
     INotificationHandler<Inserted<TItem>>,
     INotificationHandler<Moved<TItem>>,
+    INotificationHandler<Replaced<TItem>>,
     IDisposable
     where TItem :
     IDisposable
@@ -250,6 +251,17 @@ public partial class ObservableCollectionViewModel<TItem> :
         return Task.CompletedTask;
     }
 
+    public Task Handle(Replaced<TItem> notification, 
+        CancellationToken cancellationToken)
+    {
+        if (notification.Value is TItem item)
+        {
+            Replace(notification.Index, item);
+        }
+
+        return Task.CompletedTask;
+    }
+
     public int IndexOf(TItem item) =>
         collection.IndexOf(item);
 
@@ -270,6 +282,22 @@ public partial class ObservableCollectionViewModel<TItem> :
         {
             Insert(index, item);
         }
+    }
+
+    public bool Replace(int index, TItem item)
+    {
+        if (index <= Count - 1)
+        {
+            RemoveItem(index);
+        }
+        else
+        {
+            index = Count;
+        }
+
+        Insert(index, item);
+
+        return true;
     }
 
     public bool Move(int index, TItem item)

@@ -1,6 +1,8 @@
 ﻿using Hyperbar.Interop.Windows;
 using Hyperbar.UI.Windows;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.UI.Xaml.Markup;
+using System.Collections.Generic;
 
 namespace Hyperbar.Widget.Windows;
 
@@ -16,6 +18,7 @@ public static class IServiceCollectionExtensions
         services.AddTransient<IProxyServiceCollection<IWidgetBuilder>>(provider =>
             new ProxyServiceCollection<IWidgetBuilder>(services =>
             {
+                services.AddSingleton(provider.GetRequiredService<IList<IXamlMetadataProvider>>());
                 services.AddSingleton(provider.GetRequiredService<IDispatcher>());
                 services.AddTransient<IFactory<IWidgetHost, WidgetContainerViewModel?>,
                     WidgetContainerFactory>();
@@ -29,7 +32,8 @@ public static class IServiceCollectionExtensions
                 services.AddHandler<WidgetViewModelEnumerator>();
 
                 services.AddTransient<IWidgetView, WidgetView>();
-                services.AddTransient<IInitializer, WidgetResourceInitialization>();
+                services.AddTransient<IInitializer, WidgetResourceInitializer>();
+                services.AddTransient<IInitializer, WidgetXamlMetadataInitializer>();
 
                 services.AddContentTemplate<WidgetContainerViewModel, WidgetContainerView>();
                 services.AddContentTemplate<WidgetButtonViewModel, WidgetButtonView>();

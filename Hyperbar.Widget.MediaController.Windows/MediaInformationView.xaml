@@ -4,27 +4,35 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:interactions="using:Microsoft.Xaml.Interactions.Core"
-    xmlns:interactivity="using:Microsoft.Xaml.Interactivity">
-    <Grid>
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:windows="using:Hyperbar.UI.Windows">
+    <Grid Width="216">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="40" />
             <ColumnDefinition Width="8" />
-            <ColumnDefinition Width="80" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Border
             Grid.Column="0"
             Width="40"
-            Height="40"
-            Background="Red" />
+            Height="40">
+            <Image Source="{Binding ThumbnailSource, Converter={windows:StreamToImageSourceConverter}}" />
+        </Border>
         <StackPanel Grid.Column="2">
-            <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Text="{Binding Title}" />
+            <TextBlock
+                Style="{ThemeResource BaseTextBlockStyle}"
+                Text="{x:Bind ViewModel.Title, Mode=OneWay}"
+                TextTrimming="CharacterEllipsis"
+                TextWrapping="NoWrap" />
             <TextBlock
                 Opacity="0.7"
                 Style="{ThemeResource CaptionTextBlockStyle}"
-                Text="{Binding Description}" />
+                Text="{x:Bind ViewModel.Description, Mode=OneWay}"
+                TextTrimming="CharacterEllipsis"
+                TextWrapping="NoWrap" />
             <interactivity:Interaction.Behaviors>
                 <interactions:EventTriggerBehavior EventName="Loaded">
-                    <interactions:InvokeCommandAction Command="{Binding Initialize}" />
+                    <interactions:InvokeCommandAction Command="{x:Bind ViewModel.Initialize}" />
                 </interactions:EventTriggerBehavior>
             </interactivity:Interaction.Behaviors>
         </StackPanel>

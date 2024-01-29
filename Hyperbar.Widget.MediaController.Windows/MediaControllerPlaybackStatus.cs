@@ -1,4 +1,4 @@
 ﻿namespace Hyperbar.Widget.MediaController.Windows;
 
-public record PlaybackInformation(PlaybackStatus Status) : 
+public record MediaControllerPlaybackStatus(PlaybackStatus Status) : 
     INotification;

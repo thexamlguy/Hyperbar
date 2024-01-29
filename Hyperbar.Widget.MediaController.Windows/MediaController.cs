@@ -1,18 +1,25 @@
-﻿using Windows.Media.Control;
+﻿using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Media.Imaging;
+using Windows.Graphics.Imaging;
+using Windows.Media.Control;
+using Windows.Storage.Streams;
 
 namespace Hyperbar.Widget.MediaController.Windows;
 
 public class MediaController :
     INotificationHandler<Play>,
     INotificationHandler<Pause>,
-    INotificationHandler<Request<PlaybackInformation>>,
+    INotificationHandler<Request<MediaControllerPlaybackStatus>>,
     INotificationHandler<Request<MediaInformation>>,
     IDisposable
 {
     private readonly AsyncLock asyncLock = new();
     private readonly IDisposer disposer;
     private readonly IMediator mediator;
-    private readonly GlobalSystemMediaTransportControlsSession session;
+    private GlobalSystemMediaTransportControlsSession? session;
+
+    private GlobalSystemMediaTransportControlsSessionPlaybackStatus playbackStatus;
 
     public MediaController(IMediator mediator,
         IDisposer disposer,
@@ -31,6 +38,8 @@ public class MediaController :
 
     public void Dispose()
     {
+        session = null;
+
         GC.SuppressFinalize(this);
         disposer.Dispose(this);
     }
@@ -49,7 +58,7 @@ public class MediaController :
         await UpdateMediaPlaybackPropertiesAsync();
     }
 
-    public async Task Handle(Request<PlaybackInformation> args,
+    public async Task Handle(Request<MediaControllerPlaybackStatus> args,
         CancellationToken cancellationToken) => await UpdateMediaPlaybackPropertiesAsync();
 
     public async Task Handle(Request<MediaInformation> args,
@@ -68,9 +77,14 @@ public class MediaController :
             try
             {
                 GlobalSystemMediaTransportControlsSessionPlaybackInfo playbackInfo = session.GetPlaybackInfo();
-                await mediator.PublishAsync(new Changed<PlaybackInformation>(
-                    new PlaybackInformation((PlaybackStatus)playbackInfo.PlaybackStatus)));
 
+                if (playbackInfo.PlaybackStatus != playbackStatus)
+                {
+                    playbackStatus = playbackInfo.PlaybackStatus;
+                    await mediator.PublishAsync(new Changed<MediaControllerPlaybackStatus>(
+                        new MediaControllerPlaybackStatus((PlaybackStatus)playbackStatus)));
+
+                }
             }
             catch
             {
@@ -81,20 +95,31 @@ public class MediaController :
 
     private async Task UpdateMediaPropertiesAsync()
     {
-        using (await asyncLock)
+        if (session is not null)
         {
-            try
+            using (await asyncLock)
             {
-                GlobalSystemMediaTransportControlsSessionMediaProperties mediaProperties =
-                     await session.TryGetMediaPropertiesAsync();
+                try
+                {
 
-                await mediator.PublishAsync(new Changed<MediaInformation>(new MediaInformation(mediaProperties.Title,
-                    mediaProperties.Artist)));
+                    //
 
-            }
-            catch
-            {
+                    //InMemoryRandomAccessStream randomAccessStream = new InMemoryRandomAccessStream();
 
+                    //// Copy the image stream to the random access stream
+                    //await d.AsStream().CopyToAsync(randomAccessStream.AsStreamForWrite());
+
+                    GlobalSystemMediaTransportControlsSessionMediaProperties mediaProperties =
+                         await session.TryGetMediaPropertiesAsync();
+
+                    IRandomAccessStreamWithContentType randomAccessStream = await mediaProperties.Thumbnail.OpenReadAsync();
+                    await mediator.PublishAsync(new Changed<MediaInformation>(new MediaInformation(mediaProperties.Title,
+                        mediaProperties.Artist, randomAccessStream.AsStream())));
+                }
+                catch
+                {
+
+                }
             }
         }
     }

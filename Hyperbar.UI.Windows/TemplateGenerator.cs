@@ -9,9 +9,14 @@ public class TemplateGenerator : DataTemplateSelector
     protected override DataTemplate SelectTemplateCore(object item)
     {
         string xamlString = @"
-                <DataTemplate xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation'
-                                xmlns:ui='using:Hyperbar.UI.Windows'>
-                    <ui:TemplateGeneratorControl />
+                <DataTemplate xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""
+                                xmlns:ui=""using:Hyperbar.UI.Windows"">
+                    <Grid>
+                        <ui:TemplateGeneratorControl  VerticalContentAlignment=""Stretch""
+                            HorizontalContentAlignment=""Stretch"" 
+                            HorizontalAlignment=""Stretch"" 
+                            VerticalAlignment=""Stretch""/>
+                    </Grid>
                 </DataTemplate>";
 
         return (DataTemplate)XamlReader.Load(xamlString);
@@ -20,9 +25,14 @@ public class TemplateGenerator : DataTemplateSelector
     protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
     {
         string xamlString = @"
-                <DataTemplate xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation'
-                                xmlns:ui='using:Hyperbar.UI.Windows'>
-                    <ui:TemplateGeneratorControl />
+                <DataTemplate xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""
+                                xmlns:ui=""using:Hyperbar.UI.Windows"">
+                    <Grid>
+                        <ui:TemplateGeneratorControl  VerticalContentAlignment=""Stretch""
+                            HorizontalContentAlignment=""Stretch"" 
+                            HorizontalAlignment=""Stretch"" 
+                            VerticalAlignment=""Stretch""/>
+                    </Grid>
                 </DataTemplate>";
 
         return (DataTemplate)XamlReader.Load(xamlString);

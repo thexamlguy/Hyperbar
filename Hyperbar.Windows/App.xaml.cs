@@ -1,5 +1,4 @@
-﻿using CustomExtensions.WinUI;
-using Hyperbar.Controls.Windows;
+﻿using Hyperbar.Controls.Windows;
 using Hyperbar.UI.Windows;
 using Hyperbar.Widget;
 using Microsoft.Extensions.Configuration;
@@ -9,17 +8,14 @@ using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
 using System.Reflection;
 using Hyperbar.Widget.Windows;
+using Microsoft.UI.Xaml.Markup;
 
 namespace Hyperbar.Windows;
 
 public partial class App :
     Application
 {
-    public App()
-    {
-        InitializeComponent();
-        ApplicationExtensionHost.Initialize(this);
-    }
+    public App() => InitializeComponent();
 
     protected override async void OnLaunched(LaunchActivatedEventArgs args)
     {        
@@ -37,6 +33,7 @@ public partial class App :
                 services.AddDefault();
                 services.AddWidget();
                 services.AddWidgetWindows();
+                services.AddXamlMetadataProvider();
 
                 services.AddHostedService<AppService>();
 

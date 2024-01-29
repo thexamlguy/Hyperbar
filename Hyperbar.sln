@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hyperbar.Widget.Primary.Win
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hyperbar.Widget.MediaController.Windows", "Hyperbar.Widget.MediaController.Windows\Hyperbar.Widget.MediaController.Windows.csproj", "{ACBB1C58-1DB6-40E1-ABF1-71F2D2F0EC73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hyperbar.Widget.Windows", "Hyperbar.Widget.Windows\Hyperbar.Widget.Windows.csproj", "{E7322176-B67F-4A22-AFDB-7430A6AD44B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hyperbar.Widget.Windows", "Hyperbar.Widget.Windows\Hyperbar.Widget.Windows.csproj", "{E7322176-B67F-4A22-AFDB-7430A6AD44B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App1", "App1\App1.csproj", "{AB161079-E1AA-4A9B-B64C-D27A68245A2C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -203,6 +205,30 @@ Global
 		{E7322176-B67F-4A22-AFDB-7430A6AD44B6}.Release|x64.Build.0 = Release|Any CPU
 		{E7322176-B67F-4A22-AFDB-7430A6AD44B6}.Release|x86.ActiveCfg = Release|Any CPU
 		{E7322176-B67F-4A22-AFDB-7430A6AD44B6}.Release|x86.Build.0 = Release|Any CPU
+		{AB161079-E1AA-4A9B-B64C-D27A68245A2C}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{AB161079-E1AA-4A9B-B64C-D27A68245A2C}.Debug|Any CPU.Build.0 = Debug|x64
+		{AB161079-E1AA-4A9B-B64C-D27A68245A2C}.Debug|Any CPU.Deploy.0 = Debug|x64
+		{AB161079-E1AA-4A9B-B64C-D27A68245A2C}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{AB161079-E1AA-4A9B-B64C-D27A68245A2C}.Debug|ARM64.Build.0 = Debug|ARM64
+		{AB161079-E1AA-4A9B-B64C-D27A68245A2C}.Debug|ARM64.Deploy.0 = Debug|ARM64
+		{AB161079-E1AA-4A9B-B64C-D27A68245A2C}.Debug|x64.ActiveCfg = Debug|x64
+		{AB161079-E1AA-4A9B-B64C-D27A68245A2C}.Debug|x64.Build.0 = Debug|x64
+		{AB161079-E1AA-4A9B-B64C-D27A68245A2C}.Debug|x64.Deploy.0 = Debug|x64
+		{AB161079-E1AA-4A9B-B64C-D27A68245A2C}.Debug|x86.ActiveCfg = Debug|x86
+		{AB161079-E1AA-4A9B-B64C-D27A68245A2C}.Debug|x86.Build.0 = Debug|x86
+		{AB161079-E1AA-4A9B-B64C-D27A68245A2C}.Debug|x86.Deploy.0 = Debug|x86
+		{AB161079-E1AA-4A9B-B64C-D27A68245A2C}.Release|Any CPU.ActiveCfg = Release|x64
+		{AB161079-E1AA-4A9B-B64C-D27A68245A2C}.Release|Any CPU.Build.0 = Release|x64
+		{AB161079-E1AA-4A9B-B64C-D27A68245A2C}.Release|Any CPU.Deploy.0 = Release|x64
+		{AB161079-E1AA-4A9B-B64C-D27A68245A2C}.Release|ARM64.ActiveCfg = Release|ARM64
+		{AB161079-E1AA-4A9B-B64C-D27A68245A2C}.Release|ARM64.Build.0 = Release|ARM64
+		{AB161079-E1AA-4A9B-B64C-D27A68245A2C}.Release|ARM64.Deploy.0 = Release|ARM64
+		{AB161079-E1AA-4A9B-B64C-D27A68245A2C}.Release|x64.ActiveCfg = Release|x64
+		{AB161079-E1AA-4A9B-B64C-D27A68245A2C}.Release|x64.Build.0 = Release|x64
+		{AB161079-E1AA-4A9B-B64C-D27A68245A2C}.Release|x64.Deploy.0 = Release|x64
+		{AB161079-E1AA-4A9B-B64C-D27A68245A2C}.Release|x86.ActiveCfg = Release|x86
+		{AB161079-E1AA-4A9B-B64C-D27A68245A2C}.Release|x86.Build.0 = Release|x86
+		{AB161079-E1AA-4A9B-B64C-D27A68245A2C}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

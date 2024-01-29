@@ -17,9 +17,5 @@ public class TemplateGeneratorControl :
         {
             Content = templatedViewModel.TemplateFactory.Create(DataContext.GetType().Name);
         }
-        else
-        {
-
-        }
     }
 }

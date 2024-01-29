@@ -3,11 +3,10 @@
 namespace Hyperbar.Widget.MediaController.Windows;
 
 public class MediaControllerManager(IMediator mediator,
-    IFactory<GlobalSystemMediaTransportControlsSession, MediaController> factory,
-    IDispatcher dispatcher,
-    IDisposer disposer) :
+    IFactory<GlobalSystemMediaTransportControlsSession, MediaController> factory) :
     IInitializer
 {
+
     private readonly AsyncLock asyncLock = new();
     private readonly List<KeyValuePair<GlobalSystemMediaTransportControlsSession, MediaController>> cache = [];
     private GlobalSystemMediaTransportControlsSessionManager? mediaTransportControlsSessionManager;
@@ -16,7 +15,7 @@ public class MediaControllerManager(IMediator mediator,
     {
         mediaTransportControlsSessionManager = await GlobalSystemMediaTransportControlsSessionManager.RequestAsync();
         mediaTransportControlsSessionManager.SessionsChanged += OnSessionsChanged;
-
+        
         IReadOnlyList<GlobalSystemMediaTransportControlsSession> sessions = 
             mediaTransportControlsSessionManager.GetSessions();
         
@@ -31,7 +30,8 @@ public class MediaControllerManager(IMediator mediator,
         if (factory.Create(session) is MediaController mediaController)
         {
             await mediator.PublishAsync(new Created<MediaController>(mediaController));
-            cache.Add(new KeyValuePair<GlobalSystemMediaTransportControlsSession, MediaController>(session, mediaController));
+            cache.Add(new KeyValuePair<GlobalSystemMediaTransportControlsSession, MediaController>(session, 
+                mediaController));
         }
     }
 

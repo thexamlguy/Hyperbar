@@ -1,4 +1,3 @@
-using Hyperbar.Widget;
 using Microsoft.Extensions.DependencyInjection;
 using Windows.Media.Control;
 
@@ -22,6 +21,7 @@ public class MediaControllerWidget :
                 .AddHandler<MediaControllerHandler>()
                 .AddTransient<IFactory<MediaController, MediaControllerViewModel?>, MediaControllerViewModelFactory>()
                 .AddCache<MediaController, MediaControllerViewModel>()
+                .AddHandler<MediaControllerPlaybackStatusHandler>()
                 .AddContentTemplate<MediaControllerViewModel, MediaControllerView>()
                 .AddContentTemplate<MediaInformationViewModel, MediaInformationView>()
                 .AddContentTemplate<MediaButtonViewModel, MediaButtonView>();

@@ -3,11 +3,9 @@
     x:Class="Hyperbar.Widget.MediaController.Windows.MediaControllerWidgetView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:ui="using:Hyperbar.UI.Windows">
+    xmlns:windows="using:Hyperbar.UI.Windows">
     <FlipView
-        x:Name="FlipView"
-        Width="400"
-        Background="Transparent"
-        ItemTemplateSelector="{Binding Converter={ui:DataTemplateConverter}}"
+        Width="360"
+        ItemTemplateSelector="{Binding Converter={windows:DataTemplateConverter}}"
         ItemsSource="{Binding}" />
 </UserControl>
