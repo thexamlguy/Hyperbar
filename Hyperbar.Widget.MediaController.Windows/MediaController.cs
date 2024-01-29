@@ -1,8 +1,4 @@
-﻿using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Media.Imaging;
-using Windows.Graphics.Imaging;
-using Windows.Media.Control;
+﻿using Windows.Media.Control;
 using Windows.Storage.Streams;
 
 namespace Hyperbar.Widget.MediaController.Windows;
@@ -17,7 +13,7 @@ public class MediaController :
     private readonly AsyncLock asyncLock = new();
     private readonly IDisposer disposer;
     private readonly IMediator mediator;
-    private GlobalSystemMediaTransportControlsSession? session;
+    private readonly GlobalSystemMediaTransportControlsSession session;
 
     private GlobalSystemMediaTransportControlsSessionPlaybackStatus playbackStatus;
 
@@ -38,8 +34,6 @@ public class MediaController :
 
     public void Dispose()
     {
-        session = null;
-
         GC.SuppressFinalize(this);
         disposer.Dispose(this);
     }
@@ -95,31 +89,21 @@ public class MediaController :
 
     private async Task UpdateMediaPropertiesAsync()
     {
-        if (session is not null)
+        using (await asyncLock)
         {
-            using (await asyncLock)
+            try
             {
-                try
-                {
 
-                    //
+                GlobalSystemMediaTransportControlsSessionMediaProperties mediaProperties =
+                     await session.TryGetMediaPropertiesAsync();
 
-                    //InMemoryRandomAccessStream randomAccessStream = new InMemoryRandomAccessStream();
+                IRandomAccessStreamWithContentType randomAccessStream = await mediaProperties.Thumbnail.OpenReadAsync();
+                await mediator.PublishAsync(new Changed<MediaInformation>(new MediaInformation(mediaProperties.Title,
+                    mediaProperties.Artist, randomAccessStream.AsStream())));
+            }
+            catch
+            {
 
-                    //// Copy the image stream to the random access stream
-                    //await d.AsStream().CopyToAsync(randomAccessStream.AsStreamForWrite());
-
-                    GlobalSystemMediaTransportControlsSessionMediaProperties mediaProperties =
-                         await session.TryGetMediaPropertiesAsync();
-
-                    IRandomAccessStreamWithContentType randomAccessStream = await mediaProperties.Thumbnail.OpenReadAsync();
-                    await mediator.PublishAsync(new Changed<MediaInformation>(new MediaInformation(mediaProperties.Title,
-                        mediaProperties.Artist, randomAccessStream.AsStream())));
-                }
-                catch
-                {
-
-                }
             }
         }
     }
