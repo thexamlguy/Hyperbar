@@ -5,8 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Hyperbar.Windows;
 
-public class AppInitializer([FromKeyedServices(nameof(WidgetBarViewModel))] WidgetBarView view,
-    [FromKeyedServices(nameof(WidgetBarViewModel))] WidgetBarViewModel viewModel,
+public class AppInitializer([FromKeyedServices(nameof(WidgetViewModel))] WidgetBarView view,
+    [FromKeyedServices(nameof(WidgetViewModel))] WidgetViewModel viewModel,
     DesktopBar desktopFlyout, 
     AppConfiguration configuration) :
     IInitializer

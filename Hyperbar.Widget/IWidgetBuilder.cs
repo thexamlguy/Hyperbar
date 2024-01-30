@@ -6,14 +6,18 @@ public interface IWidgetBuilder
 {
     IWidgetHost Build();
 
+    IWidgetBuilder Configuration<TConfiguration>(Action<TConfiguration> configurationDelegate)
+        where TConfiguration :
+        WidgetConfiguration,
+        new();
+
     IWidgetBuilder ConfigureServices(Action<IServiceCollection> configureDelegate);
-}
 
-public interface IWidgetBuilder<TConfiguration> : 
-    IWidgetBuilder
-    where TConfiguration :
-    WidgetConfiguration,
-    new()
-{
+    IWidgetBuilder UseViewModel<TViewModel>()
+        where TViewModel :
+        IWidgetViewModel;
 
+    IWidgetBuilder UseViewModelTemplate<TViewModel, TTemplate>()
+        where TViewModel :
+        IWidgetViewModel;
 }

@@ -14,7 +14,7 @@ public class WidgetViewModelEnumerator(IWidgetHost host,
             foreach (IWidgetViewModel viewModel in viewModels)
             {
                 await mediator.PublishAsync(new Created<IWidgetViewModel>(viewModel),
-                    nameof(WidgetContainerViewModel), cancellationToken);
+                    nameof(WidgetViewModel), cancellationToken);
             }
         }
     }   

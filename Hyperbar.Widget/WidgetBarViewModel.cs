@@ -1,11 +1,11 @@
 ﻿namespace Hyperbar.Widget;
 
-[NotificationHandler(nameof(WidgetBarViewModel))]
-public partial class WidgetBarViewModel(ITemplateFactory templateFactory,
+[NotificationHandler(nameof(WidgetViewModel))]
+public partial class WidgetViewModel(ITemplateFactory templateFactory,
     IServiceFactory serviceFactory,
     IMediator mediator,
     IDisposer disposer) :
-    ObservableCollectionViewModel<WidgetContainerViewModel>(serviceFactory, mediator, disposer),
+    ObservableCollectionViewModel<IWidgetViewModel>(serviceFactory, mediator, disposer),
     ITemplatedViewModel
 {
     public ITemplateFactory TemplateFactory => templateFactory;

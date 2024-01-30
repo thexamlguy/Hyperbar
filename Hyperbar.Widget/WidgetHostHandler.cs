@@ -11,13 +11,10 @@ public class WidgetHostHandler(IMediator mediator) :
     {
         if (notification.Value is IWidgetHost host)
         {
-            if (host.Services.GetRequiredService<IFactory<IWidgetHost, WidgetContainerViewModel?>>() is { } factory)
+            if (host.Services.GetService<IWidgetViewModel>() is IWidgetViewModel viewModel)
             {
-                if (factory.Create(host) is WidgetContainerViewModel containerViewModel)
-                {
-                    await mediator.PublishAsync(new Created<WidgetContainerViewModel>(containerViewModel),
-                        nameof(WidgetBarViewModel), cancellationToken);
-                }
+                await mediator.PublishAsync(new Created<IWidgetViewModel>(viewModel),
+                    nameof(WidgetViewModel), cancellationToken);
             }
         }
     }

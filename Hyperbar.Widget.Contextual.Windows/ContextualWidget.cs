@@ -4,12 +4,15 @@ public class ContextualWidget :
     IWidget
 {
     public IWidgetBuilder Create() =>
-        WidgetBuilder<ContextualWidgetConfiguration>.Configure(args =>
-        {
-            args.Name = "Contextual commands";
+        WidgetBuilder.Create()
+            .Configuration<ContextualWidgetConfiguration>(args =>
+            {
+                args.Name = "Contextual commands";
 
-        }).ConfigureServices(args =>
-        {
-            args.AddWidgetTemplate<ContextualWidgetViewModel>();
-        });
+            })
+            .UseViewModel<ContextualWidgetViewModel>()
+            .ConfigureServices(args =>
+            {
+                args.AddWidgetTemplate<ContextualWidgetViewModel>();
+            });
 }
