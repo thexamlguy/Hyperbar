@@ -5,7 +5,7 @@ public class ContextualWidget :
 {
     public IWidgetBuilder Create() =>
         WidgetBuilder.Create()
-            .Configuration<ContextualWidgetConfiguration>(args =>
+            .UseConfiguration<ContextualWidgetConfiguration>(args =>
             {
                 args.Name = "Contextual commands";
 

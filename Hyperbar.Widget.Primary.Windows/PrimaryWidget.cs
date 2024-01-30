@@ -8,7 +8,7 @@ public class PrimaryWidget :
 {
     public IWidgetBuilder Create() =>
         WidgetBuilder.Create()
-            .Configuration<PrimaryWidgetConfiguration>(args =>
+            .UseConfiguration<PrimaryWidgetConfiguration>(args =>
             {
                 args.Name = "Primary commands";
                 args.Commands =

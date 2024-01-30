@@ -6,7 +6,7 @@ public interface IWidgetBuilder
 {
     IWidgetHost Build();
 
-    IWidgetBuilder Configuration<TConfiguration>(Action<TConfiguration> configurationDelegate)
+    IWidgetBuilder UseConfiguration<TConfiguration>(Action<TConfiguration> configurationDelegate)
         where TConfiguration :
         WidgetConfiguration,
         new();

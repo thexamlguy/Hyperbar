@@ -10,6 +10,10 @@ public class WidgetBuilder :
 {
     private readonly IHostBuilder hostBuilder;
 
+    private bool configurationRegistered;
+
+    private bool viewModelTemplateRegistered;
+
     private WidgetBuilder()
     {
         hostBuilder = new HostBuilder()
@@ -32,13 +36,25 @@ public class WidgetBuilder :
     }
 
     public static IWidgetBuilder Create() => new WidgetBuilder();
+    public IWidgetHost Build()
+    {
+        IHost host = hostBuilder.Build();
+        return host.Services.GetRequiredService<IWidgetHost>();
+    }
 
-    public IWidgetBuilder Configuration<TConfiguration>(Action<TConfiguration> configurationDelegate)
+    public IWidgetBuilder UseConfiguration<TConfiguration>(Action<TConfiguration> configurationDelegate)
         where TConfiguration : 
         WidgetConfiguration,
         new()
     {
-        TConfiguration configuration = new TConfiguration();
+        if (configurationRegistered)
+        {
+            return this;
+        }
+
+        configurationRegistered = true;
+
+        TConfiguration configuration = new();
         configurationDelegate(configuration);
 
         hostBuilder.ConfigureServices(services =>
@@ -51,36 +67,45 @@ public class WidgetBuilder :
         return this;
     }
 
-    public IWidgetBuilder UseViewModelTemplate<TWidgetContent, TWidgetTemplate>()
-        where TWidgetContent :
-        IWidgetViewModel
-    {
-        hostBuilder.ConfigureServices(services =>
-        {
-            services.AddWidgetTemplate<TWidgetContent, TWidgetTemplate>();
-        });
-
-        return this;
-    }
-    public IWidgetHost Build()
-    {
-        IHost host = hostBuilder.Build();
-        return host.Services.GetRequiredService<IWidgetHost>();
-    }
-
     public IWidgetBuilder ConfigureServices(Action<IServiceCollection> configureDelegate)
     {
         hostBuilder.ConfigureServices(configureDelegate);
         return this;
     }
 
-    public IWidgetBuilder UseViewModel<TViewModel>() 
-        where TViewModel : 
+    public IWidgetBuilder UseViewModel<TViewModel>()
+        where TViewModel :
         IWidgetViewModel
     {
+        if (viewModelTemplateRegistered)
+        {
+            return this;
+        }
+
+        viewModelTemplateRegistered = true;
+
         hostBuilder.ConfigureServices(services =>
         {
             services.AddWidgetTemplate<TViewModel>();
+        });
+
+        return this;
+    }
+
+    public IWidgetBuilder UseViewModelTemplate<TWidgetContent, TWidgetTemplate>()
+                where TWidgetContent :
+        IWidgetViewModel
+    {
+        if (viewModelTemplateRegistered)
+        {
+            return this;
+        }
+
+        viewModelTemplateRegistered = true;
+
+        hostBuilder.ConfigureServices(services =>
+        {
+            services.AddWidgetTemplate<TWidgetContent, TWidgetTemplate>();
         });
 
         return this;

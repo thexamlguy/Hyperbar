@@ -8,7 +8,7 @@ public class MediaControllerWidget :
 {
     public IWidgetBuilder Create() =>
         WidgetBuilder.Create()
-            .Configuration<MediaControllerWidgetConfiguration>(args =>
+            .UseConfiguration<MediaControllerWidgetConfiguration>(args =>
             {
                 args.Name = "Media controller";
             })
