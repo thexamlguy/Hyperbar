@@ -25,7 +25,7 @@ public class WidgetBuilder :
             })
             .ConfigureServices((context, services) =>
             {
-                services.AddSingleton<IWidgetHost, WidgetHost>();
+                services.AddHostedService<WidgetService>();
                 services.AddScoped<IServiceFactory>(provider =>
                     new ServiceFactory((type, parameters) =>
                         ActivatorUtilities.CreateInstance(provider, type, parameters!)));
@@ -36,10 +36,13 @@ public class WidgetBuilder :
     }
 
     public static IWidgetBuilder Create() => new WidgetBuilder();
+
     public IWidgetHost Build()
     {
         IHost host = hostBuilder.Build();
-        return host.Services.GetRequiredService<IWidgetHost>();
+
+        return (IWidgetHost)ActivatorUtilities.CreateInstance(host.Services,
+            typeof(WidgetHost), host);
     }
 
     public IWidgetBuilder UseConfiguration<TConfiguration>(Action<TConfiguration> configurationDelegate)
@@ -60,7 +63,9 @@ public class WidgetBuilder :
         hostBuilder.ConfigureServices(services =>
         {
             services.AddHandler<WidgetConfigurationHandler>();
-            services.AddConfiguration<WidgetConfiguration>(section: configuration.GetType().Name, configuration: configuration);
+            services.AddConfiguration<WidgetConfiguration>(section: configuration.GetType().Name,
+                configuration: configuration);
+
             services.AddConfiguration(configuration);
         });
 
@@ -93,7 +98,7 @@ public class WidgetBuilder :
     }
 
     public IWidgetBuilder UseViewModelTemplate<TWidgetContent, TWidgetTemplate>()
-                where TWidgetContent :
+        where TWidgetContent :
         IWidgetViewModel
     {
         if (viewModelTemplateRegistered)

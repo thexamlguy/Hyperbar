@@ -9,7 +9,7 @@ public class AppInitializer([FromKeyedServices(nameof(WidgetViewModel))] WidgetB
     [FromKeyedServices(nameof(WidgetViewModel))] WidgetViewModel viewModel,
     DesktopBar desktopFlyout, 
     AppConfiguration configuration) :
-    IInitializer
+    IInitialization
 {
     public Task InitializeAsync()
     {

@@ -1,9 +1,9 @@
-﻿namespace Hyperbar.Widget;
+﻿using Microsoft.Extensions.Hosting;
+
+namespace Hyperbar.Widget;
 
 public interface IWidgetHost : 
-    IInitializer
+    IHost
 {
     WidgetConfiguration Configuration { get; }
-
-    IServiceProvider Services { get; }
 }

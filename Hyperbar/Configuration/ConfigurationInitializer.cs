@@ -5,7 +5,7 @@ public class ConfigurationInitializer<TConfiguration>(IConfigurationMonitor<TCon
     IConfigurationWriter<TConfiguration> writer,
     IConfigurationFactory<TConfiguration> factory) :
     IConfigurationInitializer<TConfiguration>,
-    IInitializer
+    IInitialization
     where TConfiguration :
     class
 {

@@ -2,12 +2,12 @@
 
 namespace Hyperbar;
 
-public class AppService(IEnumerable<IInitializer> initializers) :
+public class AppService(IEnumerable<IInitialization> initializers) :
     IHostedService
 {
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        foreach (IInitializer initializer in initializers)
+        foreach (IInitialization initializer in initializers)
         {
             await initializer.InitializeAsync();
         }

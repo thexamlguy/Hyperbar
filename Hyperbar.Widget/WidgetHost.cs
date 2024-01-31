@@ -1,59 +1,52 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Hyperbar.Widget;
 
-public class WidgetHost :
-    INotificationHandler<Changed<WidgetAvailability>>,
+public sealed class WidgetHost :
     IWidgetHost
 {
-    private readonly IEnumerable<IInitializer> initializers;
+    private readonly IHost host;
     private readonly IMediator mediator;
     private readonly IProxyService<IMediator> proxyMediator;
-    private readonly IServiceProvider services;
 
-    public WidgetHost(IServiceProvider services,
+    public WidgetHost(IHost host,
         IMediator mediator,
-        IEnumerable<IInitializer> initializers,
         IProxyService<IMediator> proxyMediator)
     {
-        this.services = services;
+        this.host = host;
         this.mediator = mediator;
-        this.initializers = initializers;
         this.proxyMediator = proxyMediator;
 
         mediator.Subscribe(this);
     }
 
-    public WidgetConfiguration Configuration => 
-        services.GetRequiredService<WidgetConfiguration>();
+    public WidgetConfiguration Configuration =>
+        Services.GetRequiredService<WidgetConfiguration>();
    
-    public IServiceProvider Services => services;
+    public IServiceProvider Services => host.Services;
 
-    public async Task Handle(Changed<WidgetAvailability> notification,
-        CancellationToken cancellationToken)
+    public void Dispose()
     {
-        if (notification.Value is WidgetAvailability widgetAvailability)
-        {
-            if (widgetAvailability.Value)
-            {
-                await StartAsync();
-            }
-        }
+
     }
 
-    public async Task InitializeAsync()
+    public async Task StartAsync(CancellationToken cancellationToken = default)
     {
-        foreach (IInitializer initializer in initializers)
-        {
-            await initializer.InitializeAsync();
-        }
-    }
+        await host.StartAsync(cancellationToken);
 
-    private async Task StartAsync()
-    {
         if (proxyMediator.Proxy is IMediator mediator)
         {
-            await mediator.PublishAsync(new Started<IWidgetHost>(this));
+            await mediator.PublishAsync(new Started<IWidgetHost>(this),
+                cancellationToken);
         }
+
+        await this.mediator.PublishAsync(new Started<IWidgetHost>(this), 
+            cancellationToken);
+    }
+
+    public async Task StopAsync(CancellationToken cancellationToken = default)
+    {
+        await host.StopAsync(cancellationToken);
     }
 }

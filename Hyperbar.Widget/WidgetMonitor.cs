@@ -1,7 +1,7 @@
 ﻿namespace Hyperbar.Widget;
 
 public class WidgetMonitor :
-    IInitializer
+    IInitialization
 {
     public Task InitializeAsync()
     {

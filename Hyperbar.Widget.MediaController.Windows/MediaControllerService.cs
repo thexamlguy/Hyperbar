@@ -1,28 +1,33 @@
-﻿using Windows.Media.Control;
+﻿using Microsoft.Extensions.Hosting;
+using Windows.Media.Control;
 
 namespace Hyperbar.Widget.MediaController.Windows;
 
-public class MediaControllerManager(IMediator mediator,
+public class MediaControllerService(IMediator mediator,
     IFactory<GlobalSystemMediaTransportControlsSession, MediaController> factory) :
-    IInitializer
+    IHostedService
 {
-
     private readonly AsyncLock asyncLock = new();
     private readonly List<KeyValuePair<GlobalSystemMediaTransportControlsSession, MediaController>> cache = [];
     private GlobalSystemMediaTransportControlsSessionManager? mediaTransportControlsSessionManager;
 
-    public async Task InitializeAsync()
+    public async Task StartAsync(CancellationToken cancellationToken)
     {
         mediaTransportControlsSessionManager = await GlobalSystemMediaTransportControlsSessionManager.RequestAsync();
         mediaTransportControlsSessionManager.SessionsChanged += OnSessionsChanged;
-        
-        IReadOnlyList<GlobalSystemMediaTransportControlsSession> sessions = 
+
+        IReadOnlyList<GlobalSystemMediaTransportControlsSession> sessions =
             mediaTransportControlsSessionManager.GetSessions();
-        
+
         foreach (GlobalSystemMediaTransportControlsSession session in sessions)
         {
             await InitializeSessionAsync(session);
         }
+    }
+
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
     }
 
     private async Task InitializeSessionAsync(GlobalSystemMediaTransportControlsSession session)

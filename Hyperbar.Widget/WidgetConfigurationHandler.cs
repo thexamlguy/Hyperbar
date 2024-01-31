@@ -8,7 +8,7 @@ public class WidgetConfigurationHandler(IValue<WidgetAvailability> widgetAvailab
     {
         if (notification.Configuration is WidgetConfiguration configuration)
         {
-            await widgetAvailability.SetAsync(args => args with { Value = configuration.IsAvailable });
+            await widgetAvailability.SetAsync(args => args with { Value = configuration.Enabled });
         }
     }
 }

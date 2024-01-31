@@ -30,8 +30,8 @@ public static class IServiceCollectionExtensions
                 services.AddHandler<WidgetViewModelEnumerator>();
 
                 services.AddTransient<IWidgetView, WidgetView>();
-                services.AddTransient<IInitializer, WidgetResourceInitializer>();
-                services.AddTransient<IInitializer, WidgetXamlMetadataInitializer>();
+                services.AddTransient<IInitialization, WidgetResourceInitializer>();
+                services.AddTransient<IInitialization, WidgetXamlMetadataInitializer>();
 
                 services.AddContentTemplate<WidgetButtonViewModel, WidgetButtonView>();
                 services.AddContentTemplate<WidgetSplitButtonViewModel, WidgetSplitButtonView>();

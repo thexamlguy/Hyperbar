@@ -5,13 +5,13 @@ public class WidgetConfiguration
 {
     public string? Description { get; set; }
 
-    [JsonInclude]
-    internal Guid Id { get; set; } = Guid.NewGuid();
-
     public string? Name { get; set; }
 
     [JsonInclude]
-    internal bool IsAvailable { get; set; }
+    internal Guid Id { get; set; } = Guid.NewGuid();
+
+    [JsonInclude]
+    internal bool Enabled { get; set; }
 }
 
 public class WidgetConfiguration<TConfiguration>;

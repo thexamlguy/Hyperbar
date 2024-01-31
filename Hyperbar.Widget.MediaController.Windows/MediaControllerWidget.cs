@@ -15,7 +15,7 @@ public class MediaControllerWidget :
             .UseViewModelTemplate<MediaControllerWidgetViewModel, MediaControllerWidgetView>()
             .ConfigureServices(args =>
             {
-                args.AddSingleton<IInitializer, MediaControllerManager>()
+                args.AddHostedService<MediaControllerService>()
                     .AddTransient<IServiceScopeFactory<MediaController>, ServiceScopeFactory<MediaController>>()
                     .AddTransient<IServiceScopeProvider<MediaController>, ServiceScopeProvider<MediaController>>()
                     .AddCache<MediaController, IServiceScope>()
