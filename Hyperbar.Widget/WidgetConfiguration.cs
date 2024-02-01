@@ -11,7 +11,7 @@ public class WidgetConfiguration
     internal Guid Id { get; set; } = Guid.NewGuid();
 
     [JsonInclude]
-    internal bool Enabled { get; set; }
+    internal bool IsEnabled { get; set; }
 }
 
 public class WidgetConfiguration<TConfiguration>;

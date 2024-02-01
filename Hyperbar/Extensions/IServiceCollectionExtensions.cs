@@ -9,6 +9,20 @@ namespace Hyperbar;
 
 public static class IServiceCollectionExtensions
 {
+    public static IServiceCollection AddValueChangedNotification<TConfiguration, TValue>(this IServiceCollection services,
+        Func<TConfiguration, Action<TValue>> factory)
+        where TConfiguration :
+        class
+        where TValue : 
+        class, new()
+    {
+        services.AddSingleton<IConfigurationValueChangedNotification<TConfiguration>>(provider => 
+            new ConfigurationValueChangedNotification<TConfiguration, TValue>(provider.GetRequiredService<IMediator>(), 
+                factory));
+
+        return services;
+    }
+
     public static IServiceCollection AddCache<TKey, TValue>(this IServiceCollection services)
         where TKey :
         notnull

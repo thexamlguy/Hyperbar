@@ -1,14 +1,19 @@
 ﻿namespace Hyperbar.Widget;
 
-public class WidgetConfigurationHandler(IValue<WidgetAvailability> widgetAvailability) :
-    INotificationHandler<ConfigurationChanged<WidgetConfiguration>> 
+public class WidgetConfigurationHandler(IEnumerable<IConfigurationValueChangedNotification<WidgetConfiguration>> 
+        configurationValueChangedNotifications ) :
+    INotificationHandler<Changed<WidgetConfiguration>> 
 {
-    public async Task Handle(ConfigurationChanged<WidgetConfiguration> notification,
+    public async Task Handle(Changed<WidgetConfiguration> args,
         CancellationToken cancellationToken)
     {
-        if (notification.Configuration is WidgetConfiguration configuration)
+        if (args.Value is WidgetConfiguration configuration)
         {
-            await widgetAvailability.SetAsync(args => args with { Value = configuration.Enabled });
+            foreach (IConfigurationValueChangedNotification<WidgetConfiguration> notification in 
+                configurationValueChangedNotifications)
+            {
+                await notification.PublishAsync(configuration);
+            }
         }
     }
 }

@@ -6,15 +6,15 @@ namespace Hyperbar.Widget;
 public sealed class WidgetHost :
     IWidgetHost
 {
-    private readonly IHost host;
+    private readonly IServiceProvider services;
     private readonly IMediator mediator;
     private readonly IProxyService<IMediator> proxyMediator;
 
-    public WidgetHost(IHost host,
+    public WidgetHost(IServiceProvider services,
         IMediator mediator,
         IProxyService<IMediator> proxyMediator)
     {
-        this.host = host;
+        this.services = services;
         this.mediator = mediator;
         this.proxyMediator = proxyMediator;
 
@@ -24,7 +24,7 @@ public sealed class WidgetHost :
     public WidgetConfiguration Configuration =>
         Services.GetRequiredService<WidgetConfiguration>();
    
-    public IServiceProvider Services => host.Services;
+    public IServiceProvider Services => services;
 
     public void Dispose()
     {
@@ -33,8 +33,6 @@ public sealed class WidgetHost :
 
     public async Task StartAsync(CancellationToken cancellationToken = default)
     {
-        await host.StartAsync(cancellationToken);
-
         if (proxyMediator.Proxy is IMediator mediator)
         {
             await mediator.PublishAsync(new Started<IWidgetHost>(this),
@@ -45,8 +43,8 @@ public sealed class WidgetHost :
             cancellationToken);
     }
 
-    public async Task StopAsync(CancellationToken cancellationToken = default)
+    public Task StopAsync(CancellationToken cancellationToken = default)
     {
-        await host.StopAsync(cancellationToken);
+        return Task.CompletedTask;
     }
 }

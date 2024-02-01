@@ -7,9 +7,9 @@ public class PrimaryWidgetConfigurationHandler(IMediator mediator,
     IFactory<PrimaryCommandConfiguration, IWidgetComponentViewModel?> factory,
     IProvider<PrimaryCommandConfiguration, IWidgetComponentViewModel?> provider,
     ICache<(Guid ParentId, Guid Id), PrimaryCommandConfiguration> cache) :
-    INotificationHandler<ConfigurationChanged<PrimaryWidgetConfiguration>>
+    INotificationHandler<Changed<PrimaryWidgetConfiguration>>
 {
-    public async Task Handle(ConfigurationChanged<PrimaryWidgetConfiguration> notification,
+    public async Task Handle(Changed<PrimaryWidgetConfiguration> notification,
         CancellationToken cancellationToken)
     {
         List<KeyValuePair<(Guid ParentId, Guid Id), PrimaryCommandConfiguration>> items = [];

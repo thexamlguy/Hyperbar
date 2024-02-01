@@ -5,6 +5,6 @@ public interface INotificationHandler<in TNotification> :
     where TNotification :
     INotification
 {
-    Task Handle(TNotification notification,
+    Task Handle(TNotification args,
         CancellationToken cancellationToken);
 }

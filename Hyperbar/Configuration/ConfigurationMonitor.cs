@@ -16,7 +16,7 @@ public class ConfigurationMonitor<TConfiguration>(IConfigurationFile<TConfigurat
         {
             if (reader.Read() is { } configuration)
             {
-                await mediator.PublishAsync(new ConfigurationChanged<TConfiguration>(configuration));
+                await mediator.PublishAsync(new Changed<TConfiguration>(configuration));
             }
         }
 
