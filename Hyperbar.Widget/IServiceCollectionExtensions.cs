@@ -7,7 +7,7 @@ public static class IServiceCollectionExtensions
 { 
     public static IServiceCollection AddWidget(this IServiceCollection services)
     {
-        services.AddTransient<IInitialization, WidgetExtensionInitializer>();
+        services.AddTransient<IInitializer, WidgetExtensionInitializer>();
         services.AddTransient<IFactory<Type, IWidget>, WidgetFactory>();
 
         services.AddHandler<WidgetExtensionEnumerator>();

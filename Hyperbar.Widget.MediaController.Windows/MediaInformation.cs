@@ -2,6 +2,6 @@
 
 public record MediaInformation(string Title,
     string Description,
-    Stream ThumbnailSource);
+    Stream? ThumbnailSource);
 
 

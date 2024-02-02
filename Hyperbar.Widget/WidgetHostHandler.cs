@@ -10,10 +10,10 @@ public class WidgetHostHandler :
     {
         if (notification.Value is IWidgetHost host)
         {
-            if (host.Services.GetServices<IInitialization>() is
-                IEnumerable<IInitialization> initializations)
+            if (host.Services.GetServices<IInitializer>() is
+                IEnumerable<IInitializer> initializations)
             {
-                foreach (IInitialization initialization in initializations)
+                foreach (IInitializer initialization in initializations)
                 {
                     await initialization.InitializeAsync();
                 }

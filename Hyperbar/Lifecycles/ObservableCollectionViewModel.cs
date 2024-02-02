@@ -20,14 +20,17 @@ public partial class ObservableCollectionViewModel<TItem> :
     INotificationHandler<Inserted<TItem>>,
     INotificationHandler<Moved<TItem>>,
     INotificationHandler<Replaced<TItem>>,
-    IDisposable
+    IDisposable,
+    IInitialization
     where TItem :
     IDisposable
 {
-    private readonly ObservableCollection<TItem> collection = new();
+    private readonly ObservableCollection<TItem> collection = [];
+
+    private bool isInitialized;
 
     public ObservableCollectionViewModel(IServiceFactory serviceFactory,
-        IMediator mediator,
+            IMediator mediator,
         IDisposer disposer)
     {
         ServiceFactory = serviceFactory;
@@ -268,11 +271,7 @@ public partial class ObservableCollectionViewModel<TItem> :
     int IList.IndexOf(object? value) =>
         IsCompatibleObject(value) ?
         IndexOf((TItem)value!) : -1;
-
-    public virtual async Task InitializeAsync() =>
-        await Mediator.PublishAsync<Enumerate<TItem>>();
-
-    public void Insert(int index, TItem item) => 
+    public void Insert(int index, TItem item) =>
         InsertItem(index, item);
 
     void IList.Insert(int index,
@@ -282,22 +281,6 @@ public partial class ObservableCollectionViewModel<TItem> :
         {
             Insert(index, item);
         }
-    }
-
-    public bool Replace(int index, TItem item)
-    {
-        if (index <= Count - 1)
-        {
-            RemoveItem(index);
-        }
-        else
-        {
-            index = Count;
-        }
-
-        Insert(index, item);
-
-        return true;
     }
 
     public bool Move(int index, TItem item)
@@ -312,6 +295,11 @@ public partial class ObservableCollectionViewModel<TItem> :
         Insert(index, item);
 
         return true;
+    }
+
+    public virtual Task OnInitializeAsync()
+    {
+        return Task.CompletedTask;
     }
 
     public bool Remove(TItem item)
@@ -339,7 +327,23 @@ public partial class ObservableCollectionViewModel<TItem> :
     public void RemoveAt(int index) =>
         RemoveItem(index);
 
-    protected virtual void ClearItems() => 
+    public bool Replace(int index, TItem item)
+    {
+        if (index <= Count - 1)
+        {
+            RemoveItem(index);
+        }
+        else
+        {
+            index = Count;
+        }
+
+        Insert(index, item);
+
+        return true;
+    }
+
+    protected virtual void ClearItems() =>
         collection.Clear();
 
     protected virtual void InsertItem(int index,
@@ -357,15 +361,27 @@ public partial class ObservableCollectionViewModel<TItem> :
         collection.Insert(index, value);
     }
 
-    protected virtual void RemoveItem(int index) => 
+    protected virtual void RemoveItem(int index) =>
         collection.RemoveAt(index);
 
-    protected virtual void SetItem(int index, TItem item) => 
+    protected virtual void SetItem(int index, TItem item) =>
         collection[index] = item;
 
-    private static bool IsCompatibleObject(object? value) => 
+    private static bool IsCompatibleObject(object? value) =>
         (value is TItem) || (value == null && default(TItem) == null);
 
+    public async Task InitializeAsync()
+    {
+        if (isInitialized)
+        {
+            return;
+        }
+
+        isInitialized = true;
+
+        await Mediator.PublishAsync<Enumerate<TItem>>();
+        await OnInitializeAsync();
+    }
     private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args) => 
         CollectionChanged?.Invoke(this, args);
 }

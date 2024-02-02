@@ -13,8 +13,7 @@ public partial class MediaButtonViewModel(IServiceFactory serviceFactory,
     string? text = null,
     string? icon = null,
     RelayCommand? command = null) :
-    WidgetButtonViewModel(serviceFactory, mediator, disposer, templateFactory, guid, text, icon, command),
-    IInitialization
+    WidgetButtonViewModel(serviceFactory, mediator, disposer, templateFactory, guid, text, icon, command)
 {
     [ObservableProperty]
     private PlaybackButtonType playbackButtonType = playbackButtonType;
@@ -38,6 +37,8 @@ public partial class MediaButtonViewModel(IServiceFactory serviceFactory,
         return Task.CompletedTask;
     }
 
-    //public override async Task InitializeAsync() => 
+    //public override Task OnInitializeAsync()
+    //{
     //    await Mediator.PublishAsync<Request<PlaybackInformation>>();
+    //}  
 }

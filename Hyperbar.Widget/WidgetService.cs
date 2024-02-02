@@ -5,16 +5,16 @@ namespace Hyperbar.Widget;
 public class WidgetService : 
     IHostedService
 {
-    private readonly IEnumerable<IInitialization> initializers;
+    private readonly IEnumerable<IInitializer> initializers;
 
-    public WidgetService(IEnumerable<IInitialization> initializers)
+    public WidgetService(IEnumerable<IInitializer> initializers)
     {
         this.initializers = initializers;
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        foreach (IInitialization initializer in initializers)
+        foreach (IInitializer initializer in initializers)
         {
             await initializer.InitializeAsync();
         }

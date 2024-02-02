@@ -117,7 +117,7 @@ public static class IServiceCollectionExtensions
         services.AddTransient<IConfigurationFactory<TConfiguration>>(provider => new ConfigurationFactory<TConfiguration>(() =>
             configuration ?? provider.GetRequiredService<TConfiguration>()));
 
-        services.AddTransient<IInitialization, ConfigurationInitializer<TConfiguration>>();
+        services.AddTransient<IInitializer, ConfigurationInitializer<TConfiguration>>();
         services.AddTransient<IConfigurationInitializer<TConfiguration>, ConfigurationInitializer<TConfiguration>>();
 
         services.AddTransient<IWritableConfiguration<TConfiguration>, WritableConfiguration<TConfiguration>>();

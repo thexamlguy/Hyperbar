@@ -4,7 +4,7 @@ using Windows.Storage;
 namespace Hyperbar.Widget.Windows;
 
 internal class WidgetResourceInitializer(IWidgetAssembly widgetAssembly) :
-    IInitialization
+    IInitializer
 {
     public async Task InitializeAsync()
     {

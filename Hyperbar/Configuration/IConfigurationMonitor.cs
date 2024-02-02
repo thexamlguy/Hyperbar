@@ -2,6 +2,6 @@
 namespace Hyperbar;
 
 public interface IConfigurationMonitor<TConfiguration> : 
-    IInitialization
+    IInitializer
     where TConfiguration :
     class;

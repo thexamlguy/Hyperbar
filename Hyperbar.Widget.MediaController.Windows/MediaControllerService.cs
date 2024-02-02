@@ -27,7 +27,7 @@ public class MediaControllerService(IMediator mediator,
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+       return Task.CompletedTask;
     }
 
     private async Task InitializeSessionAsync(GlobalSystemMediaTransportControlsSession session)

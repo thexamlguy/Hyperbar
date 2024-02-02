@@ -4,7 +4,7 @@ namespace Hyperbar.Widget.Windows;
 
 public class WidgetXamlMetadataInitializer(IWidgetAssembly widgetAssembly,
     IList<IXamlMetadataProvider> xamlMetadataProviders) :
-    IInitialization
+    IInitializer
 {
     public Task InitializeAsync()
     {

@@ -6,7 +6,7 @@ public class ConfigurationInitializer<TConfiguration>(IMediator mediator,
     IConfigurationWriter<TConfiguration> writer,
     IConfigurationFactory<TConfiguration> factory) :
     IConfigurationInitializer<TConfiguration>,
-    IInitialization
+    IInitializer
     where TConfiguration :
     class
 {

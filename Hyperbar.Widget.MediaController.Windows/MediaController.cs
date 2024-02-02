@@ -97,9 +97,15 @@ public class MediaController :
                 GlobalSystemMediaTransportControlsSessionMediaProperties mediaProperties =
                      await session.TryGetMediaPropertiesAsync();
 
-                IRandomAccessStreamWithContentType randomAccessStream = await mediaProperties.Thumbnail.OpenReadAsync();
+                IRandomAccessStreamWithContentType? randomAccessStream = null;
+                if (mediaProperties.Thumbnail is not null)
+                {
+                    randomAccessStream = 
+                        await mediaProperties.Thumbnail.OpenReadAsync();
+                }
+
                 await mediator.PublishAsync(new Changed<MediaInformation>(new MediaInformation(mediaProperties.Title,
-                    mediaProperties.Artist, randomAccessStream.AsStream())));
+                    mediaProperties.Artist, randomAccessStream is not null ? randomAccessStream.AsStream() : default)));
             }
             catch
             {

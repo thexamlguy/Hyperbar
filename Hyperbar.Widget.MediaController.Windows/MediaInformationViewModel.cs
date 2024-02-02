@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Microsoft.UI.Xaml.Media;
 
 namespace Hyperbar.Widget.MediaController.Windows;
 
@@ -8,7 +7,6 @@ public partial class MediaInformationViewModel(IServiceFactory serviceFactory,
     IDisposer disposer,
     ITemplateFactory templateFactory) :
     WidgetComponentViewModel(serviceFactory, mediator, disposer, templateFactory),
-    IInitialization,
     INotificationHandler<Changed<MediaInformation>>
 {
     [ObservableProperty]
@@ -33,6 +31,6 @@ public partial class MediaInformationViewModel(IServiceFactory serviceFactory,
         return Task.CompletedTask;
     }
 
-    public override async Task InitializeAsync() =>
+    public override async Task OnInitializeAsync() =>
         await Mediator.PublishAsync<Request<MediaInformation>>();
 }

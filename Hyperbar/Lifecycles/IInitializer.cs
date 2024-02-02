@@ -1,6 +1,6 @@
 ﻿namespace Hyperbar;
 
-public interface IInitialization
+public interface IInitializer
 {
     Task InitializeAsync();
 }

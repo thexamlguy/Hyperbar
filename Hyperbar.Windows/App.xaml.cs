@@ -46,8 +46,7 @@ public partial class App :
                     args.Placement = DesktopBarPlacemenet.Top;
                 });
 
-                services.AddTransient<IInitialization, AppInitializer>();
-
+                services.AddTransient<IInitializer, AppInitializer>();
                 services.AddSingleton<DesktopBar>();
             })
         .Build();

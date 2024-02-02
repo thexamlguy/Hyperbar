@@ -9,16 +9,17 @@ public sealed class WidgetHost :
     private readonly IServiceProvider services;
     private readonly IMediator mediator;
     private readonly IProxyService<IMediator> proxyMediator;
+    private readonly IEnumerable<IHostedService> hostedServices;
 
     public WidgetHost(IServiceProvider services,
         IMediator mediator,
-        IProxyService<IMediator> proxyMediator)
+        IProxyService<IMediator> proxyMediator,
+        IEnumerable<IHostedService> hostedServices)
     {
         this.services = services;
         this.mediator = mediator;
         this.proxyMediator = proxyMediator;
-
-        mediator.Subscribe(this);
+        this.hostedServices = hostedServices;
     }
 
     public WidgetConfiguration Configuration =>
@@ -33,6 +34,11 @@ public sealed class WidgetHost :
 
     public async Task StartAsync(CancellationToken cancellationToken = default)
     {
+        foreach (IHostedService service in hostedServices)
+        {
+            await service.StartAsync(cancellationToken);
+        }
+
         if (proxyMediator.Proxy is IMediator mediator)
         {
             await mediator.PublishAsync(new Started<IWidgetHost>(this),
@@ -43,8 +49,11 @@ public sealed class WidgetHost :
             cancellationToken);
     }
 
-    public Task StopAsync(CancellationToken cancellationToken = default)
+    public async Task StopAsync(CancellationToken cancellationToken = default)
     {
-        return Task.CompletedTask;
+        foreach(IHostedService service in hostedServices)
+        {
+            await service.StopAsync(cancellationToken);
+        }
     }
 }
