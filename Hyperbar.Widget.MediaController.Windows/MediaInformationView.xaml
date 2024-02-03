@@ -8,15 +8,19 @@
     xmlns:windows="using:Hyperbar.UI.Windows">
     <Grid Width="216">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="8" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Border
             Grid.Column="0"
             Width="40"
-            Height="40">
-            <Image Source="{Binding Image, Converter={windows:StreamToImageSourceConverter}}" />
+            Height="40"
+            CornerRadius="{ThemeResource ControlCornerRadius}">
+            <Image
+                Width="40"
+                Height="40"
+                Source="{Binding Image, Converter={windows:StreamToImageSourceConverter}}" />
         </Border>
         <StackPanel Grid.Column="2">
             <TextBlock
