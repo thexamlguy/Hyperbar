@@ -30,7 +30,7 @@ public partial class ObservableCollectionViewModel<TItem> :
     private bool isInitialized;
 
     public ObservableCollectionViewModel(IServiceFactory serviceFactory,
-            IMediator mediator,
+        IMediator mediator,
         IDisposer disposer)
     {
         ServiceFactory = serviceFactory;
@@ -54,7 +54,6 @@ public partial class ObservableCollectionViewModel<TItem> :
         mediator.Subscribe(this);
 
         collection.CollectionChanged += OnCollectionChanged;
-
         AddRange(items);
     }
 
@@ -62,8 +61,8 @@ public partial class ObservableCollectionViewModel<TItem> :
 
     public int Count => collection.Count;
 
-    public ICommand Initialize =>
-        new AsyncRelayCommand(InitializeAsync);
+    public ICommand InitializeCommand =>
+        new AsyncRelayCommand(CoreInitializeAsync);
 
     bool IList.IsFixedSize => false;
 
@@ -297,7 +296,7 @@ public partial class ObservableCollectionViewModel<TItem> :
         return true;
     }
 
-    public virtual Task OnInitializeAsync()
+    public virtual Task InitializeAsync()
     {
         return Task.CompletedTask;
     }
@@ -370,7 +369,7 @@ public partial class ObservableCollectionViewModel<TItem> :
     private static bool IsCompatibleObject(object? value) =>
         (value is TItem) || (value == null && default(TItem) == null);
 
-    public async Task InitializeAsync()
+    private async Task CoreInitializeAsync()
     {
         if (isInitialized)
         {
@@ -380,8 +379,9 @@ public partial class ObservableCollectionViewModel<TItem> :
         isInitialized = true;
 
         await Mediator.PublishAsync<Enumerate<TItem>>();
-        await OnInitializeAsync();
+        await InitializeAsync();
     }
+
     private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args) => 
         CollectionChanged?.Invoke(this, args);
 }

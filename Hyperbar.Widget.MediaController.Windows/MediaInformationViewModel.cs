@@ -13,7 +13,7 @@ public partial class MediaInformationViewModel(IServiceFactory serviceFactory,
     private string? description;
 
     [ObservableProperty]
-    private Stream? thumbnailSource;
+    private byte[]? image;
 
     [ObservableProperty]
     private string? title;
@@ -25,12 +25,12 @@ public partial class MediaInformationViewModel(IServiceFactory serviceFactory,
         {
             Title = value.Title;
             Description = value.Description;
-            ThumbnailSource = value.ThumbnailSource;
+            Image = value.Image;
         }
 
         return Task.CompletedTask;
     }
 
-    public override async Task OnInitializeAsync() =>
+    public override async Task InitializeAsync() =>
         await Mediator.PublishAsync<Request<MediaInformation>>();
 }

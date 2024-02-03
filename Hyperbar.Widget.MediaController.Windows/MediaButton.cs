@@ -1,3 +1,3 @@
 ﻿namespace Hyperbar.Widget.MediaController.Windows;
 
-public record Forward : INotification;
+public record MediaButton(bool IsEnabled);

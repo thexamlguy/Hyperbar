@@ -23,9 +23,10 @@ public class MediaControllerWidget :
                     .AddHandler<MediaControllerHandler>()
                     .AddTransient<IFactory<MediaController, MediaControllerViewModel?>, MediaControllerViewModelFactory>()
                     .AddCache<MediaController, MediaControllerViewModel>()
-                    .AddHandler<MediaControllerPlaybackStatusHandler>()
                     .AddContentTemplate<MediaControllerViewModel, MediaControllerView>()
                     .AddContentTemplate<MediaInformationViewModel, MediaInformationView>()
-                    .AddContentTemplate<MediaButtonViewModel, MediaButtonView>();
+                    .AddContentTemplate<MediaButtonViewModel<MediaPreviousButton>, MediaButtonView>()
+                    .AddContentTemplate<MediaButtonViewModel<MediaPlayPauseButton>, MediaButtonView>()
+                    .AddContentTemplate<MediaButtonViewModel<MediaNextButton>, MediaButtonView>();
             });
 }

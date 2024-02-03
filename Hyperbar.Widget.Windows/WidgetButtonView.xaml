@@ -17,7 +17,7 @@
         Width="{StaticResource ButtonWidth}"
         Height="{StaticResource ButtonHeight}"
         Padding="{StaticResource ButtonPadding}"
-        Command="{Binding Click}"
+        Command="{Binding InvokeCommand}"
         Content="{Binding Icon}"
         FontFamily="{StaticResource SymbolThemeFontFamily}"
         FontSize="16"

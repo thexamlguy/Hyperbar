@@ -20,7 +20,7 @@
             </ItemsControl.ItemContainerTransitions>
             <interactivity:Interaction.Behaviors>
                 <interactions:EventTriggerBehavior EventName="Loaded">
-                    <interactions:InvokeCommandAction Command="{Binding Initialize}" />
+                    <interactions:InvokeCommandAction Command="{Binding InitializeCommand}" />
                 </interactions:EventTriggerBehavior>
             </interactivity:Interaction.Behaviors>
         </ItemsControl>

@@ -3,42 +3,33 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace Hyperbar.Widget.MediaController.Windows;
 
-[NotificationHandler(nameof(PlaybackButtonType))]
-public partial class MediaButtonViewModel(IServiceFactory serviceFactory,
+public partial class MediaButtonViewModel<TMediaButton>(IServiceFactory serviceFactory,
     IMediator mediator,
     IDisposer disposer,
     ITemplateFactory templateFactory,
-    PlaybackButtonType playbackButtonType,
-    Guid guid = default,
-    string? text = null,
-    string? icon = null,
-    RelayCommand? command = null) :
-    WidgetButtonViewModel(serviceFactory, mediator, disposer, templateFactory, guid, text, icon, command)
+    IRelayCommand invokeCommand) : 
+    WidgetComponentViewModel(serviceFactory, mediator, disposer, templateFactory),
+    INotificationHandler<Changed<TMediaButton>>,
+    IMediaButtonViewModel
+    where TMediaButton :
+    MediaButton
 {
     [ObservableProperty]
-    private PlaybackButtonType playbackButtonType = playbackButtonType;
+    private IRelayCommand? invokeCommand = invokeCommand;
 
-    public Task Handle(Changed<MediaControllerPlaybackStatus> notification, 
+    [ObservableProperty]
+    private bool isEnabled;
+
+    [ObservableProperty]
+    private string? state = $"{typeof(TMediaButton).Name}";
+
+    public Task Handle(Changed<TMediaButton> args, 
         CancellationToken cancellationToken)
     {
-        if (notification.Value is MediaControllerPlaybackStatus information)
-        {
-            //switch (buttonType)
-            //{
-            //    case PlaybackButtonType.Play:
-            //        Visible = information.Status is PlaybackStatus.Paused;
-            //    break;
-            //    case PlaybackButtonType.Pause:
-            //        Visible = information.Status is PlaybackStatus.Playing;
-            //        break;
-            //}
-        }
-
+        IsEnabled = args.Value is not null && args.Value.IsEnabled;
         return Task.CompletedTask;
     }
 
-    //public override Task OnInitializeAsync()
-    //{
-    //    await Mediator.PublishAsync<Request<PlaybackInformation>>();
-    //}  
+    public override async Task InitializeAsync() =>
+        await Mediator.PublishAsync<Request<TMediaButton>>();
 }

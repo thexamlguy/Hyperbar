@@ -12,7 +12,7 @@
 		<PackageReference Include="CommunityToolkit.WinUI" Version="7.1.2" />
 		<PackageReference Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
 		<PackageReference Include="CommunityToolkit.WinUI.UI.Controls.Primitives" Version="7.1.2" />
-		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.231202003-experimental1" />
+		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.240124002-experimental2" />
 		<PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26031-preview" />
 		<PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.9" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />

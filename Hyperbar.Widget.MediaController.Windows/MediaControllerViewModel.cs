@@ -2,6 +2,8 @@
 
 namespace Hyperbar.Widget.MediaController.Windows;
 
+
+
 [NotificationHandler(nameof(MediaControllerViewModel))]
 public class MediaControllerViewModel : 
     ObservableCollectionViewModel<WidgetComponentViewModel>,
@@ -16,17 +18,14 @@ public class MediaControllerViewModel :
 
         Add<MediaInformationViewModel>();
 
-        Add<MediaButtonViewModel>(PlaybackButtonType.Previous,
-            "Previous", "\uEB9E",
-                new RelayCommand(async () => await mediator.PublishAsync<Previous>()));
+        Add<MediaButtonViewModel<MediaPreviousButton>>(new RelayCommand(async () => 
+            await mediator.PublishAsync<Request<MediaPrevious>>()));
 
-        Add<MediaButtonViewModel>(PlaybackButtonType.Pause,
-            "Pause", "\uE769",
-                new RelayCommand(async () => await mediator.PublishAsync<Pause>()));
+        Add<MediaButtonViewModel<MediaPlayPauseButton>>(new RelayCommand(async () =>
+            await mediator.PublishAsync<Request<MediaPlayPauseButton>>()));
 
-        Add<MediaButtonViewModel>(PlaybackButtonType.Forward,
-            "Forward", "\uEB9D",
-                new RelayCommand(async () => await mediator.PublishAsync<Forward>()));
+        Add<MediaButtonViewModel<MediaNextButton>>(new RelayCommand(async () =>
+            await mediator.PublishAsync<Request<MediaNext>>()));
     }
 
     public ITemplateFactory TemplateFactory { get; set; }

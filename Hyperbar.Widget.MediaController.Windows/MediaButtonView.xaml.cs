@@ -9,5 +9,5 @@ public sealed partial class MediaButtonView :
     public MediaButtonView() =>
         this.InitializeComponent(ref _contentLoaded);
 
-    private MediaButtonViewModel ViewModel => (MediaButtonViewModel)DataContext;
+    private IMediaButtonViewModel ViewModel => (IMediaButtonViewModel)DataContext;
 }

@@ -11,14 +11,8 @@ public partial class WidgetButtonViewModel(IServiceFactory serviceFactory,
     Guid id,
     string? text = null,
     string? icon = null,
-    RelayCommand? command = null) : WidgetComponentViewModel(serviceFactory, mediator, disposer, templateFactory)
+    RelayCommand? invokeCommand = null) : WidgetComponentViewModel(serviceFactory, mediator, disposer, templateFactory)
 {
-    [ObservableProperty]
-    private IRelayCommand? click = command;
-
-    [ObservableProperty]
-    private bool enabled;
-
     [ObservableProperty]
     private string? icon = icon;
 
@@ -26,8 +20,11 @@ public partial class WidgetButtonViewModel(IServiceFactory serviceFactory,
     private Guid id = id;
 
     [ObservableProperty]
-    private string? text = text;
+    private IRelayCommand? invokeCommand = invokeCommand;
 
     [ObservableProperty]
-    private bool visible;
+    private bool isEnabled;
+
+    [ObservableProperty]
+    private string? text = text;
 }

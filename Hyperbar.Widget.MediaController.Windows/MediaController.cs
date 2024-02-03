@@ -1,13 +1,16 @@
-﻿using Windows.Media.Control;
+﻿using System.Collections.Concurrent;
+using System.Diagnostics;
+using Windows.Media.Control;
 using Windows.Storage.Streams;
 
 namespace Hyperbar.Widget.MediaController.Windows;
 
 public class MediaController :
-    INotificationHandler<Play>,
-    INotificationHandler<Pause>,
-    INotificationHandler<Request<MediaControllerPlaybackStatus>>,
+    INotificationHandler<Request<MediaPrevious>>,
+    INotificationHandler<Request<MediaNext>>,
     INotificationHandler<Request<MediaInformation>>,
+    INotificationHandler<Request<MediaPreviousButton>>,
+    INotificationHandler<Request<MediaNextButton>>,
     IDisposable
 {
     private readonly AsyncLock asyncLock = new();
@@ -38,79 +41,100 @@ public class MediaController :
         disposer.Dispose(this);
     }
 
-    public async Task Handle(Play notification,
-        CancellationToken cancellationToken)
-    {
-        await session.TryPlayAsync();
-        await UpdateMediaPlaybackPropertiesAsync();
-    }
-
-    public async Task Handle(Pause notification,
-        CancellationToken cancellationToken)
-    {
-        await session.TryPauseAsync();
-        await UpdateMediaPlaybackPropertiesAsync();
-    }
-
-    public async Task Handle(Request<MediaControllerPlaybackStatus> args,
-        CancellationToken cancellationToken) => await UpdateMediaPlaybackPropertiesAsync();
-
     public async Task Handle(Request<MediaInformation> args,
-        CancellationToken cancellationToken) => await UpdateMediaPropertiesAsync();
+        CancellationToken cancellationToken) => await UpdateMediaInformationAsync();
+
+    public async Task Handle(Request<MediaNext> args,
+        CancellationToken cancellationToken)
+    {
+        await session.TrySkipNextAsync();
+        await UpdateMediaStateAsync();
+    }
+
+    public async Task Handle(Request<MediaPrevious> args, CancellationToken cancellationToken)
+    {
+        await session.TrySkipPreviousAsync();
+        await UpdateMediaStateAsync();
+    }
+
+    public async Task Handle(Request<MediaPreviousButton> args,
+        CancellationToken cancellationToken) => await UpdateMediaStateAsync();
+
+    public async Task Handle(Request<MediaNextButton> args, 
+        CancellationToken cancellationToken) => await UpdateMediaStateAsync();
 
     private async void OnMediaPropertiesChanged(GlobalSystemMediaTransportControlsSession sender,
-        MediaPropertiesChangedEventArgs args) => await UpdateMediaPropertiesAsync();
+            MediaPropertiesChangedEventArgs args)
+    {
+        await UpdateMediaInformationAsync();
+        await UpdateMediaStateAsync();
+    }
 
     private async void OnPlaybackInfoChanged(GlobalSystemMediaTransportControlsSession sender,
-        PlaybackInfoChangedEventArgs args) => await UpdateMediaPlaybackPropertiesAsync();
+        PlaybackInfoChangedEventArgs args) => await UpdateMediaStateAsync();
 
-    private async Task UpdateMediaPlaybackPropertiesAsync()
+    private async Task UpdateMediaInformationAsync()
     {
-        using (await asyncLock)
+        try
         {
-            try
+            GlobalSystemMediaTransportControlsSessionMediaProperties mediaProperties =
+                 await session.TryGetMediaPropertiesAsync();
+
+            byte[]? buffer = null;
+
+            if (mediaProperties.Thumbnail is not null)
             {
-                GlobalSystemMediaTransportControlsSessionPlaybackInfo playbackInfo = session.GetPlaybackInfo();
+                IRandomAccessStreamWithContentType randomAccessStream =
+                    await mediaProperties.Thumbnail.OpenReadAsync();
 
-                if (playbackInfo.PlaybackStatus != playbackStatus)
-                {
-                    playbackStatus = playbackInfo.PlaybackStatus;
-                    await mediator.PublishAsync(new Changed<MediaControllerPlaybackStatus>(
-                        new MediaControllerPlaybackStatus((PlaybackStatus)playbackStatus)));
+                var stream = randomAccessStream.AsStream();
 
-                }
+                using MemoryStream memoryStream = new();
+                await stream.CopyToAsync(memoryStream);
+                buffer = memoryStream.ToArray();
             }
-            catch
-            {
 
-            }
+            await mediator.PublishAsync(new Changed<MediaInformation>(new MediaInformation(mediaProperties.Title,
+                mediaProperties.Artist, buffer)));
+        }
+        catch
+        {
+
         }
     }
 
-    private async Task UpdateMediaPropertiesAsync()
+    private bool isPreviousEnabled;
+    private bool isNextEnabled;
+
+    private async Task UpdateMediaStateAsync()
     {
-        using (await asyncLock)
+        try
         {
-            try
+            GlobalSystemMediaTransportControlsSessionPlaybackInfo playbackInfo =
+                session.GetPlaybackInfo();
+
+            bool isPreviousEnabled = playbackInfo.Controls.IsPreviousEnabled;
+            if (this.isPreviousEnabled != isPreviousEnabled)
             {
+                await mediator.PublishAsync(new Changed<MediaPreviousButton>(new
+                    MediaPreviousButton(isPreviousEnabled)));
 
-                GlobalSystemMediaTransportControlsSessionMediaProperties mediaProperties =
-                     await session.TryGetMediaPropertiesAsync();
-
-                IRandomAccessStreamWithContentType? randomAccessStream = null;
-                if (mediaProperties.Thumbnail is not null)
-                {
-                    randomAccessStream = 
-                        await mediaProperties.Thumbnail.OpenReadAsync();
-                }
-
-                await mediator.PublishAsync(new Changed<MediaInformation>(new MediaInformation(mediaProperties.Title,
-                    mediaProperties.Artist, randomAccessStream is not null ? randomAccessStream.AsStream() : default)));
+                this.isPreviousEnabled = isPreviousEnabled;
             }
-            catch
+
+            bool isNextEnabled = playbackInfo.Controls.IsNextEnabled;
+            if (this.isNextEnabled != isNextEnabled)
             {
+                await mediator.PublishAsync(new Changed<MediaNextButton>(new
+                    MediaNextButton(isNextEnabled)));
 
+                this.isNextEnabled = isNextEnabled;
             }
+
+        }
+        catch
+        {
+
         }
     }
 }

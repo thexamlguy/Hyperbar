@@ -2,6 +2,4 @@
 
 public record MediaInformation(string Title,
     string Description,
-    Stream? ThumbnailSource);
-
-
+    byte[]? Image);

@@ -16,7 +16,7 @@
             Grid.Column="0"
             Width="40"
             Height="40">
-            <Image Source="{Binding ThumbnailSource, Converter={windows:StreamToImageSourceConverter}}" />
+            <Image Source="{Binding Image, Converter={windows:StreamToImageSourceConverter}}" />
         </Border>
         <StackPanel Grid.Column="2">
             <TextBlock
@@ -32,7 +32,7 @@
                 TextWrapping="NoWrap" />
             <interactivity:Interaction.Behaviors>
                 <interactions:EventTriggerBehavior EventName="Loaded">
-                    <interactions:InvokeCommandAction Command="{x:Bind ViewModel.Initialize}" />
+                    <interactions:InvokeCommandAction Command="{x:Bind ViewModel.InitializeCommand}" />
                 </interactions:EventTriggerBehavior>
             </interactivity:Interaction.Behaviors>
         </StackPanel>

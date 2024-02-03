@@ -5,9 +5,9 @@ using Windows.Storage.Streams;
 namespace Hyperbar.UI.Windows;
 
 public class StreamToImageSourceConverter :
-    ValueConverter<Stream, ImageSource>
+    ValueConverter<byte[], ImageSource>
 {
-    protected override ImageSource? ConvertTo(Stream value,
+    protected override ImageSource? ConvertTo(byte[] value,
         Type? targetType, 
         object? parameter, 
         string? language)
@@ -17,8 +17,8 @@ public class StreamToImageSourceConverter :
             return default;
         }
 
-        IRandomAccessStream randomAccessStream = 
-            WindowsRuntimeStreamExtensions.AsRandomAccessStream(value);
+        MemoryStream memoryStream = new(value);
+        IRandomAccessStream randomAccessStream = memoryStream.AsRandomAccessStream();
 
         BitmapImage bitmapImage = new();
         bitmapImage.SetSource(randomAccessStream);

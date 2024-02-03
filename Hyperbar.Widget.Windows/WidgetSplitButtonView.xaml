@@ -16,7 +16,7 @@
     <SplitButton
         Height="{StaticResource ButtonHeight}"
         Margin="0,1,0,0"
-        Command="{Binding Click}"
+        Command="{Binding InvokeCommand}"
         Content="{Binding Icon}"
         FontFamily="{StaticResource SymbolThemeFontFamily}"
         FontSize="16">

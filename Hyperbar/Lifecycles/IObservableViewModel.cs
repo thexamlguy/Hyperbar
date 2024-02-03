@@ -2,9 +2,7 @@
 
 namespace Hyperbar;
 
-public interface IInitialization
+public interface IObservableViewModel
 {
     ICommand InitializeCommand { get; }
-
-    Task InitializeAsync();
 }
