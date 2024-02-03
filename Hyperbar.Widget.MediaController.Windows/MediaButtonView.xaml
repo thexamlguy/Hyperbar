@@ -11,6 +11,7 @@
         <SolidColorBrush x:Key="ButtonBorderBrush" Color="Transparent" />
         <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="Transparent" />
         <SolidColorBrush x:Key="ButtonBorderBrushPressed" Color="Transparent" />
+        <SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="Transparent" />
         <SolidColorBrush x:Key="ButtonBorderBrushDisabled" Color="Transparent" />
         <Thickness x:Key="ButtonPadding">0</Thickness>
         <x:Double x:Key="ButtonWidth">40</x:Double>
