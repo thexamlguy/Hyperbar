@@ -1,3 +1,3 @@
 ﻿namespace Hyperbar.Widget.MediaController.Windows;
 
-public record MediaPreviousButton;
+public record MediaButtonState;

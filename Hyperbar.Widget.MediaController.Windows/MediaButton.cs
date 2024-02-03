@@ -1,3 +1,3 @@
 ﻿namespace Hyperbar.Widget.MediaController.Windows;
 
-public record MediaButton(bool IsEnabled);
+public record MediaButton<TMediaButton>(MediaButtonState State);

@@ -23,7 +23,6 @@
         Height="{StaticResource ButtonHeight}"
         Padding="{StaticResource ButtonPadding}"
         Command="{x:Bind ViewModel.InvokeCommand}"
-        Content="{x:Bind ViewModel.State}"
         FontFamily="{StaticResource SymbolThemeFontFamily}"
         FontSize="16"
         IsEnabled="False">
@@ -36,7 +35,7 @@
             <VisualStateGroup>
                 <VisualState x:Name="MediaPreviousButtonState">
                     <VisualState.StateTriggers>
-                        <triggers:IsEqualStateTrigger Value="{Binding State}" To="MediaPreviousButton" />
+                        <triggers:IsEqualStateTrigger Value="{Binding Button}" To="MediaPreviousButton" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="Button.Content" Value="&#xE892;" />
@@ -44,7 +43,7 @@
                 </VisualState>
                 <VisualState x:Name="MediaNextButtonState">
                     <VisualState.StateTriggers>
-                        <triggers:IsEqualStateTrigger Value="{Binding State}" To="MediaNextButton" />
+                        <triggers:IsEqualStateTrigger Value="{Binding Button}" To="MediaNextButton" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="Button.Content" Value="&#xE893;" />
@@ -52,11 +51,29 @@
                 </VisualState>
             </VisualStateGroup>
             <VisualStateGroup>
-                <VisualState x:Name="IsEnabledState">
+                <VisualState x:Name="EnabledState">
                     <VisualState.StateTriggers>
-                        <triggers:IsEqualStateTrigger Value="{Binding IsEnabled}" To="True" />
+                        <triggers:IsEqualStateTrigger Value="{Binding State}" To="Enabled" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
+                        <Setter Target="Button.IsEnabled" Value="True" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="PlayingState">
+                    <VisualState.StateTriggers>
+                        <triggers:IsEqualStateTrigger Value="{Binding State}" To="Playing" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="Button.Content" Value="&#xE769;" />
+                        <Setter Target="Button.IsEnabled" Value="True" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="PausedState">
+                    <VisualState.StateTriggers>
+                        <triggers:IsEqualStateTrigger Value="{Binding State}" To="Paused" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="Button.Content" Value="&#xE768;" />
                         <Setter Target="Button.IsEnabled" Value="True" />
                     </VisualState.Setters>
                 </VisualState>

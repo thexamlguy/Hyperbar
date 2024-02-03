@@ -22,7 +22,7 @@ public class MediaControllerViewModel :
             await mediator.PublishAsync<Request<MediaPrevious>>()));
 
         Add<MediaButtonViewModel<MediaPlayPauseButton>>(new RelayCommand(async () =>
-            await mediator.PublishAsync<Request<MediaPlayPauseButton>>()));
+            await mediator.PublishAsync<Request<MediaPlayPause>>()));
 
         Add<MediaButtonViewModel<MediaNextButton>>(new RelayCommand(async () =>
             await mediator.PublishAsync<Request<MediaNext>>()));

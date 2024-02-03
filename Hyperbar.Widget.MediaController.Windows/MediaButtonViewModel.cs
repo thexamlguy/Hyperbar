@@ -9,24 +9,22 @@ public partial class MediaButtonViewModel<TMediaButton>(IServiceFactory serviceF
     ITemplateFactory templateFactory,
     IRelayCommand invokeCommand) : 
     WidgetComponentViewModel(serviceFactory, mediator, disposer, templateFactory),
-    INotificationHandler<Changed<TMediaButton>>,
+    INotificationHandler<Changed<MediaButton<TMediaButton>>>,
     IMediaButtonViewModel
-    where TMediaButton :
-    MediaButton
 {
     [ObservableProperty]
     private IRelayCommand? invokeCommand = invokeCommand;
 
     [ObservableProperty]
-    private bool isEnabled;
+    private string? state;
 
     [ObservableProperty]
-    private string? state = $"{typeof(TMediaButton).Name}";
+    private string? button = $"{typeof(TMediaButton).Name}";
 
-    public Task Handle(Changed<TMediaButton> args, 
+    public Task Handle(Changed<MediaButton<TMediaButton>> args, 
         CancellationToken cancellationToken)
     {
-        IsEnabled = args.Value is not null && args.Value.IsEnabled;
+        State = $"{args.Value?.State}";
         return Task.CompletedTask;
     }
 

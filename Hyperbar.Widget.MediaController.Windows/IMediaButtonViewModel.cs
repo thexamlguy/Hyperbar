@@ -7,7 +7,8 @@ public interface IMediaButtonViewModel :
 {
     IRelayCommand? InvokeCommand { get; set; }
 
-    bool IsEnabled { get; set; }
+    string? Button { get; set; }
 
     string? State { get; set; }
+
 }
