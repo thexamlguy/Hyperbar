@@ -10,8 +10,6 @@ public static class IServiceCollectionExtensions
 { 
     public static IServiceCollection AddWidgetWindows(this IServiceCollection services)
     {
-        services.AddContentTemplate<WidgetViewModel, WidgetBarView>();
-
         // We need to feed information to the Widgets about our Windows host,
         // so the Windows host can make discussions how to display and interact with the widgets. 
 

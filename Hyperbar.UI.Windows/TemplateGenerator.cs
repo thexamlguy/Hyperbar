@@ -11,12 +11,10 @@ public class TemplateGenerator : DataTemplateSelector
         string xamlString = @"
                 <DataTemplate xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""
                                 xmlns:ui=""using:Hyperbar.UI.Windows"">
-                    <Grid>
-                        <ui:TemplateGeneratorControl  VerticalContentAlignment=""Stretch""
-                            HorizontalContentAlignment=""Stretch"" 
-                            HorizontalAlignment=""Stretch"" 
-                            VerticalAlignment=""Stretch""/>
-                    </Grid>
+                      <ui:TemplateGeneratorControl VerticalContentAlignment=""Stretch""
+                                            HorizontalContentAlignment=""Stretch"" 
+                                            HorizontalAlignment=""Stretch"" 
+                                            VerticalAlignment=""Stretch""/>
                 </DataTemplate>";
 
         return (DataTemplate)XamlReader.Load(xamlString);
@@ -27,12 +25,10 @@ public class TemplateGenerator : DataTemplateSelector
         string xamlString = @"
                 <DataTemplate xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""
                                 xmlns:ui=""using:Hyperbar.UI.Windows"">
-                    <Grid>
-                        <ui:TemplateGeneratorControl  VerticalContentAlignment=""Stretch""
-                            HorizontalContentAlignment=""Stretch"" 
-                            HorizontalAlignment=""Stretch"" 
-                            VerticalAlignment=""Stretch""/>
-                    </Grid>
+                      <ui:TemplateGeneratorControl  VerticalContentAlignment=""Stretch""
+                                        HorizontalContentAlignment=""Stretch"" 
+                                        HorizontalAlignment=""Stretch"" 
+                                        VerticalAlignment=""Stretch""/>
                 </DataTemplate>";
 
         return (DataTemplate)XamlReader.Load(xamlString);

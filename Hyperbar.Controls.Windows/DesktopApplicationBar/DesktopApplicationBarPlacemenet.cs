@@ -1,6 +1,6 @@
 ﻿namespace Hyperbar.Controls.Windows;
 
-public enum DesktopBarPlacemenet
+public enum DesktopApplicationBarPlacemenet
 {
     Left,
     Top,

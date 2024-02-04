@@ -6,13 +6,13 @@ using Hyperbar.UI.Windows;
 
 namespace Hyperbar.Controls.Windows;
 
-internal class DesktopBarHost : Window
+internal class DesktopApplicationBarHost : Window
 {
-    private readonly DesktopBarPresenter presenter;
+    private readonly DesktopApplicationBarPresenter presenter;
     private readonly WindowSnapping windowSnapping;
-    private DesktopBarPlacemenet placement;
+    private DesktopApplicationBarPlacemenet placement;
 
-    public DesktopBarHost(DesktopBarPresenter presenter)
+    public DesktopApplicationBarHost(DesktopApplicationBarPresenter presenter)
     {
         this.SetOpacity(0);
         this.SetStyle(WindowStyle.SysMenu | WindowStyle.Visible);
@@ -31,7 +31,7 @@ internal class DesktopBarHost : Window
         Closed += OnClosed;
     }
 
-    internal void UpdatePlacement(DesktopBarPlacemenet placement)
+    internal void UpdatePlacement(DesktopApplicationBarPlacemenet placement)
     {
         this.placement = placement;
         UpdatePlacement();
@@ -44,19 +44,19 @@ internal class DesktopBarHost : Window
 
         switch (placement)
         {
-            case DesktopBarPlacemenet.Left:
+            case DesktopApplicationBarPlacemenet.Left:
                 windowSnapping.Snap(WindowSnappingPlacement.Left, (int)size);
                 break;
 
-            case DesktopBarPlacemenet.Top:
+            case DesktopApplicationBarPlacemenet.Top:
                 windowSnapping.Snap(WindowSnappingPlacement.Top, (int)size);
                 break;
 
-            case DesktopBarPlacemenet.Right:
+            case DesktopApplicationBarPlacemenet.Right:
                 windowSnapping.Snap(WindowSnappingPlacement.Right, (int)size);
                 break;
 
-            case DesktopBarPlacemenet.Bottom:
+            case DesktopApplicationBarPlacemenet.Bottom:
                 windowSnapping.Snap(WindowSnappingPlacement.Bottom, (int)size);
                 break;
 

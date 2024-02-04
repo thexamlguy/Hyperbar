@@ -14,6 +14,11 @@
 		<UseRidGraph>true</UseRidGraph>
 	</PropertyGroup>
 	<ItemGroup>
+	  <None Remove="ApplicationBarView.xaml" />
+	  <None Remove="PrimaryView.xaml" />
+	  <None Remove="SecondaryView.xaml" />
+	</ItemGroup>
+	<ItemGroup>
 		<Content Include="Assets\SplashScreen.scale-200.png" />
 		<Content Include="Assets\LockScreenLogo.scale-200.png" />
 		<Content Include="Assets\Square150x150Logo.scale-200.png" />
@@ -47,5 +52,21 @@
 		<ProjectReference Include="..\Hyperbar.Widget.Windows\Hyperbar.Widget.Windows.csproj" />
 		<ProjectReference Include="..\Hyperbar.Widget\Hyperbar.Widget.csproj" />
 		<ProjectReference Include="..\Hyperbar\Hyperbar.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Page Update="SecondaryView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
+	</ItemGroup>
+	<ItemGroup>
+	  <Page Update="PrimaryView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
+	</ItemGroup>
+	<ItemGroup>
+	  <Page Update="ApplicationBarView.xaml">
+	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+	    <SubType>Designer</SubType>
+	  </Page>
 	</ItemGroup>
 </Project>

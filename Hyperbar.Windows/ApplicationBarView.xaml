@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <UserControl
-    x:Class="Hyperbar.Widget.Windows.WidgetBarView"
+    x:Class="Hyperbar.Windows.ApplicationBarView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:windows="using:Hyperbar.UI.Windows">
     <ItemsControl ItemTemplateSelector="{Binding Converter={windows:DataTemplateConverter}}" ItemsSource="{Binding}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
-                <StackPanel Orientation="Horizontal" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="400" />
+                    </Grid.ColumnDefinitions>
+                </Grid>
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
         <ItemsControl.ItemContainerTransitions>
@@ -15,5 +20,10 @@
                 <AddDeleteThemeTransition />
             </TransitionCollection>
         </ItemsControl.ItemContainerTransitions>
+        <ItemsControl.ItemContainerStyle>
+            <Style TargetType="ContentPresenter">
+                <Setter Property="windows:GridExtension.GridColumnBindingPath" Value="Index" />
+            </Style>
+        </ItemsControl.ItemContainerStyle>
     </ItemsControl>
 </UserControl>

@@ -4,5 +4,5 @@ namespace Hyperbar.Windows;
 
 public class AppConfiguration
 {
-    public DesktopBarPlacemenet Placement { get; set; }
+    public DesktopApplicationBarPlacemenet Placement { get; set; }
 }

@@ -13,7 +13,7 @@ public class WidgetStartedHandler(IMediator mediator) :
             if (host.Services.GetService<IWidgetViewModel>() is IWidgetViewModel viewModel)
             {
                 await mediator.PublishAsync(new Created<IWidgetViewModel>(viewModel),
-                    nameof(WidgetViewModel), cancellationToken);
+                    nameof(IWidgetHostViewModel), cancellationToken);
             }
         }
     }

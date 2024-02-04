@@ -43,11 +43,15 @@ public partial class App :
                 services.AddHandler<AppConfigurationChangedHandler>();
                 services.AddConfiguration<AppConfiguration>(args =>
                 {
-                    args.Placement = DesktopBarPlacemenet.Top;
+                    args.Placement = DesktopApplicationBarPlacemenet.Top;
                 });
 
+                services.AddSingleton<DesktopApplicationBar>();
+                services.AddContentTemplate<ApplicationBarViewModel, ApplicationBarView>();
+                services.AddContentTemplate<PrimaryViewModel, PrimaryView>();
+                services.AddContentTemplate<SecondaryViewModel, SecondaryView>();
+
                 services.AddTransient<IInitializer, AppInitializer>();
-                services.AddSingleton<DesktopBar>();
             })
         .Build();
 

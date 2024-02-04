@@ -11,7 +11,8 @@ public class TemplateGeneratorControl :
         DataContextChanged += OnDataContextChanged;
     }
 
-    private void OnDataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+    private void OnDataContextChanged(FrameworkElement sender, 
+        DataContextChangedEventArgs args)
     {
         if (DataContext is ITemplatedViewModel templatedViewModel)
         {

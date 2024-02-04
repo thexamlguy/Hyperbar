@@ -2,30 +2,30 @@
 
 namespace Hyperbar.Controls.Windows;
 
-public class DesktopBar :
+public class DesktopApplicationBar :
     DependencyObject
 {
     public static readonly DependencyProperty ContentProperty =
         DependencyProperty.Register(nameof(Content),
-            typeof(object), typeof(DesktopBar),
+            typeof(object), typeof(DesktopApplicationBar),
             new PropertyMetadata(null));
 
     public static readonly DependencyProperty PlacementProperty =
         DependencyProperty.Register(nameof(Placement),
-            typeof(DesktopBarPlacemenet), typeof(DesktopBar),
-            new PropertyMetadata(DesktopBarPlacemenet.Left, OnPlacementPropertyChanged));
+            typeof(DesktopApplicationBarPlacemenet), typeof(DesktopApplicationBar),
+            new PropertyMetadata(DesktopApplicationBarPlacemenet.Left, OnPlacementPropertyChanged));
 
-    private readonly DesktopBarHost host;
-    private readonly DesktopBarPresenter presenter;
+    private readonly DesktopApplicationBarHost host;
+    private readonly DesktopApplicationBarPresenter presenter;
 
-    public DesktopBar()
+    public DesktopApplicationBar()
     {
-        presenter = new DesktopBarPresenter
+        presenter = new DesktopApplicationBarPresenter
         {
             Parent = this
         };
 
-        host = new DesktopBarHost(presenter);
+        host = new DesktopApplicationBarHost(presenter);
         host.Activate();
     }
 
@@ -35,16 +35,16 @@ public class DesktopBar :
         set => SetValue(ContentProperty, value);
     }
 
-    public DesktopBarPlacemenet Placement
+    public DesktopApplicationBarPlacemenet Placement
     {
-        get => (DesktopBarPlacemenet)GetValue(PlacementProperty);
+        get => (DesktopApplicationBarPlacemenet)GetValue(PlacementProperty);
         set => SetValue(PlacementProperty, value);
     }
 
     private static void OnPlacementPropertyChanged(DependencyObject dependencyObject,
         DependencyPropertyChangedEventArgs args)
     {
-        if (dependencyObject is DesktopBar sender)
+        if (dependencyObject is DesktopApplicationBar sender)
         {
             sender.OnPlacementPropertyChanged();
         }

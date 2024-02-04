@@ -1,13 +1,12 @@
 ﻿using Hyperbar.Controls.Windows;
 using Hyperbar.Widget;
-using Hyperbar.Widget.Windows;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Hyperbar.Windows;
 
-public class AppInitializer([FromKeyedServices(nameof(WidgetViewModel))] WidgetBarView view,
-    [FromKeyedServices(nameof(WidgetViewModel))] WidgetViewModel viewModel,
-    DesktopBar desktopFlyout, 
+public class AppInitializer([FromKeyedServices(nameof(ApplicationBarViewModel))] ApplicationBarView view,
+    [FromKeyedServices(nameof(ApplicationBarViewModel))] ApplicationBarViewModel viewModel,
+    DesktopApplicationBar desktopFlyout, 
     AppConfiguration configuration) :
     IInitializer
 {
