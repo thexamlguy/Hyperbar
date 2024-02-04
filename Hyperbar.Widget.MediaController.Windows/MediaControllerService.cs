@@ -34,7 +34,7 @@ public class MediaControllerService(IMediator mediator,
     {
         if (factory.Create(session) is MediaController mediaController)
         {
-            await mediator.PublishAsync(new Created<MediaController>(mediaController));
+            await mediator.PublishAsync(new Create<MediaController>(mediaController));
             cache.Add(new KeyValuePair<GlobalSystemMediaTransportControlsSession, MediaController>(session, 
                 mediaController));
         }
@@ -53,7 +53,7 @@ public class MediaControllerService(IMediator mediator,
             {
                 if (!sessions.Any(x => x.SourceAppUserModelId == session.Key.SourceAppUserModelId))
                 {
-                    await mediator.PublishAsync(new Removed<MediaController>(session.Value));
+                    await mediator.PublishAsync(new Remove<MediaController>(session.Value));
                     cache.Remove(session);
                 }
             }

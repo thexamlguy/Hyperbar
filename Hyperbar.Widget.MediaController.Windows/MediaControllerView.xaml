@@ -9,7 +9,7 @@
             HorizontalAlignment="Right"
             HorizontalContentAlignment="Right"
             ItemTemplateSelector="{Binding Converter={windows:DataTemplateConverter}}"
-            ItemsSource="{Binding}">
+            ItemsSource="{x:Bind ViewModel}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Horizontal" Spacing="8" />

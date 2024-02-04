@@ -15,11 +15,11 @@ public partial class ObservableCollectionViewModel<TItem> :
     IList,
     IReadOnlyList<TItem>,
     INotifyCollectionChanged,
-    INotificationHandler<Removed<TItem>>,
-    INotificationHandler<Created<TItem>>,
-    INotificationHandler<Inserted<TItem>>,
-    INotificationHandler<Moved<TItem>>,
-    INotificationHandler<Replaced<TItem>>,
+    INotificationHandler<Remove<TItem>>,
+    INotificationHandler<Create<TItem>>,
+    INotificationHandler<Insert<TItem>>,
+    INotificationHandler<Move<TItem>>,
+    INotificationHandler<Replace<TItem>>,
     IDisposable,
     IInitialization
     where TItem :
@@ -206,7 +206,7 @@ public partial class ObservableCollectionViewModel<TItem> :
     IEnumerator IEnumerable.GetEnumerator() =>
         ((IEnumerable)collection).GetEnumerator();
 
-    public Task Handle(Removed<TItem> notification,
+    public Task Handle(Remove<TItem> notification,
         CancellationToken cancellationToken)
     {
         foreach (TItem item in this.ToList())
@@ -220,7 +220,7 @@ public partial class ObservableCollectionViewModel<TItem> :
         return Task.CompletedTask;
     }
 
-    public Task Handle(Created<TItem> notification,
+    public Task Handle(Create<TItem> notification,
         CancellationToken cancellationToken)
     {
         if (notification.Value is TItem item)
@@ -231,7 +231,7 @@ public partial class ObservableCollectionViewModel<TItem> :
         return Task.CompletedTask;
     }
 
-    public Task Handle(Inserted<TItem> notification,
+    public Task Handle(Insert<TItem> notification,
         CancellationToken cancellationToken)
     {
         if (notification.Value is TItem item)
@@ -242,7 +242,7 @@ public partial class ObservableCollectionViewModel<TItem> :
         return Task.CompletedTask;
     }
 
-    public Task Handle(Moved<TItem> notification,
+    public Task Handle(Move<TItem> notification,
         CancellationToken cancellationToken)
     {
         if (notification.Value is TItem item)
@@ -253,7 +253,7 @@ public partial class ObservableCollectionViewModel<TItem> :
         return Task.CompletedTask;
     }
 
-    public Task Handle(Replaced<TItem> notification, 
+    public Task Handle(Replace<TItem> notification, 
         CancellationToken cancellationToken)
     {
         if (notification.Value is TItem item)

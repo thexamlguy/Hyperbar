@@ -29,7 +29,7 @@ public class WidgetExtensionEnumerator(IFactory<Type, IWidget> factory,
                 {
                     if (factory.Create(widgetType) is IWidget widget)
                     {
-                        await mediator.PublishAsync(new Created<WidgetExtension>(new WidgetExtension(widget, 
+                        await mediator.PublishAsync(new Create<WidgetExtension>(new WidgetExtension(widget, 
                             new WidgetAssembly(assembly))), cancellationToken);
                     }
                 }

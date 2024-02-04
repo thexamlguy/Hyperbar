@@ -3,9 +3,9 @@
 namespace Hyperbar.Widget;
 
 public class WidgetHostHandler : 
-    INotificationHandler<Created<IWidgetHost>>
+    INotificationHandler<Create<IWidgetHost>>
 {
-    public async Task Handle(Created<IWidgetHost> notification,
+    public async Task Handle(Create<IWidgetHost> notification,
         CancellationToken cancellationToken)
     {
         if (notification.Value is IWidgetHost host)

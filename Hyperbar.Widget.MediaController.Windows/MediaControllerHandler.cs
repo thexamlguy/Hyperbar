@@ -5,10 +5,10 @@ namespace Hyperbar.Widget.MediaController.Windows;
 public class MediaControllerHandler(IMediator mediator,
     IServiceScopeProvider<MediaController> scopeProvider,
     ICache<MediaController, MediaControllerViewModel> cache) :
-    INotificationHandler<Created<MediaController>>,
-    INotificationHandler<Removed<MediaController>>
+    INotificationHandler<Create<MediaController>>,
+    INotificationHandler<Remove<MediaController>>
 {
-    public async Task Handle(Created<MediaController> notification,
+    public async Task Handle(Create<MediaController> notification,
         CancellationToken cancellationToken)
     {
         if (notification.Value is MediaController mediaController &&
@@ -18,17 +18,17 @@ public class MediaControllerHandler(IMediator mediator,
             factory.Create(mediaController) is MediaControllerViewModel viewModel)
         {
             cache.Add(mediaController, viewModel);
-            await mediator.PublishAsync(new Created<MediaControllerViewModel>(viewModel), cancellationToken);
+            await mediator.PublishAsync(new Create<MediaControllerViewModel>(viewModel), cancellationToken);
         }
     }
 
-    public async Task Handle(Removed<MediaController> notification, CancellationToken cancellationToken)
+    public async Task Handle(Remove<MediaController> notification, CancellationToken cancellationToken)
     {
         if (notification.Value is MediaController mediaController &&
             cache.TryGetValue(mediaController, out MediaControllerViewModel? viewModel) &&
             viewModel is not null)
         {
-            await mediator.PublishAsync(new Removed<MediaControllerViewModel>(viewModel), cancellationToken);
+            await mediator.PublishAsync(new Remove<MediaControllerViewModel>(viewModel), cancellationToken);
             cache.Remove(mediaController);
         }
     }

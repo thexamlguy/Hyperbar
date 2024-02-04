@@ -30,7 +30,7 @@ public class WidgetComponentViewModelEnumerator(PrimaryWidgetConfiguration confi
         {
             if (factory.Create(item) is IWidgetComponentViewModel viewModel)
             {
-                await mediator.PublishAsync(new Created<IWidgetComponentViewModel>(viewModel), nameof(PrimaryWidgetViewModel), 
+                await mediator.PublishAsync(new Create<IWidgetComponentViewModel>(viewModel), nameof(PrimaryWidgetViewModel), 
                     cancellationToken);
             }
         }

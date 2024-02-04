@@ -5,9 +5,9 @@ namespace Hyperbar.Widget;
 public class WidgetExtensionHandler(IServiceProvider provider,
     IMediator mediator,
     IProxyServiceCollection<IWidgetBuilder> typedServices) :
-    INotificationHandler<Created<WidgetExtension>>
+    INotificationHandler<Create<WidgetExtension>>
 {
-    public async Task Handle(Created<WidgetExtension> notification,
+    public async Task Handle(Create<WidgetExtension> notification,
         CancellationToken cancellationToken)
     {
         if(notification.Value is WidgetExtension widgetExtension)
@@ -22,7 +22,7 @@ public class WidgetExtensionHandler(IServiceProvider provider,
             });
 
             IWidgetHost host = builder.Build();
-            await mediator.PublishAsync(new Created<IWidgetHost>(host),
+            await mediator.PublishAsync(new Create<IWidgetHost>(host),
                 cancellationToken);
         }
     }

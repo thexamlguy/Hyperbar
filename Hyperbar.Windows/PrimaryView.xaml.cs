@@ -1,28 +1,14 @@
-using Microsoft.UI.Xaml;
+using Hyperbar.Widget;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+namespace Hyperbar.Windows;
 
-namespace Hyperbar.Windows
+public partial class PrimaryView : 
+    UserControl
 {
-    public sealed partial class PrimaryView : UserControl
-    {
-        public PrimaryView()
-        {
-            this.InitializeComponent();
-        }
-    }
+    public PrimaryView() => 
+        InitializeComponent();
+
+    protected PrimaryViewModel ViewModel =>
+        (PrimaryViewModel)DataContext;
 }

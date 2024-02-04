@@ -3,11 +3,12 @@ using Hyperbar.UI.Windows;
 
 namespace Hyperbar.Widget.MediaController.Windows;
 
-public sealed partial class MediaInformationView : 
+public partial class MediaInformationView : 
     UserControl
 {
     public MediaInformationView() =>
         this.InitializeComponent(ref _contentLoaded);
 
-    private MediaInformationViewModel ViewModel => (MediaInformationViewModel)DataContext;
+    protected MediaInformationViewModel ViewModel => 
+        (MediaInformationViewModel)DataContext;
 }

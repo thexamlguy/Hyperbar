@@ -18,6 +18,7 @@
 	  <None Remove="PrimaryView.xaml" />
 	  <None Remove="SecondaryView.xaml" />
 	  <None Remove="SettingsButtonView.xaml" />
+	  <None Remove="SettingsView.xaml" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Include="Assets\SplashScreen.scale-200.png" />
@@ -53,6 +54,11 @@
 		<ProjectReference Include="..\Hyperbar.Widget.Windows\Hyperbar.Widget.Windows.csproj" />
 		<ProjectReference Include="..\Hyperbar.Widget\Hyperbar.Widget.csproj" />
 		<ProjectReference Include="..\Hyperbar\Hyperbar.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Page Update="SettingsView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
 	</ItemGroup>
 	<ItemGroup>
 	  <Page Update="SettingsButtonView.xaml">

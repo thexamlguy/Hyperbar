@@ -7,7 +7,7 @@
     <ItemsControl
         HorizontalAlignment="Center"
         ItemTemplateSelector="{Binding Converter={windows:DataTemplateConverter}}"
-        ItemsSource="{Binding}">
+        ItemsSource="{x:Bind ViewModel}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
                 <ItemsStackPanel Orientation="Horizontal" />

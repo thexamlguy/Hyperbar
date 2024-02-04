@@ -1,9 +1,13 @@
+using Hyperbar.Widget;
 using Microsoft.UI.Xaml.Controls;
 
 namespace Hyperbar.Windows;
 
-public sealed partial class ApplicationBarView :
+public partial class ApplicationBarView :
     UserControl
 {
-    public ApplicationBarView() => InitializeComponent();
+    public ApplicationBarView() => 
+        InitializeComponent();
+    protected ApplicationBarViewModel ViewModel =>
+        (ApplicationBarViewModel)DataContext;
 }

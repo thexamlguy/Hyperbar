@@ -44,7 +44,7 @@ public class PrimaryWidgetConfigurationHandler(IMediator mediator,
             if (moved.Value is PrimaryCommandConfiguration configuration &&
                 provider.Get(configuration) is IWidgetComponentViewModel viewModel)
             {
-                await mediator.PublishAsync(new Moved<IWidgetComponentViewModel>(configuration.Order, viewModel),
+                await mediator.PublishAsync(new Move<IWidgetComponentViewModel>(configuration.Order, viewModel),
                     moved.Key.ParentId == Guid.Empty ? nameof(PrimaryWidgetViewModel) : moved.Key.ParentId,
                         cancellationToken);
 
@@ -62,7 +62,7 @@ public class PrimaryWidgetConfigurationHandler(IMediator mediator,
                 factory.Create(configuration) is IWidgetComponentViewModel viewModel)
             {
                 await mediator.PublishAsync(
-                    new Inserted<IWidgetComponentViewModel>(configuration.Order, viewModel),
+                    new Insert<IWidgetComponentViewModel>(configuration.Order, viewModel),
                     added.Key.ParentId == Guid.Empty ? nameof(PrimaryWidgetViewModel) : added.Key.ParentId,
                     cancellationToken);
 
@@ -79,7 +79,7 @@ public class PrimaryWidgetConfigurationHandler(IMediator mediator,
                 provider.Get(configuration) is IWidgetComponentViewModel viewModel)
             {
                 await mediator.PublishAsync(
-                    new Removed<IWidgetComponentViewModel>(viewModel),
+                    new Remove<IWidgetComponentViewModel>(viewModel),
                     removed.Key.ParentId == Guid.Empty ? nameof(PrimaryWidgetViewModel) : removed.Key.ParentId,
                     cancellationToken);
 

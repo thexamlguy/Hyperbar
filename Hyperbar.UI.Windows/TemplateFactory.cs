@@ -8,9 +8,11 @@ public class TemplateFactory(IEnumerable<IContentTemplateDescriptor> descriptors
 {
     public object? Create(object key)
     {
-        if (descriptors.FirstOrDefault(x => x.Key == key) is IContentTemplateDescriptor descriptor)
+        if (descriptors.FirstOrDefault(x => x.Key == key)
+            is IContentTemplateDescriptor descriptor)
         {
-            if (provider.GetRequiredKeyedService(descriptor.TemplateType, descriptor.Key) is { } template)
+            if (provider.GetRequiredKeyedService(descriptor.TemplateType,
+                descriptor.Key) is { } template)
             {
                 return template;
             }

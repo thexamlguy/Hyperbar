@@ -13,7 +13,7 @@ public class WidgetViewModelEnumerator(IWidgetHost host,
         {
             foreach (IWidgetViewModel viewModel in viewModels)
             {
-                await mediator.PublishAsync(new Created<IWidgetViewModel>(viewModel),
+                await mediator.PublishAsync(new Create<IWidgetViewModel>(viewModel),
                     nameof(IWidgetHostViewModel), cancellationToken);
             }
         }

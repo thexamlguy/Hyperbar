@@ -18,7 +18,7 @@
     <ItemsControl
         Margin="6,0,6,0"
         ItemTemplateSelector="{Binding Converter={windows:DataTemplateConverter}}"
-        ItemsSource="{Binding}">
+        ItemsSource="{x:Bind ViewModel, Mode=OneWay}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
                 <Grid>
