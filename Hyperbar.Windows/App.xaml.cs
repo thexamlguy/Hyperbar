@@ -8,7 +8,6 @@ using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
 using System.Reflection;
 using Hyperbar.Widget.Windows;
-using Microsoft.UI.Xaml.Markup;
 
 namespace Hyperbar.Windows;
 
@@ -45,6 +44,8 @@ public partial class App :
                 {
                     args.Placement = DesktopApplicationBarPlacemenet.Top;
                 });
+
+                services.AddNavigationHandler<WindowHandler>();
 
                 services.AddSingleton<DesktopApplicationBar>();
                 services.AddContentTemplate<ApplicationBarViewModel, ApplicationBarView>();

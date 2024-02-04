@@ -15,9 +15,9 @@ public partial class SecondaryViewModel :
         IMediator mediator,
         IDisposer disposer,
         int index) : base(serviceFactory, mediator, disposer)
-    {
+    {       
+        TemplateFactory = templateFactory;
         this.index = index;
-        this.TemplateFactory = templateFactory;
 
         Add<SettingsButtonViewModel>();
     }

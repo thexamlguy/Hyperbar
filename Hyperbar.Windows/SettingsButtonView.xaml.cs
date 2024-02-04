@@ -2,9 +2,12 @@ using Microsoft.UI.Xaml.Controls;
 
 namespace Hyperbar.Windows;
 
-public sealed partial class SettingsButtonView : 
+public partial class SettingsButtonView : 
     UserControl
 {
     public SettingsButtonView() => 
-        this.InitializeComponent();
+        InitializeComponent();
+
+    protected SettingsButtonViewModel ViewModel =>
+        (SettingsButtonViewModel)DataContext;
 }

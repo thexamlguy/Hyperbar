@@ -3,6 +3,8 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.FileProviders.Physical;
 using Microsoft.Extensions.Hosting;
+using System.Diagnostics.CodeAnalysis;
+using System.Net.Mime;
 using System.Text.Json;
 
 namespace Hyperbar;
@@ -128,6 +130,26 @@ public static class IServiceCollectionExtensions
         return services;
     }
 
+    public static IServiceCollection AddNavigationHandler<THandler>(this IServiceCollection services)
+        where THandler : 
+        INavigationHandler,
+        IHandler
+    {
+        Type? contract = typeof(THandler).GetInterfaces()
+            .FirstOrDefault(t => t.Name == typeof(INavigationHandler<>).Name);
+
+        if (contract?.GetGenericArguments() is { Length: 1 } arguments)
+        {
+            services.AddTransient<INavigationDescriptor>(provider => new NavigationDescriptor
+            {
+                Type = arguments[0]
+            });
+        }
+
+        services.AddHandler<THandler>();
+        return services;
+    }
+
     public static IServiceCollection AddContentTemplate<TContent, TTemplate>(this IServiceCollection services,
         object? key = null)
     {
@@ -163,51 +185,58 @@ public static class IServiceCollectionExtensions
 
         services.AddSingleton<IDisposer, Disposer>();
 
+        services.AddHandler<NavigateHandler>();
+
         return services;
     }
 
-    public static IServiceCollection AddHandler<THandler>(this IServiceCollection services,
+    public static IServiceCollection AddHandler<THandler>(
+        this IServiceCollection services,
         ServiceLifetime lifetime = ServiceLifetime.Transient)
-        where THandler :
-        IHandler
+        where THandler : IHandler
     {
         if (typeof(THandler).GetInterfaces() is { } contracts)
         {
             foreach (Type contract in contracts)
             {
-                if (contract.Name == typeof(INotificationHandler<>).Name)
+                if (contract.Name == typeof(INotificationHandler<>).Name &&
+                    contract.GetGenericArguments() is { Length: 1 } notificationArguments)
                 {
-                    if (contract.GetGenericArguments() is { Length: 1 } arguments)
-                    {
-                        Type notificationType = arguments[0];
-                        services.Add(new ServiceDescriptor(typeof(INotificationHandler<>).MakeGenericType(notificationType), typeof(THandler), lifetime));
-                    }
+                    Type notificationType = notificationArguments[0];
+                    services.Add(new ServiceDescriptor(
+                        typeof(INotificationHandler<>).MakeGenericType(notificationType),
+                        typeof(THandler),
+                        lifetime));
                 }
 
-                if (contract.Name == typeof(IHandler<,>).Name)
+                if (contract.Name == typeof(IHandler<,>).Name &&
+                    contract.GetGenericArguments() is { Length: 2 } handlerArguments)
                 {
-                    if (contract.GetGenericArguments() is { Length: 2 } arguments)
-                    {
-                        Type requestType = arguments[0];
-                        Type responseType = arguments[1];
+                    Type requestType = handlerArguments[0];
+                    Type responseType = handlerArguments[1];
 
-                        Type wrapperType = typeof(HandlerWrapper<,>).MakeGenericType(requestType, responseType);
+                    Type wrapperType = typeof(HandlerWrapper<,>).MakeGenericType(requestType, responseType);
 
-                        services.TryAdd(new ServiceDescriptor(typeof(THandler), typeof(THandler), lifetime));
-                        services.Add(new ServiceDescriptor(wrapperType,
-                            provider => provider.GetService<IServiceFactory>()?.Create(wrapperType,
+                    services.TryAdd(new ServiceDescriptor(typeof(THandler), typeof(THandler), lifetime));
+                    services.Add(new ServiceDescriptor(
+                        wrapperType,
+                        provider =>
+                            provider.GetService<IServiceFactory>()?.Create(
+                                wrapperType,
                                 provider.GetRequiredService<THandler>(),
-                                provider.GetServices(typeof(IPipelineBehavior<,>).MakeGenericType(requestType, responseType)))!,
-                            lifetime
-                        ));
-                    }
+                                provider.GetServices(typeof(IPipelineBehavior<,>).MakeGenericType(requestType, responseType))
+                            )!,
+                        lifetime
+                    ));
                 }
             }
 
+            return services;
         }
 
         return services;
     }
+
 
     public static IServiceCollection AddNotificationRelay<TFromNotification,
         TToNotification>(this IServiceCollection services)

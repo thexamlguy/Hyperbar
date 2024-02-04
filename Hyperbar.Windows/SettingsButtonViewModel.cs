@@ -1,11 +1,24 @@
-﻿namespace Hyperbar.Windows;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
-public class SettingsButtonViewModel(ITemplateFactory templateFactory,
-    IServiceFactory serviceFactory,
-    IMediator mediator,
-    IDisposer disposer) :
-    ObservableViewModel(serviceFactory, mediator, disposer),
+namespace Hyperbar.Windows;
+
+public partial class SettingsButtonViewModel :
+    ObservableViewModel,
     ITemplatedViewModel
 {
-    public ITemplateFactory TemplateFactory => templateFactory;
+    [ObservableProperty]
+    private IRelayCommand? invokeCommand;
+
+    public SettingsButtonViewModel(ITemplateFactory templateFactory,
+        IServiceFactory serviceFactory,
+        IMediator mediator,
+        IDisposer disposer) : base(serviceFactory, mediator, disposer)
+    {
+        TemplateFactory = templateFactory;
+        InvokeCommand = new AsyncRelayCommand(async () =>
+            await mediator.PublishAsync(new Navigate("Settings")));
+    }
+
+    public ITemplateFactory TemplateFactory { get; }
 }

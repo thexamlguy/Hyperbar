@@ -9,8 +9,8 @@ public class WidgetExtensionEnumerator(IFactory<Type, IWidget> factory,
     IMediator mediator) :
     INotificationHandler<Enumerate<WidgetExtension>>
 {
-    public Task Handle(Enumerate<WidgetExtension> notification, 
-        CancellationToken cancellationToken)
+    public Task Handle(Enumerate<WidgetExtension> args, 
+        CancellationToken cancellationToken = default)
     {
         string extensionsDirectory = Path.Combine(hostEnvironment.ContentRootPath, "Extensions");
         if (Directory.Exists(extensionsDirectory))

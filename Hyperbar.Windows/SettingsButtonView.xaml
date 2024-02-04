@@ -18,6 +18,7 @@
         Width="{ThemeResource ButtonWidth}"
         Height="{ThemeResource ButtonHeight}"
         Padding="{ThemeResource ButtonPadding}"
+        Command="{x:Bind ViewModel.InvokeCommand}"
         Content="&#xE713;"
         FontFamily="{ThemeResource SymbolThemeFontFamily}"
         FontSize="16" />

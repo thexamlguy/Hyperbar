@@ -19,12 +19,13 @@ public interface IMediator
         where TNotification :
         INotification;
 
-    Task PublishAsync<TNotification>(TNotification notification,
+    Task PublishAsync(object notification,
+        CancellationToken cancellationToken = default);
+
+    Task PublishAsync(object notification,
         Func<Func<Task>, Task> marshal,
         object? key = null,
-        CancellationToken cancellationToken = default)
-        where TNotification :
-        INotification;
+        CancellationToken cancellationToken = default);
 
     Task PublishAsync<TNotification>(CancellationToken cancellationToken = default)
         where TNotification :

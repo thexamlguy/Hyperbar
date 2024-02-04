@@ -8,7 +8,7 @@ public class Mediator(IServiceProvider provider,
     IDispatcher dispatcher) :
     IMediator
 {
-    private readonly ConcurrentDictionary<object, List<dynamic>> subscriptions = [];
+    private readonly ConcurrentDictionary<object, List<object>> handlers = [];
 
     public Task PublishAsync<TNotification>(object key,
         CancellationToken cancellationToken = default)
@@ -36,30 +36,38 @@ public class Mediator(IServiceProvider provider,
             key, cancellationToken);
     }
 
-    public  Task PublishAsync<TNotification>(TNotification notification,
+    public Task PublishAsync(object notification,
         Func<Func<Task>, Task> marshal,
         object? key = null,
         CancellationToken cancellationToken = default)
-        where TNotification :
-        INotification
     {
-        List<INotificationHandler<TNotification>> handlers =
-            provider.GetServices<INotificationHandler<TNotification>>().ToList();
+        Type notificationType = notification.GetType();
 
-        foreach (KeyValuePair<object, List<dynamic>> subscriber in subscriptions)
+        List<object?> handlers = provider.GetServices(typeof(INotificationHandler<>)
+            .MakeGenericType(notificationType)).ToList();
+
+        foreach (KeyValuePair<object, List<object>> subscriber in this.handlers)
         {
-            if (subscriber.Key.Equals($"{(key is not null ? $"{key}:" : "")}{typeof(TNotification)}"))
+            if (subscriber.Key.Equals($"{key?.ToString()}:{notificationType}"))
             {
-                foreach (dynamic handler in subscriber.Value)
-                {
-                    handlers.Add(handler);
-                }
+                handlers.AddRange(subscriber.Value);
             }
         }
 
-        foreach (INotificationHandler<TNotification> handler in handlers)
+        foreach (object? handler in handlers)
         {
-            marshal(() => handler.Handle(notification, cancellationToken));
+            if (handler is not null)
+            {
+                Type? handlerType = handler.GetType();
+                MethodInfo? handleMethod = handlerType.GetMethod("Handle", 
+                    [notificationType, typeof(CancellationToken)]);
+               
+                if (handleMethod is not null)
+                {
+                    marshal(() => (Task)handleMethod.Invoke(handler, new object[] { notification,
+                            cancellationToken })!);
+                }
+            }
         }
 
         return Task.CompletedTask;
@@ -70,6 +78,13 @@ public class Mediator(IServiceProvider provider,
         INotification,
         new() => PublishAsync(new TNotification(), args => dispatcher.InvokeAsync(async () => await args()), 
             null, cancellationToken);
+
+    public Task PublishAsync(object notification,
+        CancellationToken cancellationToken = default)
+    {
+        return PublishAsync(notification, args => dispatcher.InvokeAsync(async () => await args()),
+            null, cancellationToken);
+    }
 
     public Task<TResponse?> SendAsync<TResponse>(IRequest<TResponse> request,
         CancellationToken cancellationToken = default)
@@ -116,7 +131,7 @@ public class Mediator(IServiceProvider provider,
         {
             if (interfaceType.GetGenericArguments().FirstOrDefault() is Type argumentType)
             {
-                subscriptions.AddOrUpdate($"{(key is not null ? $"{key}:" : "")}{argumentType}", new List<object> { handler }, (value, collection) =>
+                handlers.AddOrUpdate($"{(key is not null ? $"{key}:" : "")}{argumentType}", new List<object> { handler }, (value, collection) =>
                 {
                     collection.Add(handler);
                     return collection;
