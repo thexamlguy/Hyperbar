@@ -15,7 +15,10 @@
         <x:Double x:Key="ButtonWidth">40</x:Double>
         <x:Double x:Key="ButtonHeight">40</x:Double>
     </UserControl.Resources>
-    <ItemsControl ItemTemplateSelector="{Binding Converter={windows:DataTemplateConverter}}" ItemsSource="{Binding}">
+    <ItemsControl
+        Margin="6,0,6,0"
+        ItemTemplateSelector="{Binding Converter={windows:DataTemplateConverter}}"
+        ItemsSource="{Binding}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
                 <Grid>
