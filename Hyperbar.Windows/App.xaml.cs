@@ -51,6 +51,8 @@ public partial class App :
                 services.AddContentTemplate<PrimaryViewModel, PrimaryView>();
                 services.AddContentTemplate<SecondaryViewModel, SecondaryView>();
 
+                services.AddContentTemplate<SettingsButtonViewModel, SettingsButtonView>();
+
                 services.AddTransient<IInitializer, AppInitializer>();
             })
         .Build();

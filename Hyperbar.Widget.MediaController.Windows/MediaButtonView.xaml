@@ -19,11 +19,11 @@
     </UserControl.Resources>
     <Button
         x:Name="Button"
-        Width="{StaticResource ButtonWidth}"
-        Height="{StaticResource ButtonHeight}"
-        Padding="{StaticResource ButtonPadding}"
+        Width="{ThemeResource ButtonWidth}"
+        Height="{ThemeResource ButtonHeight}"
+        Padding="{ThemeResource ButtonPadding}"
         Command="{x:Bind ViewModel.InvokeCommand}"
-        FontFamily="{StaticResource SymbolThemeFontFamily}"
+        FontFamily="{ThemeResource SymbolThemeFontFamily}"
         FontSize="16"
         IsEnabled="False">
         <interactivity:Interaction.Behaviors>
