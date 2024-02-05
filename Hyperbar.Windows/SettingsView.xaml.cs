@@ -1,12 +1,13 @@
 using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
 
-namespace Hyperbar.Windows
+namespace Hyperbar.Windows;
+
+public partial class SettingsView :
+    Window
 {
-    public sealed partial class SettingsView :
-        Window
-    {
-        public SettingsView() => 
-            InitializeComponent();
-    }
+    public SettingsView() => 
+        InitializeComponent();
+
+    protected SettingsViewModel ViewModel =>
+        (SettingsViewModel)(Content as FrameworkElement)!.DataContext;
 }

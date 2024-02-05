@@ -34,13 +34,14 @@ public class NavigateHandler :
                     contentTemplateDescriptor.TemplateType.BaseType == navigationDescriptor.Type)
                 {
                     if (provider.GetRequiredKeyedService(contentTemplateDescriptor.TemplateType,
-                        contentTemplateDescriptor.Key) is { } template)
+                        contentTemplateDescriptor.Key) is { } template && 
+                        provider.GetRequiredKeyedService(contentTemplateDescriptor.ContentType,
+                            contentTemplateDescriptor.Key) is { } content)
                     {
                         Type navigateType = typeof(Navigate<>)
                             .MakeGenericType(navigationDescriptor.Type);
-
-                        if (Activator.CreateInstance(navigateType, 
-                            new object[] { template, args.Key }) is object navigate)
+                        if (Activator.CreateInstance(navigateType,
+                            new object[] { template, content }) is object navigate)
                         {
                             await mediator.PublishAsync(navigate, cancellationToken);
                         }

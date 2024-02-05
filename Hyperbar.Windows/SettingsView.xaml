@@ -2,6 +2,20 @@
 <Window
     x:Class="Hyperbar.Windows.SettingsView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Button>afsdfdg</Button>
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:hyperbar="using:Hyperbar">
+    <Window.SystemBackdrop>
+        <MicaBackdrop />
+    </Window.SystemBackdrop>
+    <NavigationView
+        IsBackButtonVisible="Collapsed"
+        IsPaneToggleButtonVisible="False"
+        IsSettingsVisible="False"
+        MenuItemsSource="{x:Bind ViewModel, Mode=OneWay}">
+        <NavigationView.MenuItemTemplate>
+            <DataTemplate x:DataType="hyperbar:NavigationViewModel">
+                <NavigationViewItem Content="{x:Bind Text, Mode=OneWay}" />
+            </DataTemplate>
+        </NavigationView.MenuItemTemplate>
+    </NavigationView>
 </Window>

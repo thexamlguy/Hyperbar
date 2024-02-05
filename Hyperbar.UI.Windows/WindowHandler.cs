@@ -10,6 +10,11 @@ public class WindowHandler :
     {
         if (args.Template is Window window)
         {
+            if (window.Content is FrameworkElement frameworkElement)
+            {
+                frameworkElement.DataContext = args.Content;
+            }
+
             window.Activate();
         }
 

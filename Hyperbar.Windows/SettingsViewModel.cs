@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Hyperbar.Windows;
 
-namespace Hyperbar.Windows
+public partial class SettingsViewModel :
+    ObservableCollectionViewModel<NavigationViewModel>
 {
-    internal class SettingsViewModel
+    public SettingsViewModel(IServiceFactory serviceFactory, 
+        IMediator mediator, 
+        IDisposer disposer) : base(serviceFactory, mediator, disposer)
     {
+        Add<NavigationViewModel>("General");
+        Add<NavigationViewModel>("Widgets");
     }
 }
