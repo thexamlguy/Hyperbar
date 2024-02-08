@@ -37,7 +37,9 @@ public partial class App :
                 services.AddHostedService<AppService>();
 
                 services.AddSingleton<IDispatcher>(new Dispatcher(DispatcherQueue.GetForCurrentThread()));
-                services.AddTransient<ITemplateFactory, TemplateFactory>();
+               
+                services.AddTransient<IViewModelTemplateDescriptorProvider, ViewModelTemplateDescriptorProvider>();
+                services.AddTransient<IViewModelTemplateFactory, ViewModelTemplateFactory>();
 
                 services.AddHandler<AppConfigurationChangedHandler>();
                 services.AddConfiguration<AppConfiguration>(args =>
@@ -54,6 +56,9 @@ public partial class App :
 
                 services.AddContentTemplate<SettingsButtonViewModel, SettingsButtonView>();
                 services.AddContentTemplate<SettingsViewModel, SettingsView>("Settings");
+
+                services.AddContentTemplate<GeneralSettingsNavigationViewModel, GeneralSettingsNavigationView>();
+                services.AddContentTemplate<WidgetSettingsNavigationViewModel, WidgetSettingsNavigationView>();
 
                 services.AddTransient<IInitializer, AppInitializer>();
             })

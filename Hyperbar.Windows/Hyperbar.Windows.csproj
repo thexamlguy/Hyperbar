@@ -15,10 +15,12 @@
 	</PropertyGroup>
 	<ItemGroup>
 	  <None Remove="ApplicationBarView.xaml" />
+	  <None Remove="GeneralSettingsNavigationView.xaml" />
 	  <None Remove="PrimaryView.xaml" />
 	  <None Remove="SecondaryView.xaml" />
 	  <None Remove="SettingsButtonView.xaml" />
 	  <None Remove="SettingsView.xaml" />
+	  <None Remove="WidgetSettingsNavigationView.xaml" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Include="Assets\SplashScreen.scale-200.png" />
@@ -54,6 +56,16 @@
 		<ProjectReference Include="..\Hyperbar.Widget.Windows\Hyperbar.Widget.Windows.csproj" />
 		<ProjectReference Include="..\Hyperbar.Widget\Hyperbar.Widget.csproj" />
 		<ProjectReference Include="..\Hyperbar\Hyperbar.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Page Update="GeneralSettingsNavigationView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
+	</ItemGroup>
+	<ItemGroup>
+	  <Page Update="WidgetSettingsNavigationView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
 	</ItemGroup>
 	<ItemGroup>
 	  <Page Update="SettingsView.xaml">

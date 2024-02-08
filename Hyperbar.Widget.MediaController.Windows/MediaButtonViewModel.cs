@@ -3,12 +3,13 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace Hyperbar.Widget.MediaController.Windows;
 
-public partial class MediaButtonViewModel<TMediaButton>(IServiceFactory serviceFactory,
+public partial class MediaButtonViewModel<TMediaButton>(IServiceProvider serviceProvider,
+    IServiceFactory serviceFactory,
     IMediator mediator,
     IDisposer disposer,
-    ITemplateFactory templateFactory,
+    IViewModelTemplateFactory templateFactory,
     IRelayCommand invokeCommand) : 
-    WidgetComponentViewModel(serviceFactory, mediator, disposer, templateFactory),
+    WidgetComponentViewModel(serviceProvider, serviceFactory, mediator, disposer, templateFactory),
     INotificationHandler<Changed<MediaButton<TMediaButton>>>,
     IMediaButtonViewModel
 {

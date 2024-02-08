@@ -1,15 +1,13 @@
-﻿using Hyperbar.Widget;
+﻿namespace Hyperbar.Widget.MediaController.Windows;
 
-namespace Hyperbar.Widget.MediaController.Windows;
-
-public class MediaControllerWidgetViewModel(ITemplateFactory templateFactory,
+public class MediaControllerWidgetViewModel(IViewModelTemplateFactory templateFactory,
+    IServiceProvider serviceProvider,
     IServiceFactory serviceFactory,
     IMediator mediator,
     IDisposer disposer,
     IEnumerable<MediaControllerViewModel> items) :
-    ObservableCollectionViewModel<MediaControllerViewModel>(serviceFactory, mediator, disposer, items),
-    IWidgetViewModel,
-    ITemplatedViewModel
+    ObservableCollectionViewModel<MediaControllerViewModel>(serviceProvider, serviceFactory, mediator, disposer, items),
+    IWidgetViewModel
 {
-    public ITemplateFactory TemplateFactory => templateFactory;
+    public IViewModelTemplateFactory TemplateFactory => templateFactory;
 }

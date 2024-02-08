@@ -2,11 +2,12 @@
 
 namespace Hyperbar.Widget.MediaController.Windows;
 
-public partial class MediaInformationViewModel(IServiceFactory serviceFactory,
+public partial class MediaInformationViewModel(IServiceProvider serviceProvider,
+    IServiceFactory serviceFactory,
     IMediator mediator,
     IDisposer disposer,
-    ITemplateFactory templateFactory) :
-    WidgetComponentViewModel(serviceFactory, mediator, disposer, templateFactory),
+    IViewModelTemplateFactory templateFactory) :
+    WidgetComponentViewModel(serviceProvider, serviceFactory, mediator, disposer, templateFactory),
     INotificationHandler<Changed<MediaInformation>>
 {
     [ObservableProperty]

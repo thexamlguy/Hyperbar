@@ -1,11 +1,17 @@
 ﻿using Hyperbar.Interop.Windows;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 using Windows.Graphics;
 using WinRT.Interop;
 
 namespace Hyperbar.UI.Windows;
 
+public class NavigationItemTemplateSelector : 
+    DataTemplateSelector
+{
+
+}
 public static class WindowExtensions
 {
     public static WindowMessageListener CreateMessageListener(this Window window) =>
@@ -35,6 +41,16 @@ public static class WindowExtensions
 
     public static void SetStyle(this Window window,
         ExtendedWindowStyle style) => window.GetHandle().SetExtendedWindowStyle(style);
+
+    public static void TitleBarConfiguration(this Window window, 
+        Action<AppWindowTitleBar> titleBarDelegate)
+    {
+        AppWindow appWindow = window.AppWindow;
+        if (appWindow.TitleBar is AppWindowTitleBar titleBar)
+        {
+            titleBarDelegate.Invoke(titleBar);
+        }
+    }
 
     public static void SetTopMost(this Window window,
         bool value)

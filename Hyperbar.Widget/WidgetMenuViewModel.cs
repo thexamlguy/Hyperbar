@@ -4,14 +4,15 @@ using CommunityToolkit.Mvvm.Input;
 namespace Hyperbar.Widget;
 
 [NotificationHandler(nameof(Id))]
-public partial class WidgetMenuViewModel(IServiceFactory serviceFactory,
+public partial class WidgetMenuViewModel(IServiceProvider serviceProvider,
+    IServiceFactory serviceFactory,
     IMediator mediator,
     IDisposer disposer,
-    ITemplateFactory templateFactory,
+    IViewModelTemplateFactory templateFactory,
     Guid id = default,
     string? text = null,
     string? icon = null,
-    RelayCommand? command = null) : WidgetComponentViewModel(serviceFactory, mediator, disposer, templateFactory)
+    RelayCommand? command = null) : WidgetComponentViewModel(serviceProvider, serviceFactory, mediator, disposer, templateFactory)
 {
     [ObservableProperty]
     private IRelayCommand? click = command;

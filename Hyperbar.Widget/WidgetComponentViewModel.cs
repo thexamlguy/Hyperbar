@@ -2,25 +2,26 @@
 
 public partial class WidgetComponentViewModel :
     ObservableCollectionViewModel<IWidgetComponentViewModel>,
-    IWidgetComponentViewModel,
-    ITemplatedViewModel
+    IWidgetComponentViewModel
 {
-    public WidgetComponentViewModel(IServiceFactory serviceFactory,
+    public WidgetComponentViewModel(IServiceProvider serviceProvider, 
+        IServiceFactory serviceFactory,
         IMediator mediator, 
         IDisposer disposer,
-        ITemplateFactory templateFactory,
-        IEnumerable<IWidgetComponentViewModel> items) : base(serviceFactory, mediator, disposer, items)
+        IViewModelTemplateFactory templateFactory,
+        IEnumerable<IWidgetComponentViewModel> items) : base(serviceProvider, serviceFactory, mediator, disposer, items)
     {
         TemplateFactory = templateFactory;
     }
 
-    public WidgetComponentViewModel(IServiceFactory serviceFactory,
+    public WidgetComponentViewModel(IServiceProvider serviceProvider,
+        IServiceFactory serviceFactory,
         IMediator mediator,
         IDisposer disposer,
-        ITemplateFactory templateFactory) : base(serviceFactory, mediator, disposer)
+        IViewModelTemplateFactory templateFactory) : base(serviceProvider, serviceFactory, mediator, disposer)
     {
         TemplateFactory = templateFactory;
     }
 
-    public ITemplateFactory TemplateFactory { get; private set; }
+    public IViewModelTemplateFactory TemplateFactory { get; private set; }
 }

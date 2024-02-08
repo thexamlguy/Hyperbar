@@ -3,17 +3,17 @@
 namespace Hyperbar.Widget;
 
 [NotificationHandler(nameof(IWidgetHostViewModel))]
-public partial class PrimaryViewModel(ITemplateFactory templateFactory,
+public partial class PrimaryViewModel(IViewModelTemplateFactory templateFactory,
+    IServiceProvider serviceProvider,
     IServiceFactory serviceFactory,
     IMediator mediator,
     IDisposer disposer,
     int index) :
-    ObservableCollectionViewModel<IWidgetViewModel>(serviceFactory, mediator, disposer),
-    IWidgetHostViewModel,
-    ITemplatedViewModel
+    ObservableCollectionViewModel<IWidgetViewModel>(serviceProvider, serviceFactory, mediator, disposer),
+    IWidgetHostViewModel
 {
     [ObservableProperty]
     private int index = index;
 
-    public ITemplateFactory TemplateFactory => templateFactory;
+    public IViewModelTemplateFactory TemplateFactory => templateFactory;
 }

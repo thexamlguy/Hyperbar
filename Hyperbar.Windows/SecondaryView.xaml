@@ -3,9 +3,9 @@
     x:Class="Hyperbar.Windows.SecondaryView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:windows="using:Hyperbar.UI.Windows">
+    xmlns:ui="using:Hyperbar.UI.Windows">
     <Grid>
-        <ItemsControl ItemTemplateSelector="{Binding Converter={windows:DataTemplateConverter}}" ItemsSource="{x:Bind ViewModel, Mode=OneWay}">
+        <ItemsControl ItemTemplateSelector="{ui:ViewModelTemplate}" ItemsSource="{x:Bind ViewModel, Mode=OneWay}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <ItemsStackPanel Orientation="Horizontal" />

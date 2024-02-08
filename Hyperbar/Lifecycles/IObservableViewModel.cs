@@ -1,8 +1,14 @@
-﻿using System.Windows.Input;
+﻿namespace Hyperbar;
 
-namespace Hyperbar;
-
-public interface IObservableViewModel
+public interface IObservableViewModel :
+    IInitialization,
+    IDisposable
 {
-    ICommand InitializeCommand { get; }
+    public IDisposer Disposer { get; }
+
+    public IMediator Mediator { get; }
+
+    public IServiceFactory ServiceFactory { get; }
+
+    public IServiceProvider ServiceProvider { get; }
 }

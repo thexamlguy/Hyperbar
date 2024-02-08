@@ -164,9 +164,9 @@ public static class IServiceCollectionExtensions
         services.AddKeyedTransient(contentType, key);
         services.AddKeyedTransient(templateType, key);
 
-        services.AddTransient<IContentTemplateDescriptor>(provider => new ContentTemplateDescriptor
+        services.AddTransient<IViewModelTemplateDescriptor>(provider => new ViewModelTemplateDescriptor
         {
-            ContentType = contentType,
+            ViewModelType = contentType,
             TemplateType = templateType,
             Key = key
         });

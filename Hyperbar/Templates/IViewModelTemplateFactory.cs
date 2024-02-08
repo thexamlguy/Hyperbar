@@ -1,6 +1,6 @@
 ﻿namespace Hyperbar;
 
-public interface ITemplateFactory
+public interface IViewModelTemplateFactory
 {
     object? Create(object key);
 }

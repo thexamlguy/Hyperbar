@@ -4,17 +4,17 @@ using Hyperbar.Windows;
 namespace Hyperbar.Widget;
 
 public partial class SecondaryViewModel :
-    ObservableCollectionViewModel<IDisposable>,
-    ITemplatedViewModel
+    ObservableCollectionViewModel<IDisposable>
 {
     [ObservableProperty]
     private int index;
 
-    public SecondaryViewModel(ITemplateFactory templateFactory,
+    public SecondaryViewModel(IViewModelTemplateFactory templateFactory,
+        IServiceProvider serviceProvider,
         IServiceFactory serviceFactory,
         IMediator mediator,
         IDisposer disposer,
-        int index) : base(serviceFactory, mediator, disposer)
+        int index) : base(serviceProvider, serviceFactory, mediator, disposer)
     {       
         TemplateFactory = templateFactory;
         this.index = index;
@@ -22,5 +22,5 @@ public partial class SecondaryViewModel :
         Add<SettingsButtonViewModel>();
     }
 
-    public ITemplateFactory TemplateFactory { get; }
+    public IViewModelTemplateFactory TemplateFactory { get; }
 }

@@ -1,3 +1,5 @@
+using Hyperbar.UI.Windows;
+using Microsoft.UI;
 using Microsoft.UI.Xaml;
 
 namespace Hyperbar.Windows;
@@ -5,8 +7,17 @@ namespace Hyperbar.Windows;
 public partial class SettingsView :
     Window
 {
-    public SettingsView() => 
+    public SettingsView()
+    {
         InitializeComponent();
+
+        this.TitleBarConfiguration(args => 
+        {
+            args.ExtendsContentIntoTitleBar = true;
+            args.ButtonBackgroundColor = Colors.Transparent;
+            args.ButtonInactiveBackgroundColor = Colors.Transparent;
+        });
+    }
 
     protected SettingsViewModel ViewModel =>
         (SettingsViewModel)(Content as FrameworkElement)!.DataContext;

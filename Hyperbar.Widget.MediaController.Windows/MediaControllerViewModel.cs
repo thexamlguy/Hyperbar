@@ -2,17 +2,15 @@
 
 namespace Hyperbar.Widget.MediaController.Windows;
 
-
-
 [NotificationHandler(nameof(MediaControllerViewModel))]
 public class MediaControllerViewModel : 
-    ObservableCollectionViewModel<WidgetComponentViewModel>,
-    ITemplatedViewModel
+    ObservableCollectionViewModel<WidgetComponentViewModel>
 {
-    public MediaControllerViewModel(ITemplateFactory templateFactory,
+    public MediaControllerViewModel(IViewModelTemplateFactory templateFactory,
+        IServiceProvider serviceProvider,
         IServiceFactory serviceFactory,
         IMediator mediator,
-        IDisposer disposer) : base(serviceFactory, mediator, disposer)
+        IDisposer disposer) : base(serviceProvider, serviceFactory, mediator, disposer)
     {
         TemplateFactory = templateFactory;
 
@@ -28,5 +26,5 @@ public class MediaControllerViewModel :
             await mediator.PublishAsync<Request<MediaNext>>()));
     }
 
-    public ITemplateFactory TemplateFactory { get; set; }
+    public IViewModelTemplateFactory TemplateFactory { get; set; }
 }

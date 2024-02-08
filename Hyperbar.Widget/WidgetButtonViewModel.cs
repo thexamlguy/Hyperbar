@@ -4,14 +4,15 @@ using CommunityToolkit.Mvvm.Input;
 namespace Hyperbar.Widget;
 
 [NotificationHandler(nameof(Id))]
-public partial class WidgetButtonViewModel(IServiceFactory serviceFactory,
+public partial class WidgetButtonViewModel(IServiceProvider serviceProvider,
+    IServiceFactory serviceFactory,
     IMediator mediator,
     IDisposer disposer,
-    ITemplateFactory templateFactory,
+    IViewModelTemplateFactory templateFactory,
     Guid id,
     string? text = null,
     string? icon = null,
-    RelayCommand? invokeCommand = null) : WidgetComponentViewModel(serviceFactory, mediator, disposer, templateFactory)
+    RelayCommand? invokeCommand = null) : WidgetComponentViewModel(serviceProvider, serviceFactory, mediator, disposer, templateFactory)
 {
     [ObservableProperty]
     private string? icon = icon;

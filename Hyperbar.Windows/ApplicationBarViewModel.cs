@@ -2,13 +2,13 @@
 
 [NotificationHandler(nameof(IWidgetHostViewModel))]
 public partial class ApplicationBarViewModel :
-    ObservableCollectionViewModel<IDisposable>,
-    ITemplatedViewModel
+    ObservableCollectionViewModel<IDisposable>
 {
-    public ApplicationBarViewModel(ITemplateFactory templateFactory,
+    public ApplicationBarViewModel(IViewModelTemplateFactory templateFactory,
+        IServiceProvider serviceProvider,
         IServiceFactory serviceFactory,
         IMediator mediator, 
-        IDisposer disposer) : base(serviceFactory, mediator, disposer)
+        IDisposer disposer) : base(serviceProvider, serviceFactory, mediator, disposer)
     {
         TemplateFactory = templateFactory;
 
@@ -16,5 +16,5 @@ public partial class ApplicationBarViewModel :
         Add<SecondaryViewModel>(1);
     }
 
-    public ITemplateFactory TemplateFactory { get; }
+    public IViewModelTemplateFactory TemplateFactory { get; }
 }

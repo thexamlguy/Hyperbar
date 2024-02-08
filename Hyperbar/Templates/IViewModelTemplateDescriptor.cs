@@ -1,10 +1,10 @@
 ﻿namespace Hyperbar;
 
-public interface IContentTemplateDescriptor
+public interface IViewModelTemplateDescriptor
 {
-    Type ContentType { get; set; }
-
     object Key { get; set; }
 
     Type TemplateType { get; set; }
+
+    Type ViewModelType { get; set; }
 }

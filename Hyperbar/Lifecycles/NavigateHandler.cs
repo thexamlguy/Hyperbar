@@ -5,7 +5,7 @@ namespace Hyperbar;
 public class NavigateHandler :
     INotificationHandler<Navigate>
 {
-    private readonly IEnumerable<IContentTemplateDescriptor> contentTemplateDescriptors;
+    private readonly IEnumerable<IViewModelTemplateDescriptor> contentTemplateDescriptors;
     private readonly IServiceProvider provider;
     private readonly IMediator mediator;
     private readonly IEnumerable<INavigationDescriptor> navigationDescriptors;
@@ -13,7 +13,7 @@ public class NavigateHandler :
     public NavigateHandler(IServiceProvider provider,
         IMediator mediator,
         IEnumerable<INavigationDescriptor> navigationDescriptors,
-        IEnumerable<IContentTemplateDescriptor> contentTemplateDescriptors)
+        IEnumerable<IViewModelTemplateDescriptor> contentTemplateDescriptors)
     {
         this.provider = provider;
         this.mediator = mediator;
@@ -25,7 +25,7 @@ public class NavigateHandler :
         CancellationToken cancellationToken)
     {
         if (contentTemplateDescriptors.FirstOrDefault(x => x.Key == args.Key)
-            is IContentTemplateDescriptor contentTemplateDescriptor)
+            is IViewModelTemplateDescriptor contentTemplateDescriptor)
         {
             if (navigationDescriptors.FirstOrDefault(x => contentTemplateDescriptor.TemplateType == x.Type ||
                 contentTemplateDescriptor.TemplateType.BaseType == x.Type) is { } navigationDescriptor)
@@ -35,7 +35,7 @@ public class NavigateHandler :
                 {
                     if (provider.GetRequiredKeyedService(contentTemplateDescriptor.TemplateType,
                         contentTemplateDescriptor.Key) is { } template && 
-                        provider.GetRequiredKeyedService(contentTemplateDescriptor.ContentType,
+                        provider.GetRequiredKeyedService(contentTemplateDescriptor.ViewModelType,
                             contentTemplateDescriptor.Key) is { } content)
                     {
                         Type navigateType = typeof(Navigate<>)

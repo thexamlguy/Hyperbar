@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using Hyperbar.Widget;
 
 namespace Hyperbar.Widget.Primary.Windows;
 
