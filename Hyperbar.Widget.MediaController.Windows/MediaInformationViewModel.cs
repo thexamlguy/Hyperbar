@@ -5,9 +5,8 @@ namespace Hyperbar.Widget.MediaController.Windows;
 public partial class MediaInformationViewModel(IServiceProvider serviceProvider,
     IServiceFactory serviceFactory,
     IMediator mediator,
-    IDisposer disposer,
-    IViewModelTemplateFactory templateFactory) :
-    WidgetComponentViewModel(serviceProvider, serviceFactory, mediator, disposer, templateFactory),
+    IDisposer disposer) :
+    WidgetComponentViewModel(serviceProvider, serviceFactory, mediator, disposer),
     INotificationHandler<Changed<MediaInformation>>
 {
     [ObservableProperty]

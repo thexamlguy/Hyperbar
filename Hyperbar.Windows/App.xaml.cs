@@ -37,9 +37,9 @@ public partial class App :
                 services.AddHostedService<AppService>();
 
                 services.AddSingleton<IDispatcher>(new Dispatcher(DispatcherQueue.GetForCurrentThread()));
-               
+
+                services.AddTransient<IViewModelTemplate, ViewModelTemplate>();
                 services.AddTransient<IViewModelTemplateDescriptorProvider, ViewModelTemplateDescriptorProvider>();
-                services.AddTransient<IViewModelTemplateFactory, ViewModelTemplateFactory>();
 
                 services.AddHandler<AppConfigurationChangedHandler>();
                 services.AddConfiguration<AppConfiguration>(args =>

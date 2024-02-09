@@ -3,4 +3,13 @@
     x:Class="Hyperbar.Windows.WidgetSettingsNavigationView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Content="Widgets" />
+    xmlns:interactions="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:ui="using:Hyperbar.UI.Windows"
+    Content="Widgets">
+    <interactivity:Interaction.Behaviors>
+        <interactions:EventTriggerBehavior EventName="Tapped">
+            <ui:NavigateAction />
+        </interactions:EventTriggerBehavior>
+    </interactivity:Interaction.Behaviors>
+</NavigationViewItem>

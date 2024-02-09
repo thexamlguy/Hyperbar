@@ -5,7 +5,7 @@ public class ViewModelTemplateDescriptorProvider(IEnumerable<IViewModelTemplateD
 {
     public IViewModelTemplateDescriptor? Get(object key)
     {
-        if (descriptors.FirstOrDefault(x => x.Key == key)
+        if (descriptors.FirstOrDefault(x => x.Key.Equals(key))
             is IViewModelTemplateDescriptor descriptor)
         {
             return descriptor;

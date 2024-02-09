@@ -1,9 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Hyperbar.UI.Windows;
 
 namespace Hyperbar.Widget;
 
 [NotificationHandler(nameof(IWidgetHostViewModel))]
-public partial class PrimaryViewModel(IViewModelTemplateFactory templateFactory,
+public partial class PrimaryViewModel(IViewModelTemplate template, 
     IServiceProvider serviceProvider,
     IServiceFactory serviceFactory,
     IMediator mediator,
@@ -15,5 +16,6 @@ public partial class PrimaryViewModel(IViewModelTemplateFactory templateFactory,
     [ObservableProperty]
     private int index = index;
 
-    public IViewModelTemplateFactory TemplateFactory => templateFactory;
+    public IViewModelTemplate Template => template;
+
 }

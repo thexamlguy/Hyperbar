@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Hyperbar.UI.Windows;
 using Hyperbar.Windows;
 
 namespace Hyperbar.Widget;
@@ -9,18 +10,19 @@ public partial class SecondaryViewModel :
     [ObservableProperty]
     private int index;
 
-    public SecondaryViewModel(IViewModelTemplateFactory templateFactory,
+    public SecondaryViewModel(IViewModelTemplate template, 
         IServiceProvider serviceProvider,
         IServiceFactory serviceFactory,
         IMediator mediator,
         IDisposer disposer,
         int index) : base(serviceProvider, serviceFactory, mediator, disposer)
-    {       
-        TemplateFactory = templateFactory;
+    {
+        Template = template;
         this.index = index;
 
         Add<SettingsButtonViewModel>();
     }
 
-    public IViewModelTemplateFactory TemplateFactory { get; }
+    public IViewModelTemplate Template { get; }
+
 }

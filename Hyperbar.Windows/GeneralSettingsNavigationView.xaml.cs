@@ -2,9 +2,12 @@ using Microsoft.UI.Xaml.Controls;
 
 namespace Hyperbar.Windows;
 
-public sealed partial class GeneralSettingsNavigationView : 
+public partial class GeneralSettingsNavigationView : 
     NavigationViewItem
 {
     public GeneralSettingsNavigationView() => 
         InitializeComponent();
+
+    protected GeneralSettingsNavigationViewModel ViewModel =>
+        (GeneralSettingsNavigationViewModel)DataContext;
 }

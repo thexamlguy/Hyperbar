@@ -5,7 +5,7 @@ namespace Hyperbar;
 public class NavigateHandler :
     INotificationHandler<Navigate>
 {
-    private readonly IEnumerable<IViewModelTemplateDescriptor> contentTemplateDescriptors;
+    private readonly IViewModelTemplateDescriptorProvider contentTemplateDescriptors;
     private readonly IServiceProvider provider;
     private readonly IMediator mediator;
     private readonly IEnumerable<INavigationDescriptor> navigationDescriptors;
@@ -13,7 +13,7 @@ public class NavigateHandler :
     public NavigateHandler(IServiceProvider provider,
         IMediator mediator,
         IEnumerable<INavigationDescriptor> navigationDescriptors,
-        IEnumerable<IViewModelTemplateDescriptor> contentTemplateDescriptors)
+        IViewModelTemplateDescriptorProvider contentTemplateDescriptors)
     {
         this.provider = provider;
         this.mediator = mediator;
@@ -24,7 +24,7 @@ public class NavigateHandler :
     public async Task Handle(Navigate args, 
         CancellationToken cancellationToken)
     {
-        if (contentTemplateDescriptors.FirstOrDefault(x => x.Key == args.Key)
+        if (contentTemplateDescriptors.Get(args.Key)
             is IViewModelTemplateDescriptor contentTemplateDescriptor)
         {
             if (navigationDescriptors.FirstOrDefault(x => contentTemplateDescriptor.TemplateType == x.Type ||

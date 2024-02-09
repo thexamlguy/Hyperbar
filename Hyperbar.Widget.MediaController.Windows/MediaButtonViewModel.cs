@@ -7,9 +7,8 @@ public partial class MediaButtonViewModel<TMediaButton>(IServiceProvider service
     IServiceFactory serviceFactory,
     IMediator mediator,
     IDisposer disposer,
-    IViewModelTemplateFactory templateFactory,
     IRelayCommand invokeCommand) : 
-    WidgetComponentViewModel(serviceProvider, serviceFactory, mediator, disposer, templateFactory),
+    WidgetComponentViewModel(serviceProvider, serviceFactory, mediator, disposer),
     INotificationHandler<Changed<MediaButton<TMediaButton>>>,
     IMediaButtonViewModel
 {

@@ -7,7 +7,7 @@
     <ItemsControl
         HorizontalAlignment="Right"
         HorizontalContentAlignment="Right"
-        ItemTemplateSelector="{ui:ViewModelTemplate}"
+        ItemTemplateSelector="{Binding Template}"
         ItemsSource="{x:Bind ViewModel}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>

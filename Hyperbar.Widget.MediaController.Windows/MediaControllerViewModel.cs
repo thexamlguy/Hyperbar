@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using Hyperbar.UI.Windows;
 
 namespace Hyperbar.Widget.MediaController.Windows;
 
@@ -6,17 +7,17 @@ namespace Hyperbar.Widget.MediaController.Windows;
 public class MediaControllerViewModel : 
     ObservableCollectionViewModel<WidgetComponentViewModel>
 {
-    public MediaControllerViewModel(IViewModelTemplateFactory templateFactory,
+    public MediaControllerViewModel(IViewModelTemplate template,
         IServiceProvider serviceProvider,
         IServiceFactory serviceFactory,
         IMediator mediator,
         IDisposer disposer) : base(serviceProvider, serviceFactory, mediator, disposer)
     {
-        TemplateFactory = templateFactory;
+        Template = template;
 
         Add<MediaInformationViewModel>();
 
-        Add<MediaButtonViewModel<MediaPreviousButton>>(new RelayCommand(async () => 
+        Add<MediaButtonViewModel<MediaPreviousButton>>(new RelayCommand(async () =>
             await mediator.PublishAsync<Request<MediaPrevious>>()));
 
         Add<MediaButtonViewModel<MediaPlayPauseButton>>(new RelayCommand(async () =>
@@ -26,5 +27,5 @@ public class MediaControllerViewModel :
             await mediator.PublishAsync<Request<MediaNext>>()));
     }
 
-    public IViewModelTemplateFactory TemplateFactory { get; set; }
+    public IViewModelTemplate Template { get; }
 }

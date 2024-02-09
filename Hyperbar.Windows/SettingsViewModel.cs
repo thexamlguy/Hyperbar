@@ -1,19 +1,21 @@
-﻿namespace Hyperbar.Windows;
+﻿using Hyperbar.UI.Windows;
+
+namespace Hyperbar.Windows;
 
 public partial class SettingsViewModel :
     ObservableCollectionViewModel<INavigationViewModel>
 {
-    public SettingsViewModel(IServiceProvider serviceProvider, 
+    public SettingsViewModel(IViewModelTemplate template,
+        IServiceProvider serviceProvider, 
         IServiceFactory serviceFactory, 
         IMediator mediator, 
-        IDisposer disposer,
-        IViewModelTemplateFactory templateFactory) : base(serviceProvider, serviceFactory, mediator, disposer)
+        IDisposer disposer) : base(serviceProvider, serviceFactory, mediator, disposer)
     {
+        Template = template;
+
         Add<GeneralSettingsNavigationViewModel>("General");
         Add<WidgetSettingsNavigationViewModel>("Widgets");
-
-        TemplateFactory = templateFactory;
     }
 
-    public IViewModelTemplateFactory TemplateFactory { get; }
+    public IViewModelTemplate Template { get; }
 }

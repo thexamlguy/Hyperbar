@@ -8,20 +8,16 @@ public partial class WidgetComponentViewModel :
         IServiceFactory serviceFactory,
         IMediator mediator, 
         IDisposer disposer,
-        IViewModelTemplateFactory templateFactory,
         IEnumerable<IWidgetComponentViewModel> items) : base(serviceProvider, serviceFactory, mediator, disposer, items)
     {
-        TemplateFactory = templateFactory;
+
     }
 
     public WidgetComponentViewModel(IServiceProvider serviceProvider,
         IServiceFactory serviceFactory,
         IMediator mediator,
-        IDisposer disposer,
-        IViewModelTemplateFactory templateFactory) : base(serviceProvider, serviceFactory, mediator, disposer)
+        IDisposer disposer) : base(serviceProvider, serviceFactory, mediator, disposer)
     {
-        TemplateFactory = templateFactory;
-    }
 
-    public IViewModelTemplateFactory TemplateFactory { get; private set; }
+    }
 }

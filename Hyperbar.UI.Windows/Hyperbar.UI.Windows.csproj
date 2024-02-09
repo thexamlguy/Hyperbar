@@ -11,6 +11,7 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.240124002-experimental2" />
 		<PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26031-preview" />
+		<PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.9" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Hyperbar.Interop.Windows\Hyperbar.Interop.Windows.csproj" />

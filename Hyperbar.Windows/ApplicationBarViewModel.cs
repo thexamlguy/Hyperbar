@@ -1,20 +1,23 @@
-﻿namespace Hyperbar.Widget;
+﻿using Hyperbar.UI.Windows;
+
+namespace Hyperbar.Widget;
+
 
 [NotificationHandler(nameof(IWidgetHostViewModel))]
 public partial class ApplicationBarViewModel :
     ObservableCollectionViewModel<IDisposable>
 {
-    public ApplicationBarViewModel(IViewModelTemplateFactory templateFactory,
+    public ApplicationBarViewModel(IViewModelTemplate template, 
         IServiceProvider serviceProvider,
         IServiceFactory serviceFactory,
         IMediator mediator, 
         IDisposer disposer) : base(serviceProvider, serviceFactory, mediator, disposer)
     {
-        TemplateFactory = templateFactory;
+        Template = template;
 
         Add<PrimaryViewModel>(0);
         Add<SecondaryViewModel>(1);
     }
 
-    public IViewModelTemplateFactory TemplateFactory { get; }
+    public IViewModelTemplate Template { get; }
 }

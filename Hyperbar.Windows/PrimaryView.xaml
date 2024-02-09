@@ -6,7 +6,7 @@
     xmlns:ui="using:Hyperbar.UI.Windows">
     <ItemsControl
         HorizontalAlignment="Center"
-        ItemTemplateSelector="{ui:ViewModelTemplate}"
+        ItemTemplateSelector="{Binding Template}"
         ItemsSource="{x:Bind ViewModel}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>

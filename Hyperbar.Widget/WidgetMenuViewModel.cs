@@ -8,11 +8,10 @@ public partial class WidgetMenuViewModel(IServiceProvider serviceProvider,
     IServiceFactory serviceFactory,
     IMediator mediator,
     IDisposer disposer,
-    IViewModelTemplateFactory templateFactory,
     Guid id = default,
     string? text = null,
     string? icon = null,
-    RelayCommand? command = null) : WidgetComponentViewModel(serviceProvider, serviceFactory, mediator, disposer, templateFactory)
+    RelayCommand? command = null) : WidgetComponentViewModel(serviceProvider, serviceFactory, mediator, disposer)
 {
     [ObservableProperty]
     private IRelayCommand? click = command;

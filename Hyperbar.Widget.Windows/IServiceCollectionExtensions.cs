@@ -2,7 +2,6 @@
 using Hyperbar.UI.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml.Markup;
-using System.Collections.Generic;
 
 namespace Hyperbar.Widget.Windows;
 
@@ -19,8 +18,8 @@ public static class IServiceCollectionExtensions
                 services.AddSingleton(provider.GetRequiredService<IList<IXamlMetadataProvider>>());
                 services.AddSingleton(provider.GetRequiredService<IDispatcher>());
 
+                services.AddTransient<IViewModelTemplate, ViewModelTemplate>();
                 services.AddTransient<IViewModelTemplateDescriptorProvider, ViewModelTemplateDescriptorProvider>();
-                services.AddTransient<IViewModelTemplateFactory, ViewModelTemplateFactory>();
 
                 services.AddScoped<IVirtualKeyboard, VirtualKeyboard>();
                 services.AddHandler<KeyAcceleratorHandler>();

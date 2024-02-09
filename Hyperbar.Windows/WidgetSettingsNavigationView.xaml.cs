@@ -1,10 +1,14 @@
+using Hyperbar.Widget;
 using Microsoft.UI.Xaml.Controls;
 
 namespace Hyperbar.Windows;
 
-public sealed partial class WidgetSettingsNavigationView : 
+public partial class WidgetSettingsNavigationView : 
     NavigationViewItem
 {
     public WidgetSettingsNavigationView() => 
         InitializeComponent();
+
+    protected WidgetSettingsNavigationViewModel ViewModel =>
+        (WidgetSettingsNavigationViewModel)DataContext;
 }

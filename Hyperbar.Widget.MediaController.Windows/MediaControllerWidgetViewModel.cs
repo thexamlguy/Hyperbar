@@ -1,6 +1,8 @@
-﻿namespace Hyperbar.Widget.MediaController.Windows;
+﻿using Hyperbar.UI.Windows;
 
-public class MediaControllerWidgetViewModel(IViewModelTemplateFactory templateFactory,
+namespace Hyperbar.Widget.MediaController.Windows;
+
+public class MediaControllerWidgetViewModel(IViewModelTemplate template, 
     IServiceProvider serviceProvider,
     IServiceFactory serviceFactory,
     IMediator mediator,
@@ -9,5 +11,5 @@ public class MediaControllerWidgetViewModel(IViewModelTemplateFactory templateFa
     ObservableCollectionViewModel<MediaControllerViewModel>(serviceProvider, serviceFactory, mediator, disposer, items),
     IWidgetViewModel
 {
-    public IViewModelTemplateFactory TemplateFactory => templateFactory;
+    public IViewModelTemplate Template => template;
 }

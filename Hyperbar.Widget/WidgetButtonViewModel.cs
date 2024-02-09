@@ -8,11 +8,10 @@ public partial class WidgetButtonViewModel(IServiceProvider serviceProvider,
     IServiceFactory serviceFactory,
     IMediator mediator,
     IDisposer disposer,
-    IViewModelTemplateFactory templateFactory,
     Guid id,
     string? text = null,
     string? icon = null,
-    RelayCommand? invokeCommand = null) : WidgetComponentViewModel(serviceProvider, serviceFactory, mediator, disposer, templateFactory)
+    RelayCommand? invokeCommand = null) : WidgetComponentViewModel(serviceProvider, serviceFactory, mediator, disposer)
 {
     [ObservableProperty]
     private string? icon = icon;

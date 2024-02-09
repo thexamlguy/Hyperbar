@@ -8,12 +8,11 @@ public partial class WidgetSplitButtonViewModel(IServiceProvider serviceProvider
     IServiceFactory serviceFactory,
     IMediator mediator,
     IDisposer disposer,
-    IViewModelTemplateFactory templateFactory,
     IEnumerable<IWidgetComponentViewModel> items,
     Guid id = default,
     string? text = null,
     string? icon = null,
-    RelayCommand? command = null) : WidgetComponentViewModel(serviceProvider, serviceFactory, mediator, disposer, templateFactory, items)
+    RelayCommand? command = null) : WidgetComponentViewModel(serviceProvider, serviceFactory, mediator, disposer, items)
 {
     [ObservableProperty]
     private IRelayCommand? click = command;

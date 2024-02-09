@@ -2,10 +2,9 @@
 <UserControl
     x:Class="Hyperbar.Widget.MediaController.Windows.MediaControllerWidgetView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:ui="using:Hyperbar.UI.Windows">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <FlipView
         Width="360"
-        ItemTemplateSelector="{ui:ViewModelTemplate}"
+        ItemTemplateSelector="{Binding Template}"
         ItemsSource="{Binding}" />
 </UserControl>
