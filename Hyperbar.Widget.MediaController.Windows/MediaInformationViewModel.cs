@@ -4,9 +4,10 @@ namespace Hyperbar.Widget.MediaController.Windows;
 
 public partial class MediaInformationViewModel(IServiceProvider serviceProvider,
     IServiceFactory serviceFactory,
-    IMediator mediator,
+    IPublisher publisher,
+    ISubscriber subscriber,
     IDisposer disposer) :
-    WidgetComponentViewModel(serviceProvider, serviceFactory, mediator, disposer),
+    WidgetComponentViewModel(serviceProvider, serviceFactory, publisher, subscriber, disposer),
     INotificationHandler<Changed<MediaInformation>>
 {
     [ObservableProperty]
@@ -32,5 +33,5 @@ public partial class MediaInformationViewModel(IServiceProvider serviceProvider,
     }
 
     public override async Task InitializeAsync() =>
-        await Mediator.PublishAsync<Request<MediaInformation>>();
+        await Publisher.PublishAsync<Request<MediaInformation>>();
 }

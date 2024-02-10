@@ -10,8 +10,9 @@ public partial class ApplicationBarViewModel :
     public ApplicationBarViewModel(IViewModelTemplate template, 
         IServiceProvider serviceProvider,
         IServiceFactory serviceFactory,
-        IMediator mediator, 
-        IDisposer disposer) : base(serviceProvider, serviceFactory, mediator, disposer)
+        IPublisher publisher,
+        ISubscriber subscriber,
+        IDisposer disposer) : base(serviceProvider, serviceFactory, publisher, subscriber, disposer)
     {
         Template = template;
 

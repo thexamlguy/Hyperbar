@@ -14,23 +14,24 @@ public class MediaController :
     IDisposable
 {
     private readonly IDisposer disposer;
-    private readonly IMediator mediator;
+    private readonly IPublisher publisher;
     private readonly GlobalSystemMediaTransportControlsSession session;
 
     private bool isNextEnabled;
     private bool isPreviousEnabled;
     private GlobalSystemMediaTransportControlsSessionPlaybackStatus playbackStatus;
 
-    public MediaController(IMediator mediator,
+    public MediaController(IPublisher publisher,
+        ISubscriber subscriber,
         IDisposer disposer,
         GlobalSystemMediaTransportControlsSession session)
     {
-        this.mediator = mediator;
+        this.publisher = publisher;
         this.disposer = disposer;
         this.session = session;
 
         disposer.Add(this);
-        mediator.Subscribe(this);
+        subscriber.Add(this);
 
         session.MediaPropertiesChanged += OnMediaPropertiesChanged;
         session.PlaybackInfoChanged += OnPlaybackInfoChanged;
@@ -117,7 +118,7 @@ public class MediaController :
                 buffer = memoryStream.ToArray();
             }
 
-            await mediator.PublishAsync(new Changed<MediaInformation>(new MediaInformation(mediaProperties.Title,
+            await publisher.PublishAsync(new Changed<MediaInformation>(new MediaInformation(mediaProperties.Title,
                 mediaProperties.Artist, buffer)));
         }
         catch
@@ -133,7 +134,7 @@ public class MediaController :
             GlobalSystemMediaTransportControlsSessionPlaybackInfo playbackInfo =
                 session.GetPlaybackInfo();
 
-            await mediator.PublishAsync(new Changed<MediaButton<MediaPlayPauseButton>>(new
+            await publisher.PublishAsync(new Changed<MediaButton<MediaPlayPauseButton>>(new
                  MediaButton<MediaPlayPauseButton>(playbackInfo.PlaybackStatus is 
                     GlobalSystemMediaTransportControlsSessionPlaybackStatus.Playing ? 
                         new MediaButtonPlaying() :
@@ -142,7 +143,7 @@ public class MediaController :
             bool isPreviousEnabled = playbackInfo.Controls.IsPreviousEnabled;
             if (this.isPreviousEnabled != isPreviousEnabled)
             {
-                await mediator.PublishAsync(new Changed<MediaButton<MediaPreviousButton>>(new
+                await publisher.PublishAsync(new Changed<MediaButton<MediaPreviousButton>>(new
                     MediaButton<MediaPreviousButton>(isPreviousEnabled ? new MediaButtonEnabled() :
                         new MediaButtonDisabled())));
 
@@ -152,7 +153,7 @@ public class MediaController :
             bool isNextEnabled = playbackInfo.Controls.IsNextEnabled;
             if (this.isNextEnabled != isNextEnabled)
             {
-                await mediator.PublishAsync(new Changed<MediaButton<MediaNextButton>>(new
+                await publisher.PublishAsync(new Changed<MediaButton<MediaNextButton>>(new
                     MediaButton<MediaNextButton>(isNextEnabled ? new MediaButtonEnabled() : 
                         new MediaButtonDisabled())));
 

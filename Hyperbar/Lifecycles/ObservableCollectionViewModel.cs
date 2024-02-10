@@ -27,31 +27,33 @@ public partial class ObservableCollectionViewModel<TViewModel> :
 
     public ObservableCollectionViewModel(IServiceProvider serviceProvider,
         IServiceFactory serviceFactory,
-        IMediator mediator,
+        IPublisher publisher,
+        ISubscriber subscriber,
         IDisposer disposer)
     {
         ServiceProvider = serviceProvider;
         ServiceFactory = serviceFactory;
-        Mediator = mediator;
+        Publisher = publisher;
         Disposer = disposer;
 
-        mediator.Subscribe(this);
+        subscriber.Add(this);
 
         collection.CollectionChanged += OnCollectionChanged;
     }
 
     public ObservableCollectionViewModel(IServiceProvider serviceProvider, 
         IServiceFactory serviceFactory,
-        IMediator mediator,
+        IPublisher publisher,
+        ISubscriber subscriber,
         IDisposer disposer,
         IEnumerable<TViewModel> items)
     {
         ServiceProvider = serviceProvider;
         ServiceFactory = serviceFactory;
-        Mediator = mediator;
+        Publisher = publisher;
         Disposer = disposer;
 
-        mediator.Subscribe(this);
+        subscriber.Add(this);
 
         collection.CollectionChanged += OnCollectionChanged;
         AddRange(items);
@@ -74,13 +76,13 @@ public partial class ObservableCollectionViewModel<TViewModel> :
 
     bool ICollection.IsSynchronized => false;
 
-    public IMediator Mediator { get; private set; }
+    public IPublisher Publisher { get; private set; }
 
     public IServiceFactory ServiceFactory { get; private set; }
 
-    object ICollection.SyncRoot => this;
-
     public IServiceProvider ServiceProvider { get; private set; }
+
+    object ICollection.SyncRoot => this;
 
     public TViewModel this[int index]
     {
@@ -374,7 +376,7 @@ public partial class ObservableCollectionViewModel<TViewModel> :
 
         isInitialized = true;
 
-        await Mediator.PublishAsync<Enumerate<TViewModel>>();
+        await Publisher.PublishAsync<Enumerate<TViewModel>>();
         await InitializeAsync();
     }
 
@@ -384,6 +386,7 @@ public partial class ObservableCollectionViewModel<TViewModel> :
 
 public class ObservableCollectionViewModel(IServiceProvider serviceProvider,
     IServiceFactory serviceFactory, 
-    IMediator mediator,
+    IPublisher publisher,
+    ISubscriber subscriber,
     IDisposer disposer) :
-    ObservableCollectionViewModel<IDisposable>(serviceProvider, serviceFactory, mediator, disposer);
+    ObservableCollectionViewModel<IDisposable>(serviceProvider, serviceFactory, publisher, subscriber, disposer);

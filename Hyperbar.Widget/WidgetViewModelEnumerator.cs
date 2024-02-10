@@ -3,7 +3,7 @@
 namespace Hyperbar.Widget;
 
 public class WidgetViewModelEnumerator(IWidgetHost host, 
-    IMediator mediator) :
+    IPublisher publisher) :
     INotificationHandler<Enumerate<IWidgetViewModel>>
 {
     public async Task Handle(Enumerate<IWidgetViewModel> notification,
@@ -13,7 +13,7 @@ public class WidgetViewModelEnumerator(IWidgetHost host,
         {
             foreach (IWidgetViewModel viewModel in viewModels)
             {
-                await mediator.PublishAsync(new Create<IWidgetViewModel>(viewModel),
+                await publisher.PublishAsync(new Create<IWidgetViewModel>(viewModel),
                     nameof(IWidgetHostViewModel), cancellationToken);
             }
         }

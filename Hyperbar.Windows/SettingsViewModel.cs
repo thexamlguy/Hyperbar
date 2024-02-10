@@ -7,9 +7,10 @@ public partial class SettingsViewModel :
 {
     public SettingsViewModel(IViewModelTemplate template,
         IServiceProvider serviceProvider, 
-        IServiceFactory serviceFactory, 
-        IMediator mediator, 
-        IDisposer disposer) : base(serviceProvider, serviceFactory, mediator, disposer)
+        IServiceFactory serviceFactory,
+        IPublisher publisher,
+        ISubscriber subscriber,
+        IDisposer disposer) : base(serviceProvider, serviceFactory, publisher, subscriber, disposer)
     {
         Template = template;
 

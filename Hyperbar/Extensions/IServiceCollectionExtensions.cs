@@ -19,7 +19,7 @@ public static class IServiceCollectionExtensions
         class, new()
     {
         services.AddSingleton<IConfigurationValueChangedNotification<TConfiguration>>(provider => 
-            new ConfigurationValueChangedNotification<TConfiguration, TValue>(provider.GetRequiredService<IMediator>(), 
+            new ConfigurationValueChangedNotification<TConfiguration, TValue>(provider.GetRequiredService<IPublisher>(), 
                 factory));
 
         return services;
@@ -235,18 +235,6 @@ public static class IServiceCollectionExtensions
         }
 
         return services;
-    }
-
-
-    public static IServiceCollection AddNotificationRelay<TFromNotification,
-        TToNotification>(this IServiceCollection services)
-        where TFromNotification :
-        INotification
-        where TToNotification :
-        INotification, new()
-    {
-        return services.AddHandler<NotficationRelayHandler<TFromNotification,
-            TToNotification>>();
     }
 
     public static IServiceCollection AddRange(this IServiceCollection services,

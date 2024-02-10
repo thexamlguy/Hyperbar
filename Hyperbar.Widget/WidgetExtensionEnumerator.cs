@@ -6,7 +6,7 @@ namespace Hyperbar.Widget;
 
 public class WidgetExtensionEnumerator(IFactory<Type, IWidget> factory,
     IHostEnvironment hostEnvironment, 
-    IMediator mediator) :
+    IPublisher publisher) :
     INotificationHandler<Enumerate<WidgetExtension>>
 {
     public Task Handle(Enumerate<WidgetExtension> args, 
@@ -29,7 +29,7 @@ public class WidgetExtensionEnumerator(IFactory<Type, IWidget> factory,
                 {
                     if (factory.Create(widgetType) is IWidget widget)
                     {
-                        await mediator.PublishAsync(new Create<WidgetExtension>(new WidgetExtension(widget, 
+                        await publisher.PublishAsync(new Create<WidgetExtension>(new WidgetExtension(widget, 
                             new WidgetAssembly(assembly))), cancellationToken);
                     }
                 }

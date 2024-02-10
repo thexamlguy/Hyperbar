@@ -3,7 +3,7 @@
 namespace Hyperbar.Widget;
 
 public class WidgetExtensionHandler(IServiceProvider provider,
-    IMediator mediator,
+    IPublisher publisher,
     IProxyServiceCollection<IWidgetBuilder> typedServices) :
     INotificationHandler<Create<WidgetExtension>>
 {
@@ -22,7 +22,7 @@ public class WidgetExtensionHandler(IServiceProvider provider,
             });
 
             IWidgetHost host = builder.Build();
-            await mediator.PublishAsync(new Create<IWidgetHost>(host),
+            await publisher.PublishAsync(new Create<IWidgetHost>(host),
                 cancellationToken);
         }
     }

@@ -1,3 +1,4 @@
 ﻿namespace Hyperbar;
 
-public interface INotification : IMessage;
+public interface INotification : 
+    IMessage;

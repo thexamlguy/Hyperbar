@@ -20,7 +20,7 @@ public class WindowHandler :
     public Task Handle(Navigate<Window> args,
         CancellationToken cancellationToken)
     {
-        if (args.Template is Window window)
+        if (args.View is Window window)
         {
             if (window.Content is FrameworkElement content)
             {
@@ -33,8 +33,8 @@ public class WindowHandler :
                     }
                 }
 
+                //ViewModelBinder.Bind(args.ViewModel, content);
                 window.Closed += HandleClosed;
-                content.DataContext = args.Content;
             }
 
             window.Activate();

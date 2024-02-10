@@ -1,27 +1,25 @@
 ﻿namespace Hyperbar;
 
-public class HandlerWrapper<TRequest, TResponse>
-    where TRequest :
-    class,
-    IRequest<TResponse>
+public class HandlerWrapper<TMessage, TReply>(IHandler<TMessage, TReply> handler,
+    IEnumerable<IPipelineBehavior<TMessage, TReply>> pipelineBehaviours)
+    where TMessage : class, IRequest<TReply>
 {
-    private readonly HandlerDelegate<TRequest, TResponse> handler;
+    private readonly IEnumerable<IPipelineBehavior<TMessage, TReply>> pipelineBehaviours = 
+        pipelineBehaviours.Reverse();
 
-    public HandlerWrapper(IHandler<TRequest, TResponse> concreteHandler,
-        IEnumerable<IPipelineBehavior<TRequest, TResponse>> pipelineBehaviours)
+    public async Task<TReply> Handle(TMessage message, CancellationToken cancellationToken)
     {
-        HandlerDelegate<TRequest, TResponse> handler = concreteHandler.Handle;
-        foreach (IPipelineBehavior<TRequest, TResponse>? pipeline in pipelineBehaviours.Reverse())
+        HandlerDelegate<TMessage, TReply> currentHandler = handler.Handle;
+        foreach (IPipelineBehavior<TMessage, TReply> behavior in pipelineBehaviours)
         {
-            HandlerDelegate<TRequest, TResponse> handlerCopy = handler;
-            IPipelineBehavior<TRequest, TResponse> pipelineCopy = pipeline;
-
-            handler = (TRequest message, CancellationToken cancellationToken) =>
-                pipelineCopy.Handle(message, handlerCopy, cancellationToken);
+            HandlerDelegate<TMessage, TReply> previousHandler = currentHandler;
+            currentHandler = async (msg, token) =>
+            {
+                return await behavior.Handle(msg, previousHandler, token);
+            };
         }
 
-        this.handler = handler;
+        return await currentHandler(message, cancellationToken);
     }
-
-    public Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken) => handler(request, cancellationToken);
 }
+

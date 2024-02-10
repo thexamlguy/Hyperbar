@@ -6,12 +6,13 @@ namespace Hyperbar.Widget;
 [NotificationHandler(nameof(Id))]
 public partial class WidgetButtonViewModel(IServiceProvider serviceProvider,
     IServiceFactory serviceFactory,
-    IMediator mediator,
+    IPublisher publisher,
+    ISubscriber subscriber,
     IDisposer disposer,
     Guid id,
     string? text = null,
     string? icon = null,
-    RelayCommand? invokeCommand = null) : WidgetComponentViewModel(serviceProvider, serviceFactory, mediator, disposer)
+    RelayCommand? invokeCommand = null) : WidgetComponentViewModel(serviceProvider, serviceFactory, publisher, subscriber, disposer)
 {
     [ObservableProperty]
     private string? icon = icon;

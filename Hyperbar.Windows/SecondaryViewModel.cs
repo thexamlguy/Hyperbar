@@ -13,9 +13,10 @@ public partial class SecondaryViewModel :
     public SecondaryViewModel(IViewModelTemplate template, 
         IServiceProvider serviceProvider,
         IServiceFactory serviceFactory,
-        IMediator mediator,
+        IPublisher publisher,
+        ISubscriber subscriber,
         IDisposer disposer,
-        int index) : base(serviceProvider, serviceFactory, mediator, disposer)
+        int index) : base(serviceProvider, serviceFactory, publisher, subscriber, disposer)
     {
         Template = template;
         this.index = index;

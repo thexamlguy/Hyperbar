@@ -6,7 +6,7 @@ public interface IObservableViewModel :
 {
     public IDisposer Disposer { get; }
 
-    public IMediator Mediator { get; }
+    public IPublisher Publisher { get; }
 
     public IServiceFactory ServiceFactory { get; }
 

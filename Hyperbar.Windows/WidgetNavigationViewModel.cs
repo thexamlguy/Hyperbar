@@ -2,9 +2,10 @@
 
 public class WidgetNavigationViewModel(IServiceProvider serviceProvider,
     IServiceFactory serviceFactory,
-    IMediator mediator,
+    IPublisher publisher,
+    ISubscriber subscriber,
     IDisposer disposer,
     string text) :
-    NavigationViewModel(serviceProvider, serviceFactory, mediator, disposer, text)
+    NavigationViewModel(serviceProvider, serviceFactory, publisher, subscriber, disposer, text)
 {
 }

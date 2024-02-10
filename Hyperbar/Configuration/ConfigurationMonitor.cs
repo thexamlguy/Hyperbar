@@ -2,7 +2,7 @@
 
 public class ConfigurationMonitor<TConfiguration>(IConfigurationFile<TConfiguration> configurationFile,
     IConfigurationReader<TConfiguration> reader,
-    IMediator mediator) :
+    IPublisher publisher) :
     IConfigurationMonitor<TConfiguration>
     where TConfiguration :
     class
@@ -16,7 +16,7 @@ public class ConfigurationMonitor<TConfiguration>(IConfigurationFile<TConfigurat
         {
             if (reader.Read() is { } configuration)
             {
-                await mediator.PublishAsync(new Changed<TConfiguration>(configuration));
+                await publisher.PublishAsync(new Changed<TConfiguration>(configuration));
             }
         }
 

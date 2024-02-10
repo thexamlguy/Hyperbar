@@ -6,7 +6,7 @@ namespace Hyperbar;
 
 public class ObservableViewModel(IServiceProvider serviceProvider,
     IServiceFactory serviceFactory,
-    IMediator mediator,
+    IPublisher publisher,
     IDisposer disposer) : 
     ObservableObject,
     IObservableViewModel
@@ -16,9 +16,9 @@ public class ObservableViewModel(IServiceProvider serviceProvider,
     public IDisposer Disposer => disposer;
 
     public ICommand InitializeCommand =>
-            new AsyncRelayCommand(CoreInitializeAsync);
+        new AsyncRelayCommand(CoreInitializeAsync);
 
-    public IMediator Mediator => mediator;
+    public IPublisher Publisher => publisher;
 
     public IServiceFactory ServiceFactory => serviceFactory;
 

@@ -1,6 +1,6 @@
 ﻿namespace Hyperbar;
 
-public class ConfigurationInitializer<TConfiguration>(IMediator mediator,
+public class ConfigurationInitializer<TConfiguration>(IPublisher publisher,
     IConfigurationMonitor<TConfiguration> monitor,
     IConfigurationReader<TConfiguration> reader, 
     IConfigurationWriter<TConfiguration> writer,
@@ -21,7 +21,7 @@ public class ConfigurationInitializer<TConfiguration>(IMediator mediator,
             }
         }
 
-        await mediator.PublishAsync(new Changed<TConfiguration>(configuration));
+        await publisher.PublishAsync(new Changed<TConfiguration>(configuration));
         await monitor.InitializeAsync();
     }
 }

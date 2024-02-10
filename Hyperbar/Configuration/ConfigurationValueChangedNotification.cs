@@ -1,6 +1,6 @@
 ﻿namespace Hyperbar;
 
-public class ConfigurationValueChangedNotification<TConfiguration, TValue>(IMediator mediator,
+public class ConfigurationValueChangedNotification<TConfiguration, TValue>(IPublisher publisher,
     Func<TConfiguration, Action<TValue>> factory) :
     IConfigurationValueChangedNotification<TConfiguration>
     where TConfiguration : 
@@ -18,7 +18,7 @@ public class ConfigurationValueChangedNotification<TConfiguration, TValue>(IMedi
         if (value is null || !value.Equals(newValue))
         {
             value = newValue;
-            await mediator.PublishAsync(new Changed<TValue>(value));
+            await publisher.PublishAsync(new Changed<TValue>(value));
         }
     }
 }

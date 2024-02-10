@@ -6,12 +6,13 @@ namespace Hyperbar.Widget;
 [NotificationHandler(nameof(Id))]
 public partial class WidgetMenuViewModel(IServiceProvider serviceProvider,
     IServiceFactory serviceFactory,
-    IMediator mediator,
+    IPublisher publisher,
+    ISubscriber subscriber,
     IDisposer disposer,
     Guid id = default,
     string? text = null,
     string? icon = null,
-    RelayCommand? command = null) : WidgetComponentViewModel(serviceProvider, serviceFactory, mediator, disposer)
+    RelayCommand? command = null) : WidgetComponentViewModel(serviceProvider, serviceFactory, publisher, subscriber, disposer)
 {
     [ObservableProperty]
     private IRelayCommand? click = command;

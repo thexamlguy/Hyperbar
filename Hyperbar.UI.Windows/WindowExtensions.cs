@@ -1,17 +1,11 @@
 ﻿using Hyperbar.Interop.Windows;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
 using Windows.Graphics;
 using WinRT.Interop;
 
 namespace Hyperbar.UI.Windows;
 
-public class NavigationItemTemplateSelector : 
-    DataTemplateSelector
-{
-
-}
 public static class WindowExtensions
 {
     public static WindowMessageListener CreateMessageListener(this Window window) =>

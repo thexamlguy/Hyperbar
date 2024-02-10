@@ -5,9 +5,9 @@ namespace Hyperbar.Windows;
 public partial class SettingsButtonViewModel(IViewModelTemplate template, 
     IServiceProvider serviceProvider,
     IServiceFactory serviceFactory,
-    IMediator mediator,
+    IPublisher publisher,
     IDisposer disposer) :
-    ObservableViewModel(serviceProvider, serviceFactory, mediator, disposer)
+    ObservableViewModel(serviceProvider, serviceFactory, publisher, disposer)
 {
     public IViewModelTemplate Template => template;
 }

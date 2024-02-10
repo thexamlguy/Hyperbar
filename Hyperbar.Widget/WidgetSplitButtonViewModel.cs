@@ -6,13 +6,14 @@ namespace Hyperbar.Widget;
 [NotificationHandler(nameof(Id))]
 public partial class WidgetSplitButtonViewModel(IServiceProvider serviceProvider,
     IServiceFactory serviceFactory,
-    IMediator mediator,
+    IPublisher publisher,
+    ISubscriber subscriber,
     IDisposer disposer,
     IEnumerable<IWidgetComponentViewModel> items,
     Guid id = default,
     string? text = null,
     string? icon = null,
-    RelayCommand? command = null) : WidgetComponentViewModel(serviceProvider, serviceFactory, mediator, disposer, items)
+    RelayCommand? command = null) : WidgetComponentViewModel(serviceProvider, serviceFactory, publisher, subscriber, disposer, items)
 {
     [ObservableProperty]
     private IRelayCommand? click = command;

@@ -7,17 +7,17 @@ public sealed class WidgetHost :
     IWidgetHost
 {
     private readonly IServiceProvider services;
-    private readonly IMediator mediator;
+    private readonly IPublisher publisher;
     private readonly IProxyService<IMediator> proxyMediator;
     private readonly IEnumerable<IHostedService> hostedServices;
 
     public WidgetHost(IServiceProvider services,
-        IMediator mediator,
+        IPublisher publisher,
         IProxyService<IMediator> proxyMediator,
         IEnumerable<IHostedService> hostedServices)
     {
         this.services = services;
-        this.mediator = mediator;
+        this.publisher = publisher;
         this.proxyMediator = proxyMediator;
         this.hostedServices = hostedServices;
     }
@@ -41,11 +41,11 @@ public sealed class WidgetHost :
 
         if (proxyMediator.Proxy is IMediator mediator)
         {
-            await mediator.PublishAsync(new Started<IWidgetHost>(this),
+            await publisher.PublishAsync(new Started<IWidgetHost>(this),
                 cancellationToken);
         }
 
-        await this.mediator.PublishAsync(new Started<IWidgetHost>(this), 
+        await this.publisher.PublishAsync(new Started<IWidgetHost>(this), 
             cancellationToken);
     }
 

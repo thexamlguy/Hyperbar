@@ -11,24 +11,25 @@ public class Cache<TValue>(IDisposer disposer) :
 
     public void Add(TValue value)
     {
-        disposer.Add(value!, Disposable.Create(() =>
+        if (value is null)
         {
-            Remove(value);
-        }));
+            return;
+        }
 
+        disposer.Add(value, Disposable.Create(() => Remove(value)));
         cache.Add(value);
     }
 
     public void Clear() => cache.Clear();
 
-    public System.Collections.Generic.IEnumerator<TValue> GetEnumerator() => cache.GetEnumerator();
+    public IEnumerator<TValue> GetEnumerator() => cache.GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
     public bool Remove(TValue value) => cache.Remove(value);
 }
 
-public class Cache<TKey, TValue>(IDisposer disposer) :
+public class Cache<TKey, TValue> :
     ICache<TKey, TValue>
     where TKey :
     notnull
@@ -47,7 +48,7 @@ public class Cache<TKey, TValue>(IDisposer disposer) :
 
     public bool ContainsKey(TKey key) => cache.ContainsKey(key);
 
-    public System.Collections.Generic.IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => cache.GetEnumerator();
+    public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => cache.GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 

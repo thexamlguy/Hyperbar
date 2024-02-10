@@ -5,10 +5,11 @@ namespace Hyperbar.Widget.MediaController.Windows;
 
 public partial class MediaButtonViewModel<TMediaButton>(IServiceProvider serviceProvider,
     IServiceFactory serviceFactory,
-    IMediator mediator,
+    IPublisher publisher,
+    ISubscriber subscriber,
     IDisposer disposer,
     IRelayCommand invokeCommand) : 
-    WidgetComponentViewModel(serviceProvider, serviceFactory, mediator, disposer),
+    WidgetComponentViewModel(serviceProvider, serviceFactory, publisher, subscriber, disposer),
     INotificationHandler<Changed<MediaButton<TMediaButton>>>,
     IMediaButtonViewModel
 {
@@ -29,5 +30,5 @@ public partial class MediaButtonViewModel<TMediaButton>(IServiceProvider service
     }
 
     public override async Task InitializeAsync() =>
-        await Mediator.PublishAsync<Request<TMediaButton>>();
+        await Publisher.PublishAsync<Request<TMediaButton>>();
 }

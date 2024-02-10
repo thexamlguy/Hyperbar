@@ -7,16 +7,16 @@ public class NavigateHandler :
 {
     private readonly IViewModelTemplateDescriptorProvider contentTemplateDescriptors;
     private readonly IServiceProvider provider;
-    private readonly IMediator mediator;
+    private readonly IPublisher publisher;
     private readonly IEnumerable<INavigationDescriptor> navigationDescriptors;
 
     public NavigateHandler(IServiceProvider provider,
-        IMediator mediator,
+        IPublisher publisher,
         IEnumerable<INavigationDescriptor> navigationDescriptors,
         IViewModelTemplateDescriptorProvider contentTemplateDescriptors)
     {
         this.provider = provider;
-        this.mediator = mediator;
+        this.publisher = publisher;
         this.navigationDescriptors = navigationDescriptors;
         this.contentTemplateDescriptors = contentTemplateDescriptors;
     }
@@ -43,7 +43,7 @@ public class NavigateHandler :
                         if (Activator.CreateInstance(navigateType,
                             new object[] { template, content }) is object navigate)
                         {
-                            await mediator.PublishAsync(navigate, cancellationToken);
+                            await publisher.PublishAsync(navigate, cancellationToken);
                         }
                     }
                 }

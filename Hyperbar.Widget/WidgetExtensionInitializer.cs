@@ -1,8 +1,8 @@
 ﻿namespace Hyperbar.Widget;
 
-public class WidgetExtensionInitializer(IMediator mediator) :
+public class WidgetExtensionInitializer(IPublisher publisher) :
     IInitializer
 {
     public async Task InitializeAsync() => 
-        await mediator.PublishAsync<Enumerate<WidgetExtension>>();
+        await publisher.PublishAsync<Enumerate<WidgetExtension>>();
 }

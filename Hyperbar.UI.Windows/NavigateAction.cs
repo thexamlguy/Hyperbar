@@ -24,7 +24,7 @@ public sealed class NavigateAction :
         {
             if (frameworkElement.DataContext is IObservableViewModel observableViewModel)
             {
-                observableViewModel.Mediator.PublishAsync(new Navigate(Path))
+                observableViewModel.Publisher.PublishAsync(new Navigate(Path))
                     .GetAwaiter().GetResult();
             }
         }

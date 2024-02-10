@@ -6,17 +6,19 @@ public partial class WidgetComponentViewModel :
 {
     public WidgetComponentViewModel(IServiceProvider serviceProvider, 
         IServiceFactory serviceFactory,
-        IMediator mediator, 
+        IPublisher publisher, 
+        ISubscriber subscriber,
         IDisposer disposer,
-        IEnumerable<IWidgetComponentViewModel> items) : base(serviceProvider, serviceFactory, mediator, disposer, items)
+        IEnumerable<IWidgetComponentViewModel> items) : base(serviceProvider, serviceFactory, publisher, subscriber, disposer, items)
     {
 
     }
 
     public WidgetComponentViewModel(IServiceProvider serviceProvider,
         IServiceFactory serviceFactory,
-        IMediator mediator,
-        IDisposer disposer) : base(serviceProvider, serviceFactory, mediator, disposer)
+        IPublisher publisher,
+        ISubscriber subscriber,
+        IDisposer disposer) : base(serviceProvider, serviceFactory, publisher, subscriber, disposer)
     {
 
     }

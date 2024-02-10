@@ -10,21 +10,22 @@ public class MediaControllerViewModel :
     public MediaControllerViewModel(IViewModelTemplate template,
         IServiceProvider serviceProvider,
         IServiceFactory serviceFactory,
-        IMediator mediator,
-        IDisposer disposer) : base(serviceProvider, serviceFactory, mediator, disposer)
+        IPublisher publisher,
+        ISubscriber subscriber,
+        IDisposer disposer) : base(serviceProvider, serviceFactory, publisher, subscriber, disposer)
     {
         Template = template;
 
         Add<MediaInformationViewModel>();
 
         Add<MediaButtonViewModel<MediaPreviousButton>>(new RelayCommand(async () =>
-            await mediator.PublishAsync<Request<MediaPrevious>>()));
+            await publisher.PublishAsync<Request<MediaPrevious>>()));
 
         Add<MediaButtonViewModel<MediaPlayPauseButton>>(new RelayCommand(async () =>
-            await mediator.PublishAsync<Request<MediaPlayPause>>()));
+            await publisher.PublishAsync<Request<MediaPlayPause>>()));
 
         Add<MediaButtonViewModel<MediaNextButton>>(new RelayCommand(async () =>
-            await mediator.PublishAsync<Request<MediaNext>>()));
+            await publisher.PublishAsync<Request<MediaNext>>()));
     }
 
     public IViewModelTemplate Template { get; }

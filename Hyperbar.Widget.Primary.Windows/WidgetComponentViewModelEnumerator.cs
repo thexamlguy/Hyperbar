@@ -1,14 +1,13 @@
-﻿using Hyperbar.Widget;
-
-namespace Hyperbar.Widget.Primary.Windows;
+﻿namespace Hyperbar.Widget.Primary.Windows;
 
 public class WidgetComponentViewModelEnumerator(PrimaryWidgetConfiguration configuration,
-    IMediator mediator,
+    IPublisher publisher,
     IFactory<PrimaryCommandConfiguration, IWidgetComponentViewModel?> factory,
     ICache<(Guid ParentId, Guid Id), PrimaryCommandConfiguration> cache) :
     INotificationHandler<Enumerate<IWidgetComponentViewModel>>
 {
-    public async Task Handle(Enumerate<IWidgetComponentViewModel> notification, CancellationToken cancellationToken)
+    public async Task Handle(Enumerate<IWidgetComponentViewModel> notification, 
+        CancellationToken cancellationToken)
     {
         Stack<(Guid, List<PrimaryCommandConfiguration>)> stack = new();
         stack.Push((Guid.Empty, configuration.Commands));
@@ -30,7 +29,7 @@ public class WidgetComponentViewModelEnumerator(PrimaryWidgetConfiguration confi
         {
             if (factory.Create(item) is IWidgetComponentViewModel viewModel)
             {
-                await mediator.PublishAsync(new Create<IWidgetComponentViewModel>(viewModel), nameof(PrimaryWidgetViewModel), 
+                await publisher.PublishAsync(new Create<IWidgetComponentViewModel>(viewModel), nameof(PrimaryWidgetViewModel), 
                     cancellationToken);
             }
         }

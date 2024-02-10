@@ -4,6 +4,15 @@ using Microsoft.UI.Xaml.Markup;
 
 namespace Hyperbar.UI.Windows;
 
+public class ViewModelBinder
+{
+    public void Bind(object viewModel, 
+        FrameworkElement view) 
+    {
+        view.DataContext ??= viewModel;
+
+    }
+}
 public class ViewModelTemplate(IViewModelTemplateDescriptorProvider descriptors) :
     DataTemplateSelector, 
     IViewModelTemplate
@@ -19,7 +28,7 @@ public class ViewModelTemplate(IViewModelTemplateDescriptorProvider descriptors)
         DependencyObject container) =>
         SelectTemplateCore(item);
 
-    private DataTemplate CreateDataTemplate(IViewModelTemplateDescriptor descriptor)
+    private static DataTemplate CreateDataTemplate(IViewModelTemplateDescriptor descriptor)
     {
         string xamlString = @$"
                 <DataTemplate xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""

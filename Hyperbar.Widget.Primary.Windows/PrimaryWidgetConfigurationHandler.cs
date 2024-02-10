@@ -1,8 +1,6 @@
-﻿using Hyperbar.Widget;
+﻿namespace Hyperbar.Widget.Primary.Windows;
 
-namespace Hyperbar.Widget.Primary.Windows;
-
-public class PrimaryWidgetConfigurationHandler(IMediator mediator,
+public class PrimaryWidgetConfigurationHandler(IPublisher publisher,
     PrimaryWidgetConfiguration configuration,
     IFactory<PrimaryCommandConfiguration, IWidgetComponentViewModel?> factory,
     IProvider<PrimaryCommandConfiguration, IWidgetComponentViewModel?> provider,
@@ -44,7 +42,7 @@ public class PrimaryWidgetConfigurationHandler(IMediator mediator,
             if (moved.Value is PrimaryCommandConfiguration configuration &&
                 provider.Get(configuration) is IWidgetComponentViewModel viewModel)
             {
-                await mediator.PublishAsync(new Move<IWidgetComponentViewModel>(configuration.Order, viewModel),
+                await publisher.PublishAsync(new Move<IWidgetComponentViewModel>(configuration.Order, viewModel),
                     moved.Key.ParentId == Guid.Empty ? nameof(PrimaryWidgetViewModel) : moved.Key.ParentId,
                         cancellationToken);
 
@@ -61,8 +59,7 @@ public class PrimaryWidgetConfigurationHandler(IMediator mediator,
             if (added.Value is PrimaryCommandConfiguration configuration &&
                 factory.Create(configuration) is IWidgetComponentViewModel viewModel)
             {
-                await mediator.PublishAsync(
-                    new Insert<IWidgetComponentViewModel>(configuration.Order, viewModel),
+                await publisher.PublishAsync(new Insert<IWidgetComponentViewModel>(configuration.Order, viewModel),
                     added.Key.ParentId == Guid.Empty ? nameof(PrimaryWidgetViewModel) : added.Key.ParentId,
                     cancellationToken);
 
@@ -78,8 +75,7 @@ public class PrimaryWidgetConfigurationHandler(IMediator mediator,
             if (removed.Value is PrimaryCommandConfiguration configuration &&
                 provider.Get(configuration) is IWidgetComponentViewModel viewModel)
             {
-                await mediator.PublishAsync(
-                    new Remove<IWidgetComponentViewModel>(viewModel),
+                await publisher.PublishAsync(new Remove<IWidgetComponentViewModel>(viewModel),
                     removed.Key.ParentId == Guid.Empty ? nameof(PrimaryWidgetViewModel) : removed.Key.ParentId,
                     cancellationToken);
 

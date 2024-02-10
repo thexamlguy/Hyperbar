@@ -7,10 +7,11 @@ namespace Hyperbar.Widget;
 public partial class PrimaryViewModel(IViewModelTemplate template, 
     IServiceProvider serviceProvider,
     IServiceFactory serviceFactory,
-    IMediator mediator,
+    IPublisher publisher,
+    ISubscriber subscriber,
     IDisposer disposer,
     int index) :
-    ObservableCollectionViewModel<IWidgetViewModel>(serviceProvider, serviceFactory, mediator, disposer),
+    ObservableCollectionViewModel<IWidgetViewModel>(serviceProvider, serviceFactory, publisher, subscriber, disposer),
     IWidgetHostViewModel
 {
     [ObservableProperty]

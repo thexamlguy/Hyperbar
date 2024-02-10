@@ -2,29 +2,26 @@
 
 namespace Hyperbar;
 
-public partial class NavigationViewModel :
-    ObservableCollectionViewModel<INavigationViewModel>,
+public partial class NavigationViewModel(IServiceProvider serviceProvider,
+    IServiceFactory serviceFactory,
+    IPublisher publisher,
+    ISubscriber subscriber,
+    IDisposer disposer,
+    string text) :
+    ObservableCollectionViewModel<INavigationViewModel>(serviceProvider, serviceFactory, publisher, subscriber, disposer),
     INavigationViewModel
 {
     [ObservableProperty]
-    private string? text;
-
-    public NavigationViewModel(IServiceProvider serviceProvider,
-        IServiceFactory serviceFactory, 
-        IMediator mediator, 
-        IDisposer disposer,
-        string text) : base(serviceProvider, serviceFactory, mediator, disposer)
-    {
-        this.text = text;
-    }
+    private string? text = text;
 }
 
 public partial class NavigationViewModel<TNavigationViewModel>(IServiceProvider serviceProvider,
     IServiceFactory serviceFactory,
-    IMediator mediator,
+    IPublisher publisher,
+    ISubscriber subscriber,
     IDisposer disposer,
     string text) :
-    ObservableCollectionViewModel<TNavigationViewModel>(serviceProvider, serviceFactory, mediator, disposer),
+    ObservableCollectionViewModel<TNavigationViewModel>(serviceProvider, serviceFactory, publisher, subscriber, disposer),
     INavigationViewModel
     where TNavigationViewModel :
     INavigationViewModel

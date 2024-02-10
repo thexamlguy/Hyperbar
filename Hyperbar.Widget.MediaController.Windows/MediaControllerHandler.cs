@@ -2,7 +2,7 @@
 
 namespace Hyperbar.Widget.MediaController.Windows;
 
-public class MediaControllerHandler(IMediator mediator,
+public class MediaControllerHandler(IPublisher publisher,
     IServiceScopeProvider<MediaController> scopeProvider,
     ICache<MediaController, MediaControllerViewModel> cache) :
     INotificationHandler<Create<MediaController>>,
@@ -18,7 +18,7 @@ public class MediaControllerHandler(IMediator mediator,
             factory.Create(mediaController) is MediaControllerViewModel viewModel)
         {
             cache.Add(mediaController, viewModel);
-            await mediator.PublishAsync(new Create<MediaControllerViewModel>(viewModel), cancellationToken);
+            await publisher.PublishAsync(new Create<MediaControllerViewModel>(viewModel), cancellationToken);
         }
     }
 
@@ -28,7 +28,7 @@ public class MediaControllerHandler(IMediator mediator,
             cache.TryGetValue(mediaController, out MediaControllerViewModel? viewModel) &&
             viewModel is not null)
         {
-            await mediator.PublishAsync(new Remove<MediaControllerViewModel>(viewModel), cancellationToken);
+            await publisher.PublishAsync(new Remove<MediaControllerViewModel>(viewModel), cancellationToken);
             cache.Remove(mediaController);
         }
     }
