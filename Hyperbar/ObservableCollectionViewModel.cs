@@ -20,6 +20,8 @@ public partial class ObservableCollectionViewModel<TViewModel> :
     INotificationHandler<Insert<TViewModel>>,
     INotificationHandler<Move<TViewModel>>,
     INotificationHandler<Replace<TViewModel>>
+    where TViewModel : 
+    notnull
 {
     private readonly ObservableCollection<TViewModel> collection = [];
 
@@ -202,7 +204,7 @@ public partial class ObservableCollectionViewModel<TViewModel> :
         Disposer.Dispose(this);
     }
 
-    public System.Collections.Generic.IEnumerator<TViewModel> GetEnumerator() =>
+    public IEnumerator<TViewModel> GetEnumerator() =>
         collection.GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator() =>
@@ -344,18 +346,18 @@ public partial class ObservableCollectionViewModel<TViewModel> :
         collection.Clear();
 
     protected virtual void InsertItem(int index,
-        TViewModel value)
+        TViewModel item)
     {
-        Disposer.Add(this, value);
-        Disposer.Add(value, value, Disposable.Create(() =>
+        Disposer.Add(this, item);
+        Disposer.Add(item, item, Disposable.Create(() =>
         {
-            if (value is IList collection)
+            if (item is IList collection)
             {
                 collection.Clear();
             }
         }));
 
-        collection.Insert(index, value);
+        collection.Insert(index, item);
     }
 
     protected virtual void RemoveItem(int index) =>

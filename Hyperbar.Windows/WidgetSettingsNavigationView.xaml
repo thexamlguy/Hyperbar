@@ -9,7 +9,7 @@
     Content="Widgets">
     <interactivity:Interaction.Behaviors>
         <interactions:EventTriggerBehavior EventName="Tapped">
-            <ui:NavigateAction />
+            <ui:NavigateAction Name="WidgetSettings" TargetName="Settings" />
         </interactions:EventTriggerBehavior>
     </interactivity:Interaction.Behaviors>
 </NavigationViewItem>

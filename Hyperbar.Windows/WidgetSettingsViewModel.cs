@@ -1,13 +1,11 @@
 ﻿using Hyperbar.UI.Windows;
 
-namespace Hyperbar.Widget;
+namespace Hyperbar.Windows;
 
-
-[NotificationHandler(nameof(IWidgetHostViewModel))]
-public partial class ApplicationBarViewModel :
-    ObservableCollectionViewModel<IDisposable>
+public class WidgetSettingsViewModel :
+    ObservableCollectionViewModel<INavigationViewModel>
 {
-    public ApplicationBarViewModel(IViewModelTemplateSelector viewModelTemplateSelector, 
+    public WidgetSettingsViewModel(IViewModelTemplateSelector viewModelTemplateSelector,
         IServiceProvider serviceProvider,
         IServiceFactory serviceFactory,
         IPublisher publisher,
@@ -15,9 +13,6 @@ public partial class ApplicationBarViewModel :
         IDisposer disposer) : base(serviceProvider, serviceFactory, publisher, subscriber, disposer)
     {
         ViewModelTemplateSelector = viewModelTemplateSelector;
-
-        Add<PrimaryViewModel>(0);
-        Add<SecondaryViewModel>(1);
     }
 
     public IViewModelTemplateSelector ViewModelTemplateSelector { get; }

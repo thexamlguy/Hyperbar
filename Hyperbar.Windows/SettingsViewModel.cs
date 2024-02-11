@@ -5,18 +5,18 @@ namespace Hyperbar.Windows;
 public partial class SettingsViewModel :
     ObservableCollectionViewModel<INavigationViewModel>
 {
-    public SettingsViewModel(IViewModelTemplate template,
+    public SettingsViewModel(IViewModelTemplateSelector viewModelTemplateSelector,
         IServiceProvider serviceProvider, 
         IServiceFactory serviceFactory,
         IPublisher publisher,
         ISubscriber subscriber,
         IDisposer disposer) : base(serviceProvider, serviceFactory, publisher, subscriber, disposer)
     {
-        Template = template;
+        ViewModelTemplateSelector = viewModelTemplateSelector;
 
         Add<GeneralSettingsNavigationViewModel>("General");
         Add<WidgetSettingsNavigationViewModel>("Widgets");
     }
 
-    public IViewModelTemplate Template { get; }
+    public IViewModelTemplateSelector ViewModelTemplateSelector { get; }
 }

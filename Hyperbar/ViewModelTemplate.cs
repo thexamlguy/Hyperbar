@@ -1,7 +1,7 @@
 ﻿namespace Hyperbar;
 
-public record ViewModelTemplateDescriptor :
-    IViewModelTemplateDescriptor
+public record ViewModelTemplate :
+    IViewModelTemplate
 {
     public required Type ViewModelType { get; set; }
 

@@ -26,7 +26,7 @@
         FontSize="16">
         <interactivity:Interaction.Behaviors>
             <interactions:EventTriggerBehavior EventName="Click">
-                <windows:NavigateAction Path="Settings" />
+                <windows:NavigateAction Name="Settings" />
             </interactions:EventTriggerBehavior>
         </interactivity:Interaction.Behaviors>
     </Button>

@@ -29,8 +29,16 @@ public class WidgetBuilder :
                 services.AddScoped<IServiceFactory>(provider =>
                     new ServiceFactory((type, parameters) =>
                         ActivatorUtilities.CreateInstance(provider, type, parameters!)));
+
+                services.AddSingleton<SubscriptionCollection>();
+                services.AddSingleton<ISubscriptionManager, SubscriptionManager>();
+                services.AddTransient<ISubscriber, Subscriber>();
+                services.AddTransient<IPublisher, Publisher>();
+
                 services.AddScoped<IMediator, Mediator>();
+
                 services.AddScoped<IDisposer, Disposer>();
+
                 services.AddHandler<WidgetAvailabilityChangedHandler>();
                 services.AddValueChangedNotification<WidgetConfiguration,
                     WidgetAvailability>((config) => (args) =>

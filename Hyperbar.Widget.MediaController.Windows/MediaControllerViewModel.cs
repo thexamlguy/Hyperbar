@@ -7,14 +7,14 @@ namespace Hyperbar.Widget.MediaController.Windows;
 public class MediaControllerViewModel : 
     ObservableCollectionViewModel<WidgetComponentViewModel>
 {
-    public MediaControllerViewModel(IViewModelTemplate template,
+    public MediaControllerViewModel(IViewModelTemplateSelector viewModelTemplateSelector,
         IServiceProvider serviceProvider,
         IServiceFactory serviceFactory,
         IPublisher publisher,
         ISubscriber subscriber,
         IDisposer disposer) : base(serviceProvider, serviceFactory, publisher, subscriber, disposer)
     {
-        Template = template;
+        viewModelTemplateSelector = viewModelTemplateSelector;
 
         Add<MediaInformationViewModel>();
 
@@ -28,5 +28,5 @@ public class MediaControllerViewModel :
             await publisher.PublishAsync<Request<MediaNext>>()));
     }
 
-    public IViewModelTemplate Template { get; }
+    public IViewModelTemplateSelector ViewModelTemplateSelector { get; }
 }

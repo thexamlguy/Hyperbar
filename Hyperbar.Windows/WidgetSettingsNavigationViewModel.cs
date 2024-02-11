@@ -6,7 +6,4 @@ public class WidgetSettingsNavigationViewModel(IServiceProvider serviceProvider,
     ISubscriber subscriber,
     IDisposer disposer,
     string text) :
-    NavigationViewModel<WidgetNavigationViewModel>(serviceProvider, serviceFactory, publisher, subscriber, disposer, text)
-{
-
-}
+    NavigationViewModel<WidgetNavigationViewModel>(serviceProvider, serviceFactory, publisher, subscriber, disposer, text);

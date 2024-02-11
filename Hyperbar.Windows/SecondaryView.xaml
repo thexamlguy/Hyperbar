@@ -2,10 +2,9 @@
 <UserControl
     x:Class="Hyperbar.Windows.SecondaryView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:ui="using:Hyperbar.UI.Windows">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Grid>
-        <ItemsControl ItemTemplateSelector="{Binding Template}" ItemsSource="{x:Bind ViewModel, Mode=OneWay}">
+        <ItemsControl ItemTemplateSelector="{Binding ViewModelTemplateSelector}" ItemsSource="{x:Bind ViewModel, Mode=OneWay}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <ItemsStackPanel Orientation="Horizontal" />

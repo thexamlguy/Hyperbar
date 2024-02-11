@@ -1,7 +1,7 @@
 ﻿namespace Hyperbar;
 
-public record NavigationDescriptor : 
-    INavigationDescriptor
+public record Navigation : 
+    INavigation
 {
     public required Type Type { get; set; }
 }

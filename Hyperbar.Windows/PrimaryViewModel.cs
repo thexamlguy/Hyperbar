@@ -4,7 +4,7 @@ using Hyperbar.UI.Windows;
 namespace Hyperbar.Widget;
 
 [NotificationHandler(nameof(IWidgetHostViewModel))]
-public partial class PrimaryViewModel(IViewModelTemplate template, 
+public partial class PrimaryViewModel(IViewModelTemplateSelector viewModelTemplateSelector, 
     IServiceProvider serviceProvider,
     IServiceFactory serviceFactory,
     IPublisher publisher,
@@ -17,6 +17,6 @@ public partial class PrimaryViewModel(IViewModelTemplate template,
     [ObservableProperty]
     private int index = index;
 
-    public IViewModelTemplate Template => template;
+    public IViewModelTemplateSelector ViewModelTemplateSelector => viewModelTemplateSelector;
 
 }

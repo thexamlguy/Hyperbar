@@ -3,8 +3,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.FileProviders.Physical;
 using Microsoft.Extensions.Hosting;
-using System.Diagnostics.CodeAnalysis;
-using System.Net.Mime;
 using System.Text.Json;
 
 namespace Hyperbar;
@@ -140,7 +138,7 @@ public static class IServiceCollectionExtensions
 
         if (contract?.GetGenericArguments() is { Length: 1 } arguments)
         {
-            services.AddTransient<INavigationDescriptor>(provider => new NavigationDescriptor
+            services.AddTransient<INavigation>(provider => new Navigation
             {
                 Type = arguments[0]
             });
@@ -164,7 +162,7 @@ public static class IServiceCollectionExtensions
         services.AddKeyedTransient(contentType, key);
         services.AddKeyedTransient(templateType, key);
 
-        services.AddTransient<IViewModelTemplateDescriptor>(provider => new ViewModelTemplateDescriptor
+        services.AddTransient<IViewModelTemplate>(provider => new ViewModelTemplate
         {
             ViewModelType = contentType,
             TemplateType = templateType,
@@ -179,7 +177,13 @@ public static class IServiceCollectionExtensions
         services.AddSingleton<IServiceFactory>(provider =>
             new ServiceFactory((type, parameters) => ActivatorUtilities.CreateInstance(provider, type, parameters!)));
 
+        services.AddSingleton<SubscriptionCollection>();
+        services.AddSingleton<ISubscriptionManager, SubscriptionManager>();
+        services.AddTransient<ISubscriber, Subscriber>();
+        services.AddTransient<IPublisher, Publisher>();
+
         services.AddSingleton<IMediator, Mediator>();
+
         services.AddSingleton<IProxyService<IMediator>>(provider =>
             new ProxyService<IMediator>(provider.GetRequiredService<IMediator>()));
 

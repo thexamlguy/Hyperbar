@@ -4,22 +4,13 @@ using Microsoft.UI.Xaml.Markup;
 
 namespace Hyperbar.UI.Windows;
 
-public class ViewModelBinder
-{
-    public void Bind(object viewModel, 
-        FrameworkElement view) 
-    {
-        view.DataContext ??= viewModel;
-
-    }
-}
-public class ViewModelTemplate(IViewModelTemplateDescriptorProvider descriptors) :
+public class ViewModelTemplateSelector(IViewModelTemplateProvider descriptors) :
     DataTemplateSelector, 
-    IViewModelTemplate
+    IViewModelTemplateSelector
 {
     protected override DataTemplate SelectTemplateCore(object item)
     {
-        return descriptors.Get(item.GetType().Name) is IViewModelTemplateDescriptor descriptor
+        return descriptors.Get(item.GetType().Name) is Hyperbar.IViewModelTemplate descriptor
             ? CreateDataTemplate(descriptor)
             : new DataTemplate();
     }
@@ -28,7 +19,7 @@ public class ViewModelTemplate(IViewModelTemplateDescriptorProvider descriptors)
         DependencyObject container) =>
         SelectTemplateCore(item);
 
-    private static DataTemplate CreateDataTemplate(IViewModelTemplateDescriptor descriptor)
+    private static DataTemplate CreateDataTemplate(Hyperbar.IViewModelTemplate descriptor)
     {
         string xamlString = @$"
                 <DataTemplate xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""

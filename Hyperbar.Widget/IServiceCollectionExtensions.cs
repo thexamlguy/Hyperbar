@@ -33,7 +33,7 @@ public static class IServiceCollectionExtensions
         services.AddKeyedTransient(typeof(IWidgetViewModel), key, contentType);
         services.TryAddKeyedTransient(key, (provider, key) => provider.GetService<IWidgetView>()!);
 
-        services.AddTransient<IViewModelTemplateDescriptor>(provider => new ViewModelTemplateDescriptor { ViewModelType = contentType, TemplateType = templateType, Key = key });
+        services.AddTransient<IViewModelTemplate>(provider => new ViewModelTemplate { ViewModelType = contentType, TemplateType = templateType, Key = key });
 
         return services;
     }
@@ -54,8 +54,8 @@ public static class IServiceCollectionExtensions
         services.AddKeyedTransient(typeof(IWidgetViewModel), key, contentType);
         services.TryAddKeyedTransient(templateType, key);
 
-        services.AddTransient<IViewModelTemplateDescriptor>(provider =>
-            new ViewModelTemplateDescriptor { ViewModelType = contentType, 
+        services.AddTransient<IViewModelTemplate>(provider =>
+            new ViewModelTemplate { ViewModelType = contentType, 
                 TemplateType = templateType, Key = key });
 
         return services;

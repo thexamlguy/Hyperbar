@@ -2,11 +2,10 @@
 <UserControl
     x:Class="Hyperbar.Windows.PrimaryView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:ui="using:Hyperbar.UI.Windows">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ItemsControl
         HorizontalAlignment="Center"
-        ItemTemplateSelector="{Binding Template}"
+        ItemTemplateSelector="{Binding ViewModelTemplateSelector}"
         ItemsSource="{x:Bind ViewModel}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>

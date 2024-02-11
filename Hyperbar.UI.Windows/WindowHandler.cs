@@ -3,24 +3,28 @@ using Microsoft.UI.Xaml.Controls;
 
 namespace Hyperbar.UI.Windows;
 
-public class FrameHandler :
-    INavigationHandler<Frame>
+public class ContentControlHandler(IViewModelContentBinder viewModelContentBinder) :
+    INavigationHandler<ContentControl>
 {
-    public Task Handle(Navigate<Frame> args,
-        CancellationToken cancellationToken = default)
+    public Task Handle(Navigate<ContentControl> args,
+        CancellationToken cancellationToken)
     {
+        if (args.Target is ContentControl contentControl)
+        {
+            contentControl.Content = args.View;
+        }
 
         return Task.CompletedTask;
     }
 }
 
-public class WindowHandler :
+public class WindowHandler(IViewModelContentBinder viewModelContentBinder) :
     INavigationHandler<Window>
 {
     public Task Handle(Navigate<Window> args,
         CancellationToken cancellationToken)
     {
-        if (args.View is Window window)
+        if (args.Target is Window window)
         {
             if (window.Content is FrameworkElement content)
             {
@@ -33,8 +37,9 @@ public class WindowHandler :
                     }
                 }
 
-                //ViewModelBinder.Bind(args.ViewModel, content);
+                viewModelContentBinder.Bind(content, window);
                 window.Closed += HandleClosed;
+                content.DataContext = args.ViewModel;
             }
 
             window.Activate();

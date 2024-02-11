@@ -6,6 +6,4 @@ public class GeneralSettingsNavigationViewModel(IServiceProvider serviceProvider
     ISubscriber subscriber,
     IDisposer disposer,
     string text) :
-    NavigationViewModel(serviceProvider, serviceFactory, publisher, subscriber, disposer, text)
-{
-}
+    NavigationViewModel(serviceProvider, serviceFactory, publisher, subscriber, disposer, text);

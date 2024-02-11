@@ -1,6 +1,6 @@
 ﻿namespace Hyperbar;
 
-public interface INavigationDescriptor
+public interface INavigation
 {
     Type Type { get; set; }
 }

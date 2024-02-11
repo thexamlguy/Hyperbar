@@ -1,6 +1,6 @@
 ﻿namespace Hyperbar;
 
-public interface IViewModelTemplateDescriptor
+public interface IViewModelTemplate
 {
     object Key { get; set; }
 

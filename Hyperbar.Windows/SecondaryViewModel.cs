@@ -10,7 +10,7 @@ public partial class SecondaryViewModel :
     [ObservableProperty]
     private int index;
 
-    public SecondaryViewModel(IViewModelTemplate template, 
+    public SecondaryViewModel(IViewModelTemplateSelector viewModelTemplateSelector, 
         IServiceProvider serviceProvider,
         IServiceFactory serviceFactory,
         IPublisher publisher,
@@ -18,12 +18,12 @@ public partial class SecondaryViewModel :
         IDisposer disposer,
         int index) : base(serviceProvider, serviceFactory, publisher, subscriber, disposer)
     {
-        Template = template;
+        ViewModelTemplateSelector = viewModelTemplateSelector;
         this.index = index;
 
         Add<SettingsButtonViewModel>();
     }
 
-    public IViewModelTemplate Template { get; }
+    public IViewModelTemplateSelector ViewModelTemplateSelector { get; }
 
 }

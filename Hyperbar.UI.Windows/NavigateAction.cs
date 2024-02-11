@@ -7,15 +7,25 @@ public sealed class NavigateAction :
     DependencyObject,
     IAction
 {
-    public static readonly DependencyProperty PathProperty = 
-        DependencyProperty.Register(nameof(Path),
+    public static readonly DependencyProperty NameProperty = 
+        DependencyProperty.Register(nameof(Name),
             typeof(string), typeof(NavigateAction), 
                 new PropertyMetadata(null));
 
-    public string Path
+    public static readonly DependencyProperty TargetNameProperty =
+        DependencyProperty.Register(nameof(Name),
+            typeof(string), typeof(NavigateAction),
+                new PropertyMetadata(null));
+    public string Name
     {
-        get => (string)GetValue(PathProperty);
-        set => SetValue(PathProperty, value);
+        get => (string)GetValue(NameProperty);
+        set => SetValue(NameProperty, value);
+    }
+
+    public string TargetName
+    {
+        get => (string)GetValue(TargetNameProperty);
+        set => SetValue(TargetNameProperty, value);
     }
 
     public object Execute(object sender, object parameter)
@@ -24,7 +34,7 @@ public sealed class NavigateAction :
         {
             if (frameworkElement.DataContext is IObservableViewModel observableViewModel)
             {
-                observableViewModel.Publisher.PublishAsync(new Navigate(Path))
+                observableViewModel.Publisher.PublishAsync(new Navigate(Name, TargetName ?? null))
                     .GetAwaiter().GetResult();
             }
         }

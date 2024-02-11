@@ -4,6 +4,7 @@ using Microsoft.UI.Xaml;
 
 namespace Hyperbar.Windows;
 
+[NavigationTarget("Settings")]
 public partial class SettingsView :
     Window
 {

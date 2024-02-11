@@ -21,7 +21,7 @@ public partial class App :
         base.OnLaunched(args);
 
         IHost? host = new HostBuilder()
-            .UseContentRoot(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), 
+            .UseContentRoot(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 Assembly.GetEntryAssembly()?.GetName().Name!), true)
             .ConfigureAppConfiguration(config =>
             {
@@ -36,18 +36,24 @@ public partial class App :
 
                 services.AddHostedService<AppService>();
 
-                services.AddSingleton<IDispatcher>(new Dispatcher(DispatcherQueue.GetForCurrentThread()));
+                services.AddSingleton((IDispatcher)new Dispatcher(DispatcherQueue.GetForCurrentThread()));
 
-                services.AddTransient<IViewModelTemplate, ViewModelTemplate>();
-                services.AddTransient<IViewModelTemplateDescriptorProvider, ViewModelTemplateDescriptorProvider>();
+                services.AddTransient<INavigationProvider, NavigationProvider>();
+                services.AddSingleton<NavigationTargetCollection>();
+                services.AddTransient<INavigationTargetProvider, NavigationTargetProvider>();
+
+                services.AddTransient<IViewModelContentBinder, ViewModelContentBinder>();
+                services.AddTransient<IViewModelTemplateSelector, ViewModelTemplateSelector>();
+                services.AddTransient<IViewModelTemplateProvider, ViewModelTemplateProvider>();
 
                 services.AddHandler<AppConfigurationChangedHandler>();
-                services.AddConfiguration<AppConfiguration>(args =>
+                services.AddConfiguration((AppConfiguration args) =>
                 {
                     args.Placement = DesktopApplicationBarPlacemenet.Top;
                 });
 
                 services.AddNavigationHandler<WindowHandler>();
+                services.AddNavigationHandler<ContentControlHandler>();
 
                 services.AddSingleton<DesktopApplicationBar>();
                 services.AddContentTemplate<ApplicationBarViewModel, ApplicationBarView>();
@@ -59,6 +65,7 @@ public partial class App :
 
                 services.AddContentTemplate<GeneralSettingsNavigationViewModel, GeneralSettingsNavigationView>();
                 services.AddContentTemplate<WidgetSettingsNavigationViewModel, WidgetSettingsNavigationView>();
+                services.AddContentTemplate<WidgetSettingsViewModel, WidgetSettingsView>("WidgetSettings");
 
                 services.AddTransient<IInitializer, AppInitializer>();
             })

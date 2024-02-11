@@ -1,13 +1,10 @@
-﻿using System.Collections.Concurrent;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace Hyperbar;
 
-public class SubscriptionManager :
+public class SubscriptionManager(SubscriptionCollection subscriptions) :
     ISubscriptionManager
 {
-    private readonly ConcurrentDictionary<object, List<WeakReference>> subscriptions = new();
-
     public IEnumerable<object?> GetHandlers(Type notificationType, object key)
     {
         if (subscriptions.TryGetValue($"{key?.ToString()}:{notificationType}", 

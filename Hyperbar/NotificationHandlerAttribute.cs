@@ -3,5 +3,5 @@
 [AttributeUsage(AttributeTargets.Class, Inherited = false)]
 public class NotificationHandlerAttribute(object key) : Attribute
 {
-    public object Key { get; } = key;
+    public object Key => key;
 }

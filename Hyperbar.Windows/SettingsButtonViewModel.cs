@@ -2,12 +2,12 @@
 
 namespace Hyperbar.Windows;
 
-public partial class SettingsButtonViewModel(IViewModelTemplate template, 
+public partial class SettingsButtonViewModel(IViewModelTemplateSelector viewModelTemplateSelector, 
     IServiceProvider serviceProvider,
     IServiceFactory serviceFactory,
     IPublisher publisher,
     IDisposer disposer) :
     ObservableViewModel(serviceProvider, serviceFactory, publisher, disposer)
 {
-    public IViewModelTemplate Template => template;
+    public IViewModelTemplateSelector ViewModelTemplateSelector => viewModelTemplateSelector;
 }

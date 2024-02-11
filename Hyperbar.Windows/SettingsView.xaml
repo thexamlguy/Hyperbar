@@ -7,9 +7,10 @@
         <MicaBackdrop />
     </Window.SystemBackdrop>
     <NavigationView
+        x:Name="Settings"
         IsBackButtonVisible="Collapsed"
         IsPaneToggleButtonVisible="False"
         IsSettingsVisible="False"
-        MenuItemTemplateSelector="{Binding Template}"
+        MenuItemTemplateSelector="{Binding ViewModelTemplateSelector}"
         MenuItemsSource="{x:Bind ViewModel, Mode=OneWay}" />
 </Window>

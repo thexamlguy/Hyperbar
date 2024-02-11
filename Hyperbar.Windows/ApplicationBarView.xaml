@@ -17,7 +17,7 @@
     </UserControl.Resources>
     <ItemsControl
         Margin="6,0,6,0"
-        ItemTemplateSelector="{Binding Template}"
+        ItemTemplateSelector="{Binding ViewModelTemplateSelector}"
         ItemsSource="{x:Bind ViewModel, Mode=OneWay}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>

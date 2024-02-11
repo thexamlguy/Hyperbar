@@ -12,14 +12,14 @@ public static class IServiceCollectionExtensions
         // We need to feed information to the Widgets about our Windows host,
         // so the Windows host can make discussions how to display and interact with the widgets. 
 
-        services.AddTransient<IProxyServiceCollection<IWidgetBuilder>>(provider =>
+        services.AddTransient((Func<IServiceProvider, IProxyServiceCollection<IWidgetBuilder>>)(provider =>
             new ProxyServiceCollection<IWidgetBuilder>(services =>
             {
                 services.AddSingleton(provider.GetRequiredService<IList<IXamlMetadataProvider>>());
                 services.AddSingleton(provider.GetRequiredService<IDispatcher>());
 
-                services.AddTransient<IViewModelTemplate, ViewModelTemplate>();
-                services.AddTransient<IViewModelTemplateDescriptorProvider, ViewModelTemplateDescriptorProvider>();
+                services.AddTransient<IViewModelTemplateSelector, UI.Windows.ViewModelTemplateSelector>();
+                services.AddTransient<IViewModelTemplateProvider, ViewModelTemplateProvider>();
 
                 services.AddScoped<IVirtualKeyboard, VirtualKeyboard>();
                 services.AddHandler<KeyAcceleratorHandler>();
@@ -33,7 +33,7 @@ public static class IServiceCollectionExtensions
 
                 services.AddContentTemplate<WidgetButtonViewModel, WidgetButtonView>();
                 services.AddContentTemplate<WidgetSplitButtonViewModel, WidgetSplitButtonView>();
-            }));
+            })));
 
         return services;
     }
