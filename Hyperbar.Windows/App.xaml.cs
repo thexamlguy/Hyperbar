@@ -43,8 +43,9 @@ public partial class App :
                 services.AddTransient<INavigationTargetProvider, NavigationTargetProvider>();
 
                 services.AddTransient<IViewModelContentBinder, ViewModelContentBinder>();
-                services.AddTransient<IViewModelTemplateSelector, ViewModelTemplateSelector>();
+
                 services.AddTransient<IViewModelTemplateProvider, ViewModelTemplateProvider>();
+                services.AddTransient<IViewModelTemplateSelector, ViewModelTemplateSelector>();
 
                 services.AddHandler<AppConfigurationChangedHandler>();
                 services.AddConfiguration((AppConfiguration args) =>
@@ -65,8 +66,11 @@ public partial class App :
 
                 services.AddContentTemplate<GeneralSettingsNavigationViewModel, GeneralSettingsNavigationView>();
                 services.AddContentTemplate<WidgetSettingsNavigationViewModel, WidgetSettingsNavigationView>();
+                services.AddContentTemplate<WidgetNavigationViewModel, WidgetNavigationView>();
+
                 services.AddContentTemplate<WidgetSettingsViewModel, WidgetSettingsView>("WidgetSettings");
 
+                services.AddHandler<WidgetNavigationViewModelEnumerator>();
                 services.AddTransient<IInitializer, AppInitializer>();
             })
         .Build();

@@ -43,8 +43,7 @@ public class Publisher(ISubscriptionManager subscriptionManager,
         List<object?> handlers = provider.GetServices(typeof(INotificationHandler<>)
             .MakeGenericType(notificationType)).ToList();
 
-        foreach (object? handler in subscriptionManager.GetHandlers(notificationType, 
-            $"{key?.ToString()}:{notificationType}"))
+        foreach (object? handler in subscriptionManager.GetHandlers(notificationType, key))
         {
             handlers.Add(handler);
         }

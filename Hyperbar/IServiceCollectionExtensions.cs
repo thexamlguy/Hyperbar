@@ -165,7 +165,7 @@ public static class IServiceCollectionExtensions
         services.AddTransient<IViewModelTemplate>(provider => new ViewModelTemplate
         {
             ViewModelType = contentType,
-            TemplateType = templateType,
+            ViewType = templateType,
             Key = key
         });
 
@@ -184,8 +184,8 @@ public static class IServiceCollectionExtensions
 
         services.AddSingleton<IMediator, Mediator>();
 
-        services.AddSingleton<IProxyService<IMediator>>(provider =>
-            new ProxyService<IMediator>(provider.GetRequiredService<IMediator>()));
+        services.AddSingleton<IProxyService<IPublisher>>(provider =>
+            new ProxyService<IPublisher>(provider.GetRequiredService<IPublisher>()));
 
         services.AddSingleton<IDisposer, Disposer>();
 

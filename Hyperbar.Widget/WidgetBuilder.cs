@@ -26,17 +26,17 @@ public class WidgetBuilder :
             .ConfigureServices((context, services) =>
             {
                 services.AddSingleton<IWidgetHost, WidgetHost>();
+
                 services.AddScoped<IServiceFactory>(provider =>
                     new ServiceFactory((type, parameters) =>
                         ActivatorUtilities.CreateInstance(provider, type, parameters!)));
 
-                services.AddSingleton<SubscriptionCollection>();
-                services.AddSingleton<ISubscriptionManager, SubscriptionManager>();
+                services.AddScoped<SubscriptionCollection>();
+                services.AddScoped<ISubscriptionManager, SubscriptionManager>();
                 services.AddTransient<ISubscriber, Subscriber>();
                 services.AddTransient<IPublisher, Publisher>();
 
                 services.AddScoped<IMediator, Mediator>();
-
                 services.AddScoped<IDisposer, Disposer>();
 
                 services.AddHandler<WidgetAvailabilityChangedHandler>();

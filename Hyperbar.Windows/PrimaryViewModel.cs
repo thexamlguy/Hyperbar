@@ -18,5 +18,4 @@ public partial class PrimaryViewModel(IViewModelTemplateSelector viewModelTempla
     private int index = index;
 
     public IViewModelTemplateSelector ViewModelTemplateSelector => viewModelTemplateSelector;
-
 }

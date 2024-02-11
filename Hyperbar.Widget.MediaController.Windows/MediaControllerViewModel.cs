@@ -14,7 +14,7 @@ public class MediaControllerViewModel :
         ISubscriber subscriber,
         IDisposer disposer) : base(serviceProvider, serviceFactory, publisher, subscriber, disposer)
     {
-        viewModelTemplateSelector = viewModelTemplateSelector;
+        ViewModelTemplateSelector = viewModelTemplateSelector;
 
         Add<MediaInformationViewModel>();
 

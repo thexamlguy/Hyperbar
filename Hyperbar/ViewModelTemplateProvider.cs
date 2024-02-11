@@ -1,4 +1,5 @@
 ﻿namespace Hyperbar;
+
 public class ViewModelTemplateProvider(IEnumerable<IViewModelTemplate> viewModelTemplates) :
     IViewModelTemplateProvider
 {

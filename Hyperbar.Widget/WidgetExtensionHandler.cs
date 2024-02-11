@@ -7,16 +7,16 @@ public class WidgetExtensionHandler(IServiceProvider provider,
     IProxyServiceCollection<IWidgetBuilder> typedServices) :
     INotificationHandler<Create<WidgetExtension>>
 {
-    public async Task Handle(Create<WidgetExtension> notification,
+    public async Task Handle(Create<WidgetExtension> args,
         CancellationToken cancellationToken)
     {
-        if(notification.Value is WidgetExtension widgetExtension)
+        if(args.Value is WidgetExtension widgetExtension)
         {
             IWidgetBuilder builder = widgetExtension.Widget.Create();
             builder.ConfigureServices(args =>
             {
                 args.AddSingleton(widgetExtension.Assembly);
-                args.AddTransient(_ => provider.GetRequiredService<IProxyService<IMediator>>());
+                args.AddTransient(_ => provider.GetRequiredService<IProxyService<IPublisher>>());
 
                 args.AddRange(typedServices.Services);
             });

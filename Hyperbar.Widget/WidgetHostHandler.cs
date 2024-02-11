@@ -2,14 +2,16 @@
 
 namespace Hyperbar.Widget;
 
-public class WidgetHostHandler : 
+public class WidgetHostHandler(IWidgetHostCollection widgetHosts) : 
     INotificationHandler<Create<IWidgetHost>>
 {
-    public async Task Handle(Create<IWidgetHost> notification,
+    public async Task Handle(Create<IWidgetHost> args,
         CancellationToken cancellationToken)
     {
-        if (notification.Value is IWidgetHost host)
+        if (args.Value is IWidgetHost host)
         {
+            widgetHosts.Add(host);
+
             if (host.Services.GetServices<IInitializer>() is
                 IEnumerable<IInitializer> initializations)
             {

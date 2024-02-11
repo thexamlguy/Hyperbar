@@ -20,6 +20,7 @@
 	  <None Remove="SecondaryView.xaml" />
 	  <None Remove="SettingsButtonView.xaml" />
 	  <None Remove="SettingsView.xaml" />
+	  <None Remove="WidgetNavigationView.xaml" />
 	  <None Remove="WidgetSettingsNavigationView.xaml" />
 	  <None Remove="WidgetSettingsView.xaml" />
 	</ItemGroup>
@@ -57,6 +58,11 @@
 		<ProjectReference Include="..\Hyperbar.Widget.Windows\Hyperbar.Widget.Windows.csproj" />
 		<ProjectReference Include="..\Hyperbar.Widget\Hyperbar.Widget.csproj" />
 		<ProjectReference Include="..\Hyperbar\Hyperbar.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Page Update="WidgetNavigationView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
 	</ItemGroup>
 	<ItemGroup>
 	  <Page Update="WidgetSettingsView.xaml">

@@ -4,7 +4,7 @@ public interface IViewModelTemplate
 {
     object Key { get; set; }
 
-    Type TemplateType { get; set; }
+    Type ViewType { get; set; }
 
     Type ViewModelType { get; set; }
 }

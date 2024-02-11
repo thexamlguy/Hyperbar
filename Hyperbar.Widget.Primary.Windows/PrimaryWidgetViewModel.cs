@@ -1,6 +1,4 @@
-﻿using Hyperbar.Widget;
-
-namespace Hyperbar.Widget.Primary.Windows;
+﻿namespace Hyperbar.Widget.Primary.Windows;
 
 [NotificationHandler(nameof(PrimaryWidgetViewModel))]
 public class PrimaryWidgetViewModel(IServiceProvider serviceProvider,

@@ -1,4 +1,6 @@
-﻿namespace Hyperbar.Windows;
+﻿using Hyperbar.UI.Windows;
+
+namespace Hyperbar.Windows;
 
 public class WidgetNavigationViewModel(IServiceProvider serviceProvider,
     IServiceFactory serviceFactory,
@@ -6,6 +8,4 @@ public class WidgetNavigationViewModel(IServiceProvider serviceProvider,
     ISubscriber subscriber,
     IDisposer disposer,
     string text) :
-    NavigationViewModel(serviceProvider, serviceFactory, publisher, subscriber, disposer, text)
-{
-}
+    NavigationViewModel(serviceProvider, serviceFactory, publisher, subscriber, disposer, text);

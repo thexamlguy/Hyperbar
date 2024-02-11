@@ -12,11 +12,10 @@ public class NavigateHandler(IServiceProvider provider,
     public async Task Handle(Navigate args, 
         CancellationToken cancellationToken)
     {
-
         if (viewModelTemplateProvider.Get(args.Name)
             is IViewModelTemplate viewModelTemplate)
         {
-            if (provider.GetRequiredKeyedService(viewModelTemplate.TemplateType,
+            if (provider.GetRequiredKeyedService(viewModelTemplate.ViewType,
                 viewModelTemplate.Key) is object view &&
                 provider.GetRequiredKeyedService(viewModelTemplate.ViewModelType,
                 viewModelTemplate.Key) is object viewModel)

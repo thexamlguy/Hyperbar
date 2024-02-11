@@ -68,7 +68,7 @@ public partial class ObservableCollectionViewModel<TViewModel> :
     public IDisposer Disposer { get; private set; }
 
     public ICommand InitializeCommand =>
-            new AsyncRelayCommand(CoreInitializeAsync);
+        new AsyncRelayCommand(CoreInitializeAsync);
 
     bool IList.IsFixedSize => false;
 

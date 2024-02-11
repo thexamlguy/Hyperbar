@@ -3,24 +3,13 @@ using Microsoft.Extensions.Hosting;
 
 namespace Hyperbar.Widget;
 
-public sealed class WidgetHost :
+public sealed class WidgetHost(IServiceProvider services,
+    IPublisher publisher,
+    IProxyService<IPublisher> proxyPublisher,
+    IEnumerable<IHostedService> hostedServices) :
     IWidgetHost
 {
-    private readonly IServiceProvider services;
-    private readonly IPublisher publisher;
-    private readonly IProxyService<IMediator> proxyMediator;
-    private readonly IEnumerable<IHostedService> hostedServices;
-
-    public WidgetHost(IServiceProvider services,
-        IPublisher publisher,
-        IProxyService<IMediator> proxyMediator,
-        IEnumerable<IHostedService> hostedServices)
-    {
-        this.services = services;
-        this.publisher = publisher;
-        this.proxyMediator = proxyMediator;
-        this.hostedServices = hostedServices;
-    }
+    private readonly IPublisher publisher = publisher;
 
     public WidgetConfiguration Configuration =>
         Services.GetRequiredService<WidgetConfiguration>();
@@ -39,7 +28,7 @@ public sealed class WidgetHost :
             await service.StartAsync(cancellationToken);
         }
 
-        if (proxyMediator.Proxy is IMediator mediator)
+        if (proxyPublisher.Proxy is IPublisher publisher)
         {
             await publisher.PublishAsync(new Started<IWidgetHost>(this),
                 cancellationToken);

@@ -2,18 +2,13 @@
 
 namespace Hyperbar.Windows;
 
-public class WidgetSettingsViewModel :
-    ObservableCollectionViewModel<INavigationViewModel>
+public class WidgetSettingsViewModel(IViewModelTemplateSelector viewModelTemplateSelector,
+    IServiceProvider serviceProvider,
+    IServiceFactory serviceFactory,
+    IPublisher publisher,
+    ISubscriber subscriber,
+    IDisposer disposer) :
+    ObservableCollectionViewModel<IObservableViewModel>(serviceProvider, serviceFactory, publisher, subscriber, disposer)
 {
-    public WidgetSettingsViewModel(IViewModelTemplateSelector viewModelTemplateSelector,
-        IServiceProvider serviceProvider,
-        IServiceFactory serviceFactory,
-        IPublisher publisher,
-        ISubscriber subscriber,
-        IDisposer disposer) : base(serviceProvider, serviceFactory, publisher, subscriber, disposer)
-    {
-        ViewModelTemplateSelector = viewModelTemplateSelector;
-    }
-
-    public IViewModelTemplateSelector ViewModelTemplateSelector { get; }
+    public IViewModelTemplateSelector ViewModelTemplateSelector { get; } = viewModelTemplateSelector;
 }

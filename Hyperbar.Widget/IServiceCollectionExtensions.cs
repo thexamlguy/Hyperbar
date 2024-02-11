@@ -10,6 +10,8 @@ public static class IServiceCollectionExtensions
         services.AddTransient<IInitializer, WidgetExtensionInitializer>();
         services.AddTransient<IFactory<Type, IWidget>, WidgetFactory>();
 
+        services.AddSingleton<IWidgetHostCollection, WidgetHostCollection>();
+
         services.AddHandler<WidgetExtensionEnumerator>();
         services.AddHandler<WidgetExtensionHandler>();
         services.AddHandler<WidgetHostHandler>();
@@ -33,7 +35,7 @@ public static class IServiceCollectionExtensions
         services.AddKeyedTransient(typeof(IWidgetViewModel), key, contentType);
         services.TryAddKeyedTransient(key, (provider, key) => provider.GetService<IWidgetView>()!);
 
-        services.AddTransient<IViewModelTemplate>(provider => new ViewModelTemplate { ViewModelType = contentType, TemplateType = templateType, Key = key });
+        services.AddTransient<IViewModelTemplate>(provider => new ViewModelTemplate { ViewModelType = contentType, ViewType = templateType, Key = key });
 
         return services;
     }
@@ -56,7 +58,7 @@ public static class IServiceCollectionExtensions
 
         services.AddTransient<IViewModelTemplate>(provider =>
             new ViewModelTemplate { ViewModelType = contentType, 
-                TemplateType = templateType, Key = key });
+                ViewType = templateType, Key = key });
 
         return services;
     }

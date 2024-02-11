@@ -17,9 +17,9 @@ public static class IServiceCollectionExtensions
             {
                 services.AddSingleton(provider.GetRequiredService<IList<IXamlMetadataProvider>>());
                 services.AddSingleton(provider.GetRequiredService<IDispatcher>());
-
-                services.AddTransient<IViewModelTemplateSelector, UI.Windows.ViewModelTemplateSelector>();
+                
                 services.AddTransient<IViewModelTemplateProvider, ViewModelTemplateProvider>();
+                services.AddTransient<IViewModelTemplateSelector, ViewModelTemplateSelector>();
 
                 services.AddScoped<IVirtualKeyboard, VirtualKeyboard>();
                 services.AddHandler<KeyAcceleratorHandler>();
