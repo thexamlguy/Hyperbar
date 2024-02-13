@@ -17,6 +17,7 @@ public class WidgetExtensionHandler(IServiceProvider provider,
             {
                 args.AddSingleton(widgetExtension.Assembly);
                 args.AddTransient(_ => provider.GetRequiredService<IProxyService<IPublisher>>());
+                args.AddTransient(_ => provider.GetRequiredService<IProxyService<INavigationTargetProvider>>());
 
                 args.AddRange(typedServices.Services);
             });

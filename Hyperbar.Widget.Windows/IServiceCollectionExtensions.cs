@@ -9,9 +9,6 @@ public static class IServiceCollectionExtensions
 { 
     public static IServiceCollection AddWidgetWindows(this IServiceCollection services)
     {
-        // We need to feed information to the Widgets about our Windows host,
-        // so the Windows host can make discussions how to display and interact with the widgets. 
-
         services.AddTransient((Func<IServiceProvider, IProxyServiceCollection<IWidgetBuilder>>)(provider =>
             new ProxyServiceCollection<IWidgetBuilder>(services =>
             {
@@ -25,6 +22,11 @@ public static class IServiceCollectionExtensions
                 services.AddHandler<KeyAcceleratorHandler>();
                 services.AddHandler<StartProcessHandler>();
 
+                services.AddTransient<IViewModelContentBinder, ViewModelContentBinder>();
+
+                services.AddNavigationHandler<WindowHandler>();
+                services.AddNavigationHandler<ContentControlHandler>();
+
                 services.AddHandler<WidgetViewModelEnumerator>();
 
                 services.AddTransient<IWidgetView, WidgetView>();
@@ -33,6 +35,9 @@ public static class IServiceCollectionExtensions
 
                 services.AddContentTemplate<WidgetButtonViewModel, WidgetButtonView>();
                 services.AddContentTemplate<WidgetSplitButtonViewModel, WidgetSplitButtonView>();
+
+                services.AddContentTemplate<WidgetSettingsNavigationViewModel, WidgetSettingsNavigationView>();
+                services.AddContentTemplate<WidgetSettingsViewModel, WidgetSettingsView>("WidgetSettings");
             })));
 
         return services;

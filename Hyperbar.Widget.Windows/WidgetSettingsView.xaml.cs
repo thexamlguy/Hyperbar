@@ -1,6 +1,6 @@
 using Microsoft.UI.Xaml.Controls;
 
-namespace Hyperbar.Windows;
+namespace Hyperbar.Widget.Windows;
 
 public partial class WidgetSettingsView : UserControl
 {

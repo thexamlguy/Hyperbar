@@ -38,9 +38,8 @@ public partial class App :
 
                 services.AddSingleton((IDispatcher)new Dispatcher(DispatcherQueue.GetForCurrentThread()));
 
-                services.AddTransient<INavigationProvider, NavigationProvider>();
-                services.AddSingleton<NavigationTargetCollection>();
-                services.AddTransient<INavigationTargetProvider, NavigationTargetProvider>();
+                services.AddNavigationHandler<WindowHandler>();
+                services.AddNavigationHandler<ContentControlHandler>();
 
                 services.AddTransient<IViewModelContentBinder, ViewModelContentBinder>();
 
@@ -53,9 +52,6 @@ public partial class App :
                     args.Placement = DesktopApplicationBarPlacemenet.Top;
                 });
 
-                services.AddNavigationHandler<WindowHandler>();
-                services.AddNavigationHandler<ContentControlHandler>();
-
                 services.AddSingleton<DesktopApplicationBar>();
                 services.AddContentTemplate<ApplicationBarViewModel, ApplicationBarView>();
                 services.AddContentTemplate<PrimaryViewModel, PrimaryView>();
@@ -65,12 +61,9 @@ public partial class App :
                 services.AddContentTemplate<SettingsViewModel, SettingsView>("Settings");
 
                 services.AddContentTemplate<GeneralSettingsNavigationViewModel, GeneralSettingsNavigationView>();
-                services.AddContentTemplate<WidgetSettingsNavigationViewModel, WidgetSettingsNavigationView>();
                 services.AddContentTemplate<WidgetNavigationViewModel, WidgetNavigationView>();
 
-                services.AddContentTemplate<WidgetSettingsViewModel, WidgetSettingsView>("WidgetSettings");
-
-                services.AddHandler<WidgetNavigationViewModelEnumerator>();
+                services.AddHandler<WidgetSettingsNavigationViewModelEnumerator>();
                 services.AddTransient<IInitializer, AppInitializer>();
             })
         .Build();

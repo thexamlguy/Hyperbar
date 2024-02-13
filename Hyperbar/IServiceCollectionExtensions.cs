@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Hyperbar.UI.Windows;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.FileProviders.Physical;
@@ -187,8 +188,14 @@ public static class IServiceCollectionExtensions
         services.AddSingleton<IProxyService<IPublisher>>(provider =>
             new ProxyService<IPublisher>(provider.GetRequiredService<IPublisher>()));
 
+        services.AddSingleton<IProxyService<INavigationTargetProvider>>(provider =>
+            new ProxyService<INavigationTargetProvider>(provider.GetRequiredService<INavigationTargetProvider>()));
+
         services.AddSingleton<IDisposer, Disposer>();
 
+        services.AddTransient<INavigationProvider, NavigationProvider>();
+        services.AddSingleton<NavigationTargetCollection>();
+        services.AddTransient<INavigationTargetProvider, NavigationTargetProvider>();
         services.AddHandler<NavigateHandler>();
 
         return services;

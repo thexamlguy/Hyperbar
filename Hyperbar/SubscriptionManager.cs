@@ -7,7 +7,6 @@ public class SubscriptionManager(SubscriptionCollection subscriptions) :
 {
     public IEnumerable<object?> GetHandlers(Type notificationType, object key)
     {
-        var d = subscriptions;
         if (subscriptions.TryGetValue($"{key?.ToString()}:{notificationType}", 
             out List<WeakReference>? subscribers))
         {

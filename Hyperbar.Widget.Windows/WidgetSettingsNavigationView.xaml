@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <NavigationViewItem
-    x:Class="Hyperbar.Windows.WidgetSettingsNavigationView"
+    x:Class="Hyperbar.Widget.Windows.WidgetSettingsNavigationView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:interactions="using:Microsoft.Xaml.Interactions.Core"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:ui="using:Hyperbar.UI.Windows"
-    Content="Widgets"
-    MenuItemsSource="{Binding}"
-    SelectsOnInvoked="False">
+    Content="{Binding Text}">
     <interactivity:Interaction.Behaviors>
         <interactions:EventTriggerBehavior EventName="Tapped">
             <ui:NavigateAction Name="WidgetSettings" TargetName="Settings" />
-        </interactions:EventTriggerBehavior>
-        <interactions:EventTriggerBehavior EventName="Loaded">
-            <interactions:InvokeCommandAction Command="{Binding InitializeCommand}" />
         </interactions:EventTriggerBehavior>
     </interactivity:Interaction.Behaviors>
 </NavigationViewItem>

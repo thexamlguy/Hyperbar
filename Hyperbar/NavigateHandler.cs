@@ -6,7 +6,8 @@ public class NavigateHandler(IServiceProvider provider,
     IPublisher publisher,
     INavigationProvider navigationProvider,
     IViewModelTemplateProvider viewModelTemplateProvider,
-    INavigationTargetProvider navigationTargetProvider) :
+    INavigationTargetProvider navigationTargetProvider,
+    IProxyService<INavigationTargetProvider> proxyNavigationTargetProvider) :
     INotificationHandler<Navigate>
 {
     public async Task Handle(Navigate args, 
@@ -20,10 +21,15 @@ public class NavigateHandler(IServiceProvider provider,
                 provider.GetRequiredKeyedService(viewModelTemplate.ViewModelType,
                 viewModelTemplate.Key) is object viewModel)
             {
-                if ((args.TargetName is not null ?
-                    navigationTargetProvider.Get(args.TargetName) : view) is object target)
+                object? target = args.TargetName is not null
+                    ? navigationTargetProvider.TryGet(args.TargetName, out target) || proxyNavigationTargetProvider.Proxy.TryGet(args.TargetName, out target)
+                        ? target
+                        : null
+                    : view;
+
+                if (target is not null)
                 {
-                    if (navigationProvider.Get(target.GetType())
+                    if (navigationProvider.Get(target.GetType()) 
                         is INavigation navigation)
                     {
                         Type navigateType = typeof(Navigate<>).MakeGenericType(navigation.Type);

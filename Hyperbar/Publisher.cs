@@ -12,16 +12,18 @@ public class Publisher(ISubscriptionManager subscriptionManager,
         CancellationToken cancellationToken = default)
         where TNotification :
         INotification,
-        new() => PublishAsync(new TNotification(), args => dispatcher.InvokeAsync(async () => await args()),
-            key, cancellationToken);
+        new() => PublishAsync(new TNotification(), args => 
+            dispatcher.InvokeAsync(async () => await args()),
+                key, cancellationToken);
 
     public Task PublishAsync<TNotification>(TNotification notification,
         CancellationToken cancellationToken = default)
         where TNotification :
         INotification
     {
-        return PublishAsync(notification, args => dispatcher.InvokeAsync(async () => await args()),
-            null, cancellationToken);
+        return PublishAsync(notification, args => 
+            dispatcher.InvokeAsync(async () => await args()),
+                null, cancellationToken);
     }
 
     public Task PublishAsync<TNotification>(TNotification notification,
@@ -30,8 +32,9 @@ public class Publisher(ISubscriptionManager subscriptionManager,
         where TNotification :
         INotification
     {
-        return PublishAsync(notification, args => dispatcher.InvokeAsync(async () => await args()),
-            key, cancellationToken);
+        return PublishAsync(notification, args => 
+            dispatcher.InvokeAsync(async () => await args()),
+                key, cancellationToken);
     }
 
     public Task PublishAsync(object notification,
@@ -43,7 +46,8 @@ public class Publisher(ISubscriptionManager subscriptionManager,
         List<object?> handlers = provider.GetServices(typeof(INotificationHandler<>)
             .MakeGenericType(notificationType)).ToList();
 
-        foreach (object? handler in subscriptionManager.GetHandlers(notificationType, key))
+        foreach (object? handler in subscriptionManager
+            .GetHandlers(notificationType, key!))
         {
             handlers.Add(handler);
         }
@@ -58,8 +62,8 @@ public class Publisher(ISubscriptionManager subscriptionManager,
 
                 if (handleMethod is not null)
                 {
-                    marshal(() => (Task)handleMethod.Invoke(handler, new object[] { notification,
-                        cancellationToken })!);
+                    marshal(() => (Task)handleMethod.Invoke(handler, new object[] 
+                        { notification, cancellationToken })!);
                 }
             }
         }
@@ -70,14 +74,16 @@ public class Publisher(ISubscriptionManager subscriptionManager,
     public Task PublishAsync<TNotification>(CancellationToken cancellationToken = default)
         where TNotification :
         INotification,
-        new() => PublishAsync(new TNotification(), args => dispatcher.InvokeAsync(async () => await args()),
-            null, cancellationToken);
+        new() => PublishAsync(new TNotification(), args => 
+            dispatcher.InvokeAsync(async () => await args()),
+                null, cancellationToken);
 
     public Task PublishAsync(object notification,
         CancellationToken cancellationToken = default)
     {
-        return PublishAsync(notification, args => dispatcher.InvokeAsync(async () => await args()),
-            null, cancellationToken);
+        return PublishAsync(notification, args => 
+            dispatcher.InvokeAsync(async () => await args()),
+                null, cancellationToken);
     }
 
 }

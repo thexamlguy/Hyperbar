@@ -28,7 +28,8 @@ public sealed class NavigateAction :
         set => SetValue(TargetNameProperty, value);
     }
 
-    public object Execute(object sender, object parameter)
+    public object Execute(object sender,
+        object parameter)
     {
         if (sender is FrameworkElement frameworkElement)
         {

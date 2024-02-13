@@ -1,4 +1,5 @@
 ﻿using Hyperbar.UI.Windows;
+using Hyperbar.Widget.Windows;
 
 namespace Hyperbar.Windows;
 
@@ -15,7 +16,7 @@ public partial class SettingsViewModel :
         ViewModelTemplateSelector = viewModelTemplateSelector;
 
         Add<GeneralSettingsNavigationViewModel>("General");
-        Add<WidgetSettingsNavigationViewModel>("Widgets");
+        Add<WidgetNavigationViewModel>("Widgets");
     }
 
     public IViewModelTemplateSelector ViewModelTemplateSelector { get; }

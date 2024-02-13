@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Hyperbar.UI.Windows;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Reflection;
@@ -31,13 +32,14 @@ public class WidgetBuilder :
                     new ServiceFactory((type, parameters) =>
                         ActivatorUtilities.CreateInstance(provider, type, parameters!)));
 
-                services.AddScoped<SubscriptionCollection>();
-                services.AddScoped<ISubscriptionManager, SubscriptionManager>();
+                services.AddSingleton<SubscriptionCollection>();
+                services.AddSingleton<ISubscriptionManager, SubscriptionManager>();
+
                 services.AddTransient<ISubscriber, Subscriber>();
                 services.AddTransient<IPublisher, Publisher>();
 
-                services.AddScoped<IMediator, Mediator>();
-                services.AddScoped<IDisposer, Disposer>();
+                services.AddTransient<IMediator, Mediator>();
+                services.AddSingleton<IDisposer, Disposer>();
 
                 services.AddHandler<WidgetAvailabilityChangedHandler>();
                 services.AddValueChangedNotification<WidgetConfiguration,
@@ -45,6 +47,12 @@ public class WidgetBuilder :
                     {
                         args.Value = config.IsEnabled;
                     });
+
+                services.AddTransient<INavigationProvider, NavigationProvider>();
+                services.AddSingleton<NavigationTargetCollection>();
+                services.AddTransient<INavigationTargetProvider, NavigationTargetProvider>();
+
+                services.AddHandler<NavigateHandler>();
             });
     }
 

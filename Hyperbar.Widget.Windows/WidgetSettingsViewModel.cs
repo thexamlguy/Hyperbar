@@ -1,6 +1,6 @@
 ﻿using Hyperbar.UI.Windows;
 
-namespace Hyperbar.Windows;
+namespace Hyperbar.Widget.Windows;
 
 public class WidgetSettingsViewModel(IViewModelTemplateSelector viewModelTemplateSelector,
     IServiceProvider serviceProvider,
@@ -10,5 +10,5 @@ public class WidgetSettingsViewModel(IViewModelTemplateSelector viewModelTemplat
     IDisposer disposer) :
     ObservableCollectionViewModel<IObservableViewModel>(serviceProvider, serviceFactory, publisher, subscriber, disposer)
 {
-    public IViewModelTemplateSelector ViewModelTemplateSelector { get; } = viewModelTemplateSelector;
+    public IViewModelTemplateSelector ViewModelTemplateSelector => viewModelTemplateSelector;
 }
