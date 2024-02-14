@@ -1,8 +1,8 @@
 ﻿namespace Hyperbar;
 
-public class ConfigurationValueChangedNotification<TConfiguration, TValue>(IPublisher publisher,
+public class ConfigurationChangedPublisher<TConfiguration, TValue>(IPublisher publisher,
     Func<TConfiguration, Action<TValue>> factory) :
-    IConfigurationValueChangedNotification<TConfiguration>
+    IConfigurationChangedPublisher<TConfiguration>
     where TConfiguration : 
     class
     where TValue : 

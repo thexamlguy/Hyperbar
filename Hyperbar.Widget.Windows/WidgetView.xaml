@@ -5,23 +5,21 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:interactions="using:Microsoft.Xaml.Interactions.Core"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity">
-    <Grid>
-        <ItemsControl ItemTemplateSelector="{Binding ViewModelTemplateSelector}" ItemsSource="{Binding Mode=TwoWay}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal" Spacing="8" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemContainerTransitions>
-                <TransitionCollection>
-                    <AddDeleteThemeTransition />
-                </TransitionCollection>
-            </ItemsControl.ItemContainerTransitions>
-            <interactivity:Interaction.Behaviors>
-                <interactions:EventTriggerBehavior EventName="Loaded">
-                    <interactions:InvokeCommandAction Command="{Binding InitializeCommand}" />
-                </interactions:EventTriggerBehavior>
-            </interactivity:Interaction.Behaviors>
-        </ItemsControl>
-    </Grid>
+    <ItemsControl ItemTemplateSelector="{Binding ViewModelTemplateSelector}" ItemsSource="{Binding Mode=TwoWay}">
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <StackPanel Orientation="Horizontal" Spacing="8" />
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemContainerTransitions>
+            <TransitionCollection>
+                <AddDeleteThemeTransition />
+            </TransitionCollection>
+        </ItemsControl.ItemContainerTransitions>
+        <interactivity:Interaction.Behaviors>
+            <interactions:EventTriggerBehavior EventName="Loaded">
+                <interactions:InvokeCommandAction Command="{Binding InitializeCommand}" />
+            </interactions:EventTriggerBehavior>
+        </interactivity:Interaction.Behaviors>
+    </ItemsControl>
 </UserControl>

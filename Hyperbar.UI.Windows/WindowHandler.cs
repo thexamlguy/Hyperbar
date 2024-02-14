@@ -1,22 +1,6 @@
 ﻿using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
 
 namespace Hyperbar.UI.Windows;
-
-public class ContentControlHandler(IViewModelContentBinder viewModelContentBinder) :
-    INavigationHandler<ContentControl>
-{
-    public Task Handle(Navigate<ContentControl> args,
-        CancellationToken cancellationToken)
-    {
-        if (args.Target is ContentControl contentControl)
-        {
-            contentControl.Content = args.View;
-        }
-
-        return Task.CompletedTask;
-    }
-}
 
 public class WindowHandler(IViewModelContentBinder viewModelContentBinder) :
     INavigationHandler<Window>

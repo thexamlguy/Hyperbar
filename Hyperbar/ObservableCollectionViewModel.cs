@@ -7,7 +7,6 @@ using System.Reactive.Disposables;
 using System.Windows.Input;
 
 namespace Hyperbar;
-
 public partial class ObservableCollectionViewModel<TViewModel> :
     ObservableObject,
     IObservableCollectionViewModel<TViewModel>,

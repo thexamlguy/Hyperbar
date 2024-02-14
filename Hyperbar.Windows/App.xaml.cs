@@ -63,7 +63,7 @@ public partial class App :
                 services.AddContentTemplate<GeneralSettingsNavigationViewModel, GeneralSettingsNavigationView>();
                 services.AddContentTemplate<WidgetNavigationViewModel, WidgetNavigationView>();
 
-                services.AddHandler<WidgetSettingsNavigationViewModelEnumerator>();
+                services.AddHandler<WidgetConfigurationNavigationViewModelEnumerator>();
                 services.AddTransient<IInitializer, AppInitializer>();
             })
         .Build();

@@ -2,19 +2,19 @@
 
 namespace Hyperbar.Widget.Windows;
 
-public class WidgetSettingsNavigationViewModelEnumerator(IPublisher publisher,
+public class WidgetConfigurationNavigationViewModelEnumerator(IPublisher publisher,
     IWidgetHostCollection widgetHosts) :
-    INotificationHandler<Enumerate<WidgetSettingsNavigationViewModel>>
+    INotificationHandler<Enumerate<WidgetConfigurationNavigationViewModel>>
 {
-    public async Task Handle(Enumerate<WidgetSettingsNavigationViewModel> args,
+    public async Task Handle(Enumerate<WidgetConfigurationNavigationViewModel> args,
         CancellationToken cancellationToken = default)
     {
         foreach (IWidgetHost host in widgetHosts)
         {
             if (host.Services.GetService<IServiceFactory>() is IServiceFactory serviceFactory)
             {
-                await publisher.PublishAsync(new Create<WidgetSettingsNavigationViewModel>(serviceFactory
-                    .Create<WidgetSettingsNavigationViewModel>(host.Configuration.Name)),
+                await publisher.PublishAsync(new Create<WidgetConfigurationNavigationViewModel>(serviceFactory
+                    .Create<WidgetConfigurationNavigationViewModel>(host.Configuration.Name)),
                         nameof(WidgetNavigationViewModel), cancellationToken);
             }
         }

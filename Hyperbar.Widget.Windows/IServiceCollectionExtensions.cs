@@ -36,8 +36,8 @@ public static class IServiceCollectionExtensions
                 services.AddContentTemplate<WidgetButtonViewModel, WidgetButtonView>();
                 services.AddContentTemplate<WidgetSplitButtonViewModel, WidgetSplitButtonView>();
 
-                services.AddContentTemplate<WidgetSettingsNavigationViewModel, WidgetSettingsNavigationView>();
-                services.AddContentTemplate<WidgetSettingsViewModel, WidgetSettingsView>("WidgetSettings");
+                services.AddContentTemplate<WidgetConfigurationNavigationViewModel, WidgetConfigurationNavigationView>();
+                services.AddContentTemplate<WidgetConfigurationViewModel, WidgetConfigurationView>("WidgetSettings");
             })));
 
         return services;

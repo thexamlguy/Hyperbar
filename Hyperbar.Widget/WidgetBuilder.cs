@@ -42,7 +42,7 @@ public class WidgetBuilder :
                 services.AddSingleton<IDisposer, Disposer>();
 
                 services.AddHandler<WidgetAvailabilityChangedHandler>();
-                services.AddValueChangedNotification<WidgetConfiguration,
+                services.AddConfigurationChanged<WidgetConfiguration,
                     WidgetAvailability>((config) => (args) =>
                     {
                         args.Value = config.IsEnabled;

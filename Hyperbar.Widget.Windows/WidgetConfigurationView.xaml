@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <UserControl
-    x:Class="Hyperbar.Widget.Windows.WidgetSettingsView"
+    x:Class="Hyperbar.Widget.Windows.WidgetConfigurationView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Grid>
-        <Button>Test</Button>
-    </Grid>
+    <ListBox ItemsSource="{Binding Mode=TwoWay}" />
 </UserControl>

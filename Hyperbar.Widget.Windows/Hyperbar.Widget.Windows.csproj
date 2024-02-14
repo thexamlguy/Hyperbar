@@ -8,9 +8,9 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 	<ItemGroup>
+	  <None Remove="WidgetConfigurationNavigationView.xaml" />
+	  <None Remove="WidgetConfigurationView.xaml" />
 	  <None Remove="WidgetNavigationView.xaml" />
-	  <None Remove="WidgetSettingsNavigationView.xaml" />
-	  <None Remove="WidgetSettingsView.xaml" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.240124002-experimental2" />
@@ -24,7 +24,7 @@
 		<ProjectReference Include="..\Hyperbar\Hyperbar.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Page Update="WidgetSettingsNavigationView.xaml">
+	  <Page Update="WidgetConfigurationNavigationView.xaml">
 	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
 	    <SubType>Designer</SubType>
 	  </Page>
@@ -32,7 +32,7 @@
 	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
 	    <SubType>Designer</SubType>
 	  </Page>
-	  <Page Update="WidgetSettingsView.xaml">
+	  <Page Update="WidgetConfigurationView.xaml">
 	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
 	    <SubType>Designer</SubType>
 	  </Page>

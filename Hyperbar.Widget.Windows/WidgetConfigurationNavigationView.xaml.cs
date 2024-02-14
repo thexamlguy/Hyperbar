@@ -2,9 +2,9 @@ using Microsoft.UI.Xaml.Controls;
 
 namespace Hyperbar.Widget.Windows;
 
-public sealed partial class WidgetSettingsNavigationView : 
+public sealed partial class WidgetConfigurationNavigationView : 
     NavigationViewItem
 {
-    public WidgetSettingsNavigationView() =>
+    public WidgetConfigurationNavigationView() =>
         InitializeComponent();
 }

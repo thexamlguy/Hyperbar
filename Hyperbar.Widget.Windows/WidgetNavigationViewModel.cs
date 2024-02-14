@@ -10,7 +10,7 @@ public class WidgetNavigationViewModel(IViewModelTemplateSelector viewModelTempl
     ISubscriber subscriber,
     IDisposer disposer,
     string text) :
-    NavigationViewModel<WidgetSettingsNavigationViewModel>(serviceProvider, serviceFactory, publisher, subscriber, disposer, text)
+    NavigationViewModel<WidgetConfigurationNavigationViewModel>(serviceProvider, serviceFactory, publisher, subscriber, disposer, text)
 {
     public IViewModelTemplateSelector ViewModelTemplateSelector => viewModelTemplateSelector;
 }

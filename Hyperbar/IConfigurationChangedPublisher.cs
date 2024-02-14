@@ -1,6 +1,6 @@
 ﻿namespace Hyperbar;
 
-public interface IConfigurationValueChangedNotification<TConfiguration>
+public interface IConfigurationChangedPublisher<TConfiguration>
 {
     Task PublishAsync(TConfiguration configuration);
 }

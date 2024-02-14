@@ -1,6 +1,6 @@
 ﻿namespace Hyperbar.Widget.Windows;
 
-public class WidgetSettingsNavigationViewModel(IServiceProvider serviceProvider,
+public class WidgetConfigurationNavigationViewModel(IServiceProvider serviceProvider,
     IServiceFactory serviceFactory,
     IPublisher publisher,
     ISubscriber subscriber,
