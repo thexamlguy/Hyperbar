@@ -8,12 +8,12 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 	<ItemGroup>
-	  <None Remove="WidgetConfigurationNavigationView.xaml" />
-	  <None Remove="WidgetConfigurationView.xaml" />
-	  <None Remove="WidgetNavigationView.xaml" />
-	</ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.240124002-experimental2" />
+		<PackageReference Include="CommunityToolkit.Common" Version="8.2.2" />
+		<PackageReference Include="CommunityToolkit.WinUI.Controls.SettingsControls" Version="8.0.240109" />
+		<PackageReference Include="CommunityToolkit.WinUI.Extensions" Version="8.0.240109" />
+		<PackageReference Include="CommunityToolkit.WinUI.Helpers" Version="8.0.240109" />
+		<PackageReference Include="CommunityToolkit.WinUI.Triggers" Version="8.0.240109" />
+		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.240205001-preview1" />
 		<PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26031-preview" />
 		<PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.9" />
 	</ItemGroup>
@@ -22,19 +22,5 @@
 		<ProjectReference Include="..\Hyperbar.UI.Windows\Hyperbar.UI.Windows.csproj" />
 		<ProjectReference Include="..\Hyperbar.Widget\Hyperbar.Widget.csproj" />
 		<ProjectReference Include="..\Hyperbar\Hyperbar.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Page Update="WidgetConfigurationNavigationView.xaml">
-	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-	    <SubType>Designer</SubType>
-	  </Page>
-	  <Page Update="WidgetNavigationView.xaml">
-	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-	    <SubType>Designer</SubType>
-	  </Page>
-	  <Page Update="WidgetConfigurationView.xaml">
-	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-	    <SubType>Designer</SubType>
-	  </Page>
 	</ItemGroup>
 </Project>

@@ -32,12 +32,12 @@
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-		<PackageReference Include="CommunityToolkit.WinUI" Version="7.1.2" />
-		<PackageReference Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
-		<PackageReference Include="CommunityToolkit.WinUI.UI.Controls.Primitives" Version="7.1.2" />
-		<PackageReference Include="CustomExtensions.WinUI" Version="0.1.10-beta" />
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
-		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.240124002-experimental2" />
+		<PackageReference Include="CommunityToolkit.Common" Version="8.2.2" />
+		<PackageReference Include="CommunityToolkit.WinUI.Extensions" Version="8.0.240109" />
+		<PackageReference Include="CommunityToolkit.WinUI.Helpers" Version="8.0.240109" />
+		<PackageReference Include="CommunityToolkit.WinUI.Triggers" Version="8.0.240109" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0-preview.1.24080.9" />
+		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.240205001-preview1" />
 		<PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26031-preview" />
 		<PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.9" />		
 		<Manifest Include="$(ApplicationManifest)" />
@@ -55,36 +55,5 @@
 		<ProjectReference Include="..\Hyperbar.Widget.Windows\Hyperbar.Widget.Windows.csproj" />
 		<ProjectReference Include="..\Hyperbar.Widget\Hyperbar.Widget.csproj" />
 		<ProjectReference Include="..\Hyperbar\Hyperbar.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Page Update="GeneralSettingsNavigationView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </Page>
-	</ItemGroup>
-	<ItemGroup>
-	  <Page Update="SettingsView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </Page>
-	</ItemGroup>
-	<ItemGroup>
-	  <Page Update="SettingsButtonView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </Page>
-	</ItemGroup>
-	<ItemGroup>
-	  <Page Update="SecondaryView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </Page>
-	</ItemGroup>
-	<ItemGroup>
-	  <Page Update="PrimaryView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </Page>
-	</ItemGroup>
-	<ItemGroup>
-	  <Page Update="ApplicationBarView.xaml">
-	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-	    <SubType>Designer</SubType>
-	  </Page>
 	</ItemGroup>
 </Project>
