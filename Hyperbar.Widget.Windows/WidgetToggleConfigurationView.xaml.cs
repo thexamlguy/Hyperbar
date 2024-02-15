@@ -2,9 +2,9 @@ using CommunityToolkit.WinUI.Controls;
 
 namespace Hyperbar.Widget.Windows;
 
-public sealed partial class WidgetAvailabilityConfigurationView :
+public sealed partial class WidgetToggleConfigurationView :
     SettingsCard
 {
-    public WidgetAvailabilityConfigurationView() => 
+    public WidgetToggleConfigurationView() => 
         InitializeComponent();
 }

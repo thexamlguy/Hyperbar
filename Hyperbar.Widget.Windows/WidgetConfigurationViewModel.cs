@@ -1,22 +1,47 @@
-﻿using Hyperbar.UI.Windows;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Hyperbar.UI.Windows;
 
 namespace Hyperbar.Widget.Windows;
 
-public class WidgetConfigurationViewModel<TConfiguration, TValue> :
+public partial class WidgetConfigurationViewModel<TConfiguration, TValue> :
     ValueViewModel<TValue>, 
     INotificationHandler<Changed<TConfiguration>> 
     where TConfiguration : 
     class
 {
-    private readonly Func<TConfiguration, TValue> valueFactory;
+    private readonly Func<TConfiguration, TValue> read;
+
+    [ObservableProperty]
+    private string? description;
+
+    [ObservableProperty]
+    private string? title;
 
     public WidgetConfigurationViewModel(IServiceProvider serviceProvider,
         IServiceFactory serviceFactory,
         IPublisher publisher,
         IDisposer disposer,
-        Func<TConfiguration, TValue> valueFactory) : base(serviceProvider, serviceFactory, publisher, disposer)
+        ISubscriber subscriber,
+        string? title,
+        Func<TConfiguration, TValue> read) : base(serviceProvider, serviceFactory, publisher, subscriber, disposer)
     {
-        this.valueFactory = valueFactory;
+        this.title = title;
+        this.read = read;
+    }
+
+    public WidgetConfigurationViewModel(IServiceProvider serviceProvider,
+        IServiceFactory serviceFactory,
+        IPublisher publisher,
+        IDisposer disposer,
+        ISubscriber subscriber,
+        string? title,
+        string? description,
+        Func<TConfiguration, TValue> read) : base(serviceProvider, serviceFactory, publisher, subscriber, disposer)
+    {
+        this.title = title;
+        this.description = description;
+
+        this.read = read;
     }
 
     public Task Handle(Changed<TConfiguration> args, 
@@ -24,7 +49,7 @@ public class WidgetConfigurationViewModel<TConfiguration, TValue> :
     {
         if (args.Value is TConfiguration configuration)
         {
-            valueFactory.Invoke(configuration);
+            Value = read.Invoke(configuration);
         }
 
         return Task.CompletedTask;
@@ -44,7 +69,7 @@ public class WidgetConfigurationViewModel :
         ViewModelTemplateSelector = viewModelTemplateSelector;
 
         Add<WidgetConfigurationViewModel<WidgetAvailability,
-            bool>>((Func<WidgetAvailability, bool>)(config => config.Value));
+            bool>>("Widget", (Func<WidgetAvailability, bool>)(config => config.Value));
     }
 
     public IViewModelTemplateSelector ViewModelTemplateSelector { get; }

@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <controls:SettingsCard
-    x:Class="Hyperbar.Widget.Windows.WidgetAvailabilityConfigurationView"
+    x:Class="Hyperbar.Widget.Windows.WidgetToggleConfigurationView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:CommunityToolkit.WinUI.Controls"
-    Description="foo foo foo" />
+    Description="{Binding Description}"
+    Header="{Binding Title}">
+    <ToggleSwitch IsOn="{Binding Value}" />
+</controls:SettingsCard>

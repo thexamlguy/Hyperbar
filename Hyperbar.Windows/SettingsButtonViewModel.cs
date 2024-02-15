@@ -6,8 +6,9 @@ public partial class SettingsButtonViewModel(IViewModelTemplateSelector viewMode
     IServiceProvider serviceProvider,
     IServiceFactory serviceFactory,
     IPublisher publisher,
+    ISubscriber subscriber,
     IDisposer disposer) :
-    ObservableViewModel(serviceProvider, serviceFactory, publisher, disposer)
+    ObservableViewModel(serviceProvider, serviceFactory, publisher, subscriber, disposer)
 {
     public IViewModelTemplateSelector ViewModelTemplateSelector => viewModelTemplateSelector;
 }

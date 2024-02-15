@@ -6,5 +6,6 @@ public sealed partial class WidgetView :
     UserControl,
     IWidgetView
 {
-    public WidgetView() => InitializeComponent();
+    public WidgetView() => 
+        InitializeComponent();
 }

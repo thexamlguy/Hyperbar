@@ -4,30 +4,41 @@ using System.Windows.Input;
 
 namespace Hyperbar;
 
-public class ObservableViewModel(IServiceProvider serviceProvider,
-    IServiceFactory serviceFactory,
-    IPublisher publisher,
-    IDisposer disposer) : 
+public class ObservableViewModel : 
     ObservableObject,
     IObservableViewModel
 {
     private bool isInitialized;
 
-    public IDisposer Disposer => disposer;
+    public ObservableViewModel(IServiceProvider serviceProvider,
+        IServiceFactory serviceFactory,
+        IPublisher publisher,
+        ISubscriber subscriber,
+        IDisposer disposer)
+    {
+        ServiceProvider = serviceProvider;
+        ServiceFactory = serviceFactory;
+        Publisher = publisher;
+        Disposer = disposer;
+
+        subscriber.Add(this);
+    }
+
+    public IDisposer Disposer { get; }
 
     public ICommand InitializeCommand =>
         new AsyncRelayCommand(CoreInitializeAsync);
 
-    public IPublisher Publisher => publisher;
+    public IPublisher Publisher { get; }
 
-    public IServiceFactory ServiceFactory => serviceFactory;
+    public IServiceFactory ServiceFactory { get; }
 
-    public IServiceProvider ServiceProvider => serviceProvider;
+    public IServiceProvider ServiceProvider { get; }
 
     public void Dispose()
     {
         GC.SuppressFinalize(this);
-        disposer.Dispose(this);
+        Disposer.Dispose(this);
     }
 
     public virtual Task InitializeAsync() => Task.CompletedTask;

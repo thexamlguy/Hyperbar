@@ -39,7 +39,7 @@ public static class IServiceCollectionExtensions
                 services.AddContentTemplate<WidgetConfigurationNavigationViewModel, WidgetConfigurationNavigationView>();
                 services.AddContentTemplate<WidgetConfigurationViewModel, WidgetConfigurationView>("WidgetSettings");
 
-                services.AddContentTemplate<WidgetConfigurationViewModel<WidgetAvailability, bool>, WidgetAvailabilityConfigurationView>();
+                services.AddContentTemplate<WidgetConfigurationViewModel<WidgetAvailability, bool>, WidgetToggleConfigurationView>();
             })));
 
         return services;
