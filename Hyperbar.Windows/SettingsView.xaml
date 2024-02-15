@@ -6,11 +6,28 @@
     <Window.SystemBackdrop>
         <MicaBackdrop />
     </Window.SystemBackdrop>
-    <NavigationView
-        x:Name="Settings"
-        IsBackButtonVisible="Collapsed"
-        IsPaneToggleButtonVisible="False"
-        IsSettingsVisible="False"
-        MenuItemTemplateSelector="{Binding ViewModelTemplateSelector}"
-        MenuItemsSource="{x:Bind ViewModel, Mode=OneWay}" />
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="43" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0">
+            <TextBlock
+                Margin="15,0,0,0"
+                VerticalAlignment="Center"
+                Text="Settings" />
+        </Border>
+        <NavigationView
+            Grid.Row="1"
+            IsBackButtonVisible="Collapsed"
+            IsPaneToggleButtonVisible="False"
+            IsSettingsVisible="False"
+            MenuItemTemplateSelector="{Binding ViewModelTemplateSelector}"
+            MenuItemsSource="{x:Bind ViewModel, Mode=OneWay}">
+            <ContentControl
+                x:Name="Settings"
+                Margin="12"
+                HorizontalContentAlignment="Stretch" />
+        </NavigationView>
+    </Grid>
 </Window>

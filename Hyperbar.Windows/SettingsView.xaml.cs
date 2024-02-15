@@ -1,5 +1,6 @@
 using Hyperbar.UI.Windows;
 using Microsoft.UI;
+using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 
 namespace Hyperbar.Windows;
