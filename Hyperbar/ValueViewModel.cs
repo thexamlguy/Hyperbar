@@ -11,4 +11,11 @@ public partial class ValueViewModel<TValue>(IServiceProvider serviceProvider,
 {
     [ObservableProperty]
     private TValue? value;
+
+    protected virtual void OnChanged(TValue? value)
+    {
+
+    }
+
+    partial void OnValueChanged(TValue? value) => OnChanged(value);
 }

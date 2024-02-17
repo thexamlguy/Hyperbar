@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Hyperbar.UI.Windows;
+using System.Collections.Concurrent;
+using System.Threading.Channels;
 
 namespace Hyperbar.Widget.Windows;
 
@@ -10,6 +12,7 @@ public partial class WidgetConfigurationViewModel<TConfiguration, TValue> :
     class
 {
     private readonly Func<TConfiguration, TValue> read;
+    private readonly Func<TValue, TConfiguration> write;
 
     [ObservableProperty]
     private string? description;
@@ -23,10 +26,12 @@ public partial class WidgetConfigurationViewModel<TConfiguration, TValue> :
         IDisposer disposer,
         ISubscriber subscriber,
         string? title,
-        Func<TConfiguration, TValue> read) : base(serviceProvider, serviceFactory, publisher, subscriber, disposer)
+        Func<TConfiguration, TValue> read,
+        Func<TValue, TConfiguration> write) : base(serviceProvider, serviceFactory, publisher, subscriber, disposer)
     {
         this.title = title;
         this.read = read;
+        this.write = write;
     }
 
     public WidgetConfigurationViewModel(IServiceProvider serviceProvider,
@@ -36,12 +41,14 @@ public partial class WidgetConfigurationViewModel<TConfiguration, TValue> :
         ISubscriber subscriber,
         string? title,
         string? description,
-        Func<TConfiguration, TValue> read) : base(serviceProvider, serviceFactory, publisher, subscriber, disposer)
+        Func<TConfiguration, TValue> read,
+        Func<TValue, TConfiguration> write) : base(serviceProvider, serviceFactory, publisher, subscriber, disposer)
     {
         this.title = title;
         this.description = description;
 
         this.read = read;
+        this.write = write;
     }
 
     public Task Handle(Changed<TConfiguration> args, 
@@ -53,6 +60,11 @@ public partial class WidgetConfigurationViewModel<TConfiguration, TValue> :
         }
 
         return Task.CompletedTask;
+    }
+
+    protected override void OnChanged(TValue? value)
+    {
+        base.OnChanged(value);
     }
 }
 

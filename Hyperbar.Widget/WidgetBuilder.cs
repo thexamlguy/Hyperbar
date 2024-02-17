@@ -42,7 +42,7 @@ public class WidgetBuilder :
                 services.AddSingleton<IDisposer, Disposer>();
 
                 services.AddHandler<WidgetAvailabilityChangedHandler>();
-                services.AddConfigurationChanged<WidgetConfiguration,
+                services.AddConfiguration<WidgetConfiguration,
                     WidgetAvailability>((config) => (args) =>
                     {
                         args.Value = config.IsEnabled;
@@ -80,7 +80,7 @@ public class WidgetBuilder :
 
         hostBuilder.ConfigureServices(services =>
         {
-            services.AddHandler<WidgetConfigurationHandler>();
+           // services.AddHandler<WidgetConfigurationHandler>();
             services.AddConfiguration<WidgetConfiguration>(section: configuration.GetType().Name,
                 configuration: configuration);
 

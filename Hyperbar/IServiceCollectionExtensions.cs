@@ -10,16 +10,16 @@ namespace Hyperbar;
 
 public static class IServiceCollectionExtensions
 {
-    public static IServiceCollection AddConfigurationChanged<TConfiguration, TValue>(this IServiceCollection services,
-        Func<TConfiguration, Action<TValue>> factory)
+    public static IServiceCollection AddConfiguration<TConfiguration, 
+        TValue>(this IServiceCollection services,
+        Func<TConfiguration, Action<TValue>> changed)
         where TConfiguration :
         class
         where TValue : 
         class, new()
     {
-        services.AddSingleton<IConfigurationChangedPublisher<TConfiguration>>(provider => 
-            new ConfigurationChangedPublisher<TConfiguration, TValue>(provider.GetRequiredService<IPublisher>(), 
-                factory));
+        services.AddSingleton(new ConfigurationValue<TConfiguration, TValue>(changed));
+        services.AddHandler<ConfigurationChangedHandler<TConfiguration, TValue>>();
 
         return services;
     }
@@ -214,8 +214,7 @@ public static class IServiceCollectionExtensions
                     contract.GetGenericArguments() is { Length: 1 } notificationArguments)
                 {
                     Type notificationType = notificationArguments[0];
-                    services.Add(new ServiceDescriptor(
-                        typeof(INotificationHandler<>).MakeGenericType(notificationType),
+                    services.Add(new ServiceDescriptor(typeof(INotificationHandler<>).MakeGenericType(notificationType),
                         typeof(THandler),
                         lifetime));
                 }
@@ -235,7 +234,8 @@ public static class IServiceCollectionExtensions
                             provider.GetService<IServiceFactory>()?.Create(
                                 wrapperType,
                                 provider.GetRequiredService<THandler>(),
-                                provider.GetServices(typeof(IPipelineBehavior<,>).MakeGenericType(requestType, responseType))
+                                provider.GetServices(typeof(IPipelineBehavior<,>)
+                                    .MakeGenericType(requestType, responseType))
                             )!,
                         lifetime
                     ));
